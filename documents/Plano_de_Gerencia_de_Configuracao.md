@@ -19,7 +19,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
-| 0.1.0 | AAAA-MM-DD | Hugo Henry Lemos Carvalho | Versão inicial do plano | — |
+| 0.1.1 | 09/11/2026 | Hugo Henry Lemos Carvalho | Versão inicial do plano | — |
 
 ---
 
@@ -336,7 +336,8 @@ As entregas são semanais, às **quartas-feiras**, acompanhando o conteúdo da d
 
 | Marco | Atividade de GC | Responsável |
 | --- | --- | --- |
-| Entrega 1 | Repositório criado, planilha de ICs, Plano de Projeto atualizado, ERS e RTM no repositório; BL-PLAN | Gerente |
+| Entrega 1| Repositório criado, planilha de ICs, Plano de Projeto atualizado, BL-PLAN | Gerente |
+| Entrega 2| ERS e RTM no repositório |Analista de Requisitos; 
 | A cada entrega | Atualização do status accounting e da planilha de ICs | Gerente |
 | Antes de BL-REQ-S1 | Revisão técnica e CCB sobre ERS, casos de uso e RTM | QA/Testes, CCB |
 | Antes de BL-IMPL-S2 | Revisão técnica e auditoria; CI verde | QA/Testes |
