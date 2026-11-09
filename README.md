@@ -30,7 +30,7 @@ Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integraçã
 |---|---|
 | Frontend | HTML, CSS e JavaScript |
 | Backend | Python com Flask (API REST) |
-| Banco de dados | MySQL, com migrações versionadas |
+| Banco de dados | MySQL, com migrações versionadas em banco-de-dados/migracoes/ |
 | Testes | pytest e Postman/Newman |
 | CI/CD | GitHub Actions |
 | Contêineres | Docker e docker-compose |
@@ -42,8 +42,17 @@ Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integraçã
 GymManager/
 │
 ├── README.md
-│
 ├── LICENSE
+├── CONTRIBUTING.md
+├── .gitignore
+├── .env.example
+├── docker-compose.yml
+│
+├── .github/
+│   ├── workflows/
+│   │   └── ci.yml
+│   └── ISSUE_TEMPLATE/
+│       └── change-request.md
 │
 ├── prototipos/
 │   ├── telas-login.png
@@ -51,33 +60,53 @@ GymManager/
 │   └── outras-telas.png
 │
 ├── documentos/
-│   │
-│   ├── Plano_de_Projeto.md
-│   ├── ERS.md
-│   ├── Inventario_de_ICs.md
-│   ├── Planilha_Controle_de_ICs.md
-│   └── outras-planilhas.md
+│   ├── gerencia/
+│   │   ├── Plano_de_Projeto.md
+│   │   ├── Planilha_Controle_de_ICs.xlsx
+│   │   ├── Plano_de_Gerencia_de_Configuracao.md
+│   │   ├── Modelo_CRF.md
+│   │   └── Status_Accounting.xlsx
+│   ├── requisitos/
+│   │   ├── ERS.md
+│   │   ├── Casos_de_Uso.md
+│   │   └── RTM.xlsx
+│   ├── arquitetura/
+│   │   ├── Arquitetura.md
+│   │   ├── Modelo_de_Dados.md
+│   │   ├── openapi.yaml
+│   │   └── adr/
+│   ├── testes/
+│   │   └── Plano_de_Testes.md
+│   └── usuario/
+│       ├── Manual_do_Usuario.md
+│       └── Notas_de_Versao.md
 │
 ├── codigo-fonte/
-│   │
 │   ├── frontend/
 │   │   ├── index.html
 │   │   ├── css/
 │   │   └── js/
-│   │
-│   └── backend/
-│       └── ...
+│   ├── backend/
+│   │   └── ...
+│   └── testes/
+│       ├── unitarios/
+│       ├── integracao/
+│       └── postman/
 │
 └── banco-de-dados/
-    └── ...
+    └── migracoes/
 
 ```
 
 ## Gerência de configuração
 
-- **Itens de Configuração (ICs):** todo artefato relevante tem ID no padrão `GYM-<TIPO>-<NNN>` e está catalogado em [`docs/gerencia/inventario-ics.xlsx`](docs/gerencia/inventario-ics.xlsx).
+- **Itens de Configuração (ICs):** todo artefato relevante tem ID no padrão `GYM-REQ-001(nome, tipo, caminho, versão, responsável, baseline, status e dependências` e está catalogado em [`documento/gerencia/Planilha_Controle_de_ICs.xlxs`](documento/gerencia/Planilha_Controle_de_ICs.xlxs).
 
 - **Controle de mudanças:** alterações em itens sob baseline exigem uma Change Request (issue com o formulário CRF), avaliada pelo Comitê de Controle de Mudanças (CCB). Todo commit deve estar vinculado a uma issue ou CR.
+  
+-**Baselines:** BL-PLAN, BL-REQ-S1, BL-IMPL-S2 e BL-REL-S3 (release v1.0.0), um IC sob baseline só muda mediante Change Request aprovada
+
+-**Commits:** padrão Conventional Commits (feat:, fix:, docs:, test:, chore:), CONTRIBUTING.md
 
 ## Equipe
 
@@ -86,16 +115,16 @@ GymManager/
 | Gerente de Projeto/Configuração | Hugo Henry Lemos Carvalho |
 | Analista de Requisitos | Renata Martins Da Silva |
 | Dev Backend e Frontend | João Vitor Simonetti |
-| DBA/DevOps | João vitor Simonetti |
-| QA/Testes | Iago Medice Ferrreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
+| DBA/DevOps | João Vitor Simonetti |
+| QA/Testes | Iago Medice Ferreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
 
 ## Documentação
 
-- [Plano de Projeto](docs/gerencia/plano-projeto.md)
-- [Inventário de ICs](docs/gerencia/inventario-ics.xlsx)
-- [Documento de Requisitos (ERS)](docs/requisitos/ers.md) *(em elaboração)*
-- [Contrato da API (OpenAPI)](docs/api/openapi.yaml) *(planejado)*
-- [Decisões arquiteturais (ADR)](docs/adr/)
+- [Plano de Projeto](documentos/gerencia/Plano-De-Projeto.md)
+- [Inventário de ICs](documentos/gerencia/Planilha-de-Controle-ICs.xlsx)
+- [Documento de Requisitos (ERS)](documentos/requisitos/ERS.md) *(em elaboração)*
+- [Contrato da API (OpenAPI)](documentos/api/openapi.yaml) *(planejado)*
+- [Decisões arquiteturais (ADR)](documentos/adr/)
 
 ---
 
