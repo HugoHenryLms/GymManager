@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
-| Versão | 0.1.0 |
+| Versão | 0.1.1 |
 | Status | Em elaboração |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
@@ -21,7 +21,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 2026-11-09 | Renata Martins da Silva | Versão inicial do documento | — |
-
+| 0.1.1 | 2026-11-09 | Renata Martins da Silva | Versão inicial do documento | — |
 ---
 
 ## 1. Introdução
@@ -187,8 +187,8 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RN01 | Apenas administrador ou instrutor cria e atribui fichas de treino. | RF04 |
 | RN02 | O aluno acessa somente suas próprias fichas, execuções e histórico. | RF04, RF05 |
 | RN03 | Apenas o administrador cadastra instrutores e define perfis. | RF06 |
-| RN04 | Exercício vinculado a uma ficha não é excluído; apenas inativado. | RF03 |
-| RN05 | Usuário ou aluno inativo não se autentica e não recebe novas fichas; o histórico é preservado. | RF01, RF02 |
+| RN04 | Exercício vinculado a uma ficha não é excluído; apenas inativado. | RF04 |
+| RN05 | Usuário ou aluno inativo não se autentica e não recebe novas fichas; o histórico é preservado. | RF01, RF02, RF04, RF06 |
 | RN06 | Uma ficha possui pelo menos um exercício e pertence a um único aluno. | RF04 |
 | RN07 | A execução de treino refere-se a uma ficha atribuída ao próprio aluno. | RF05 |
 
@@ -204,14 +204,14 @@ A modelagem de casos de uso é um documento próprio: `documentos/requisitos/Cas
 
 | ID | Caso de uso | Ator(es) | Requisito(s) |
 | --- | --- | --- | --- |
-| UC01 | Autenticar-se | Todos | RF02 |
+| UC01 | Autenticar-se | Todos | RF02, RF07 |
 | UC02 | Gerenciar usuários e instrutores | Administrador | RF06 |
 | UC03 | Gerenciar alunos | Administrador, Instrutor | RF01 |
 | UC04 | Gerenciar exercícios | Administrador, Instrutor | RF03 |
-| UC05 | Montar e atribuir ficha de treino | Instrutor (e Administrador) | RF04 |
+| UC05 | Montar e atribuir ficha de treino | Instrutor e Administrador | RF04 |
 | UC06 | Consultar minhas fichas | Aluno | RF04, RF07 |
 | UC07 | Registrar execução do treino | Aluno | RF05 |
-| UC08 | Consultar histórico e evolução de carga | Aluno, Instrutor | RF05 |
+| UC08 | Consultar histórico e evolução de carga | Aluno, Instrutor, Administrador | RF05 |
 
 ### 4.2 Modelo de dados conceitual
 
