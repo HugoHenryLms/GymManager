@@ -11,7 +11,7 @@
 | Tipo | Aplicação web |
 | Repositório | GitHub (link compartilhado com o professor; todos os integrantes como colaboradores) |
 | Gerente de Projeto/Configuração | Hugo Henry Lemos Carvalho |
-| Equipe | Renata Martins Da Silva ,João vitor Simonetti ,Iago Medice Ferrreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
+| Equipe | Renata Martins Da Silva, João vitor Simonetti, Iago Medice Ferrreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
 
 ## 2. Visão geral e objetivos
 
@@ -44,7 +44,7 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 | --- | --- |
 | Frontend | HTML, CSS, JavaScript |
 | Backend | Python com Flask (API REST) |
-| Banco de dados | MySQL, com migrações versionadas em `db/migrations/` |
+| Banco de dados | MySQL, com migrações versionadas em banco-de-dados/migracoes/. |
 | Testes | pytest, Postman/Newman |
 | CI/CD | GitHub Actions |
 | Contêineres | Docker e docker-compose |
@@ -54,11 +54,11 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 
 | Papel | Integrante | Responsabilidades principais |
 | --- | --- | --- |
-| Gerente de Projeto/Configuração | Hugo Henry Lemos Carvalho | Coordenar entregas; manter repositório, baselines e tags; presidir o CCB; manter Plano de Projeto, PGC e inventário de ICs |
+| Gerente de Projeto/Configuração | Hugo Henry Lemos Carvalho | Coordenar entregas; manter repositório, baselines e tags; presidir o CCB; manter Plano de Projeto, PGC e planilha de controle de ICs |
 | Analista de Requisitos | Renata Martins Da Silva | ERS, casos de uso e matriz de rastreabilidade (RTM) |
 | Dev Backend e Frontend | João Vitor Simonetti | API REST, regras de negócio, autenticação, arquitetura, Interface web, consumo da API, manual do usuário |
 | DBA/DevOps | João Vitor Simonetti | Modelo de dados, migrações, Docker, CI, configurações de ambiente |
-| QA/Testes | Iago Medice, Tiago Costa Dos Santos, Ruan Victor Assunção | Plano de testes, testes unitários e de integração, coleção Postman, revisão técnica |
+| QA/Testes | Iago Medice Ferreira da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção | Plano de testes, testes unitários e de integração, coleção Postman, revisão técnica |
 
 ## 6. Atividades e responsáveis
 
@@ -68,21 +68,21 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 | 2 | Definir estrutura de diretórios e `.gitignore` | DBA/DevOps | Gerente | GYM-CFG-001 |
 | 3 | Elaborar o Plano de Projeto | Gerente de Projeto/Config | Todos | GYM-GER-001 |
 | 4 | Elaborar a planilha de controle de ICs | Gerente de Projeto/Config | Analista de Requisitos | GYM-GER-002 |
-| 5 | Redigir README e guia de contribuição | Gerente de Projeto/Config | Dev Backend | GYM-DOC-001, GYM-GER-004 |
+| 5 | Redigir README e guia de contribuição | Gerente de Projeto/Config | Dev Backend e Frontend | GYM-DOC-001, GYM-GER-004 |
 | 6 | Redigir o Plano de Gerência de Configuração e o modelo de CRF | Gerente de Projeto/Config | QA/Testes | GYM-GER-003, GYM-GER-005 |
 | 7 | Levantar e documentar requisitos (ERS) e casos de uso | Analista de Requisitos | Todos | GYM-REQ-001, GYM-REQ-002 |
 | 8 | Construir a matriz de rastreabilidade (RTM) | Analista de Requisitos | QA/Testes | GYM-REQ-003 |
-| 9 | Projetar a arquitetura e registrar a ADR da stack | Dev Backend | DBA/DevOps | GYM-ARQ-001, GYM-ARQ-004 |
-| 10 | Modelar o banco de dados e escrever as migrações | DBA/DevOps | Dev Backend | GYM-ARQ-002, GYM-DB-001 |
-| 11 | Especificar a API (OpenAPI) | Dev Backend | Analista de Requisitos | GYM-ARQ-003 |
-| 12 | Implementar módulos de alunos, exercícios, fichas e execuções | Dev Backend | QA/Testes | GYM-SRC-002 a 005 |
-| 13 | Implementar autenticação e perfis | Dev Backend | DBA/DevOps | GYM-SRC-001 |
-| 14 | Implementar a interface web | Dev Frontend | Dev Backend | GYM-SRC-006 |
-| 15 | Elaborar plano de testes, testes automatizados e coleção Postman | QA/Testes | Dev Backend | GYM-TST-001 a 004 |
+| 9 | Projetar a arquitetura e registrar a ADR da stack | Dev Backend e Frontend | DBA/DevOps | GYM-ARQ-001, GYM-ARQ-004 |
+| 10 | Modelar o banco de dados e escrever as migrações | DBA/DevOps | Dev Backend e Frontend | GYM-ARQ-002, GYM-DB-001 |
+| 11 | Especificar a API (OpenAPI) | Dev Backend e Frontend | Analista de Requisitos | GYM-ARQ-003 |
+| 12 | Implementar módulos de alunos, exercícios, fichas e execuções | Dev Backend e Frontend | QA/Testes | GYM-SRC-002 a 005 |
+| 13 | Implementar autenticação e perfis | Dev Backend e Frontend | DBA/DevOps | GYM-SRC-001 |
+| 14 | Implementar a interface web | Dev Backend e Frontend | DBA/DevOps | GYM-SRC-006 |
+| 15 | Elaborar plano de testes, testes automatizados e coleção Postman | QA/Testes | Dev Backend e Frontend | GYM-TST-001 a 004 |
 | 16 | Configurar pipeline de CI e Docker | DBA/DevOps | QA/Testes | GYM-CI-001, GYM-IAC-001 |
 | 17 | Estabelecer baselines, tags e registrar status accounting | Gerente de Projeto/Config | Todos | GYM-GER-006 |
-| 18 | Manual do usuário e notas de versão | Dev Frontend | Gerente | GYM-DOC-002, GYM-DOC-003 |
-| 19 | Auditoria de configuração e revisão técnica formal antes de cada baseline | QA/Testes | Gerente | Todas as baselines |
+| 18 | Manual do usuário e notas de versão | Dev Backend e Frontend | Gerente de Projeto/Config | GYM-DOC-002, GYM-DOC-003 |
+| 19 | Auditoria de configuração e revisão técnica formal antes de cada baseline | QA/Testes | Gerente de Projeto/Config | Todas as baselines |
 
 ## 7. Cronograma de entregas
 
@@ -92,7 +92,7 @@ As entregas são semanais, sempre às **quartas-feiras**, acompanhando o conteú
 
 ### 8.1 Identificação
 
-Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `docs/gerencia/inventario-ics.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4).
+Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `documentos/gerencia/Planilha_Controle_de_ICs.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4).
 
 ### 8.2 Estrutura do repositório
 
@@ -100,8 +100,17 @@ Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TI
 GymManager/
 │
 ├── README.md
-│
 ├── LICENSE
+├── CONTRIBUTING.md
+├── .gitignore
+├── .env.example
+├── docker-compose.yml
+│
+├── .github/
+│   ├── workflows/
+│   │   └── ci.yml
+│   └── ISSUE_TEMPLATE/
+│       └── change-request.md
 │
 ├── prototipos/
 │   ├── telas-login.png
@@ -109,26 +118,41 @@ GymManager/
 │   └── outras-telas.png
 │
 ├── documentos/
-│   │
-│   ├── Plano_de_Projeto.md
-│   ├── ERS.md
-│   ├── Inventario_de_ICs.md
-│   ├── Planilha_Controle_de_ICs.md
-│   └── outras-planilhas.md
+│   ├── gerencia/
+│   │   ├── Plano_de_Projeto.md
+│   │   ├── Planilha_Controle_de_ICs.xlsx
+│   │   ├── Plano_de_Gerencia_de_Configuracao.md
+│   │   ├── Modelo_CRF.md
+│   │   └── Status_Accounting.xlsx
+│   ├── requisitos/
+│   │   ├── ERS.md
+│   │   ├── Casos_de_Uso.md
+│   │   └── RTM.xlsx
+│   ├── arquitetura/
+│   │   ├── Arquitetura.md
+│   │   ├── Modelo_de_Dados.md
+│   │   ├── openapi.yaml
+│   │   └── adr/
+│   ├── testes/
+│   │   └── Plano_de_Testes.md
+│   └── usuario/
+│       ├── Manual_do_Usuario.md
+│       └── Notas_de_Versao.md
 │
 ├── codigo-fonte/
-│   │
 │   ├── frontend/
 │   │   ├── index.html
 │   │   ├── css/
 │   │   └── js/
-│   │
-│   └── backend/
-│       └── ...
+│   ├── backend/
+│   │   └── ...
+│   └── testes/
+│       ├── unitarios/
+│       ├── integracao/
+│       └── postman/
 │
 └── banco-de-dados/
-    └── ...
-
+    └── migracoes/
 ```
 
 ### 8.3 Commits e versionamento
@@ -140,7 +164,7 @@ GymManager/
 
 | Baseline | Tipo | Critério de congelamento |
 | --- | --- | --- |
-| BL-PLAN | Developmental | Plano de Projeto e inventário aprovados pelo professor |
+| BL-PLAN | Developmental | Plano de Projeto e planilha de controle de ICs aprovados |
 | BL-REQ-S1 | Funcional | ERS, casos de uso e RTM revisados e aprovados pelo CCB |
 | BL-IMPL-S2 | Design/Implementação | Backend e testes estáveis, CI verde, revisão técnica concluída |
 | BL-REL-S3 | Product/Release | Sistema completo, manual e notas de versão; tag `v1.0.0` |
@@ -151,14 +175,14 @@ IC sob baseline só muda mediante Change Request aprovada.
 
 (1) submissão da CR via issue com o CRF; (2) verificação de validade; (3) registro; (4) análise de custo e impacto; (5) decisão do CCB; (6) implementação e teste; (7) fechamento.
 
-- **CCB:** Gerente de Projeto/Configuração (presidente), Analista de Requisitos e Dev Backend.
+- **CCB:** Gerente de Projeto/Configuração (presidente), Analista de Requisitos e Dev Backend e Frontend.
 - **Critérios de decisão:** consequências de não mudar, benefícios, usuários afetados, custo de implementação e ciclo de liberação.
 - **Formalidade calibrada:** correções triviais em ICs fora de baseline seguem por issue e Pull Request; mudanças em ICs de baseline ou que atravessam vários módulos passam pelo CCB.
 - Toda alteração no repositório deve estar vinculada a uma issue ou CR (rastreabilidade bidirecional).
 
 ## 10. Auditoria e relato de status
 
-- **Status accounting:** registro da situação de ICs e baselines atualizado a cada entrega (`docs/gerencia/status-accounting.xlsx`).
+- **Status accounting:** registro da situação de ICs e baselines atualizado a cada entrega (`documentos/gerencia /Status_Accounting.xlxs`).
 - **Revisão técnica formal:** realizada pelo QA/Testes sobre cada IC antes de entrar em baseline.
 - **Auditoria de configuração:** verifica se a modificação realizada é a solicitada, se a revisão ocorreu, se o processo foi seguido e se os dados de rastreabilidade (data, autor, nº da CR) constam registrados.
 
@@ -175,7 +199,7 @@ IC sob baseline só muda mediante Change Request aprovada.
 
 ## 12. Critérios de qualidade e aceite
 
-- Todos os ICs listados no inventário, com responsável e baseline.
+- Todos os ICs listados na planilha de controle, com responsável e baseline.
 - Pipeline de CI executando build e testes a cada Pull Request.
 - Requisitos rastreados até código e testes (RTM).
 - Nenhuma alteração em baseline sem CR aprovada.
