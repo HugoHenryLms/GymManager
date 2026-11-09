@@ -39,29 +39,38 @@ Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integraçã
 ## Estrutura do repositório
 
 ```
-gymmanager/
-├── .github/workflows/   # pipeline de CI (ci.yml) e templates de issue/PR
-├── config/              # templates de configuração (sem segredos)
-├── db/migrations/       # migrações do MySQL
-├── deploy/docker/       # Dockerfile e docker-compose
-├── docs/
-│   ├── gerencia/        # plano de projeto, PGC, inventário de ICs, CRFs
-│   ├── requisitos/      # ERS, casos de uso, RTM
-│   ├── arquitetura/     # arquitetura e modelo ER
-│   ├── api/             # openapi.yaml
-│   ├── adr/             # decisões arquiteturais
-│   ├── testes/          # plano de testes
-│   └── manual/          # manual do usuário
-├── scripts/             # scripts de automação
-├── src/app/             # código-fonte (auth, alunos, exercicios, fichas, execucoes)
-├── tests/               # unit, integration e api
-├── .env.example
-├── .gitignore
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── Makefile
+GymManager/
+│
 ├── README.md
-└── requirements.txt
+│
+├── LICENSE
+│
+├── prototipos/
+│   ├── telas-login.png
+│   ├── telas-cadastro.png
+│   └── outras-telas.png
+│
+├── documentos/
+│   │
+│   ├── Plano_de_Projeto.md
+│   ├── ERS.md
+│   ├── Inventario_de_ICs.md
+│   ├── Planilha_Controle_de_ICs.md
+│   └── outras-planilhas.md
+│
+├── codigo-fonte/
+│   │
+│   ├── frontend/
+│   │   ├── index.html
+│   │   ├── css/
+│   │   └── js/
+│   │
+│   └── backend/
+│       └── ...
+│
+└── banco-de-dados/
+    └── ...
+
 ```
 
 ## Gerência de configuração
