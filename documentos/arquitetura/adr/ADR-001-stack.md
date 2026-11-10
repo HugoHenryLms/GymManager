@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-ARQ-004 |
 | Caminho | `documentos/arquitetura/adr/ADR-001-stack.md` |
-| Versão | 0.1.0 |
+| Versão | 0.1.1 |
 | Status | Em elaboração |
 | Baseline prevista | BL-IMPL-S2 |
 | Responsável | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -21,6 +21,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial do ADR | — |
+| 0.1.1 | 10/11/2026 | João Vitor Simonetti | Ajusta versões fixadas (Flask 3.1.3, Gunicorn 27.0) ao requirements.txt | — |
 
 ---
 
@@ -45,9 +46,9 @@ Restrições consideradas:
 | --- | --- | --- | --- |
 | Frontend | HTML, CSS e JavaScript puro (ES2020, sem framework) | — | Sem etapa de build; qualquer integrante consegue ler e alterar; atende a RF07/RNF05 com layout responsivo |
 | Servidor web do frontend | Nginx | `nginx:1.27-alpine` | Serve os arquivos estáticos e faz proxy de `/api/` para o backend, evitando CORS |
-| Backend | Python + Flask (API REST) | Python 3.12, Flask 3.1 | Framework leve, curva de aprendizado baixa, ótimo suporte a testes com pytest |
+| Backend | Python + Flask (API REST) | Python 3.12, Flask 3.1.3 | Framework leve, curva de aprendizado baixa, ótimo suporte a testes com pytest |
 | Acesso a dados | Flask-SQLAlchemy / SQLAlchemy 2.0 + PyMySQL | ver `requirements.txt` | ORM com SQL parametrizado (evita injeção de SQL) e independência de banco nos testes unitários (SQLite em memória) |
-| Servidor de aplicação | Gunicorn | 23.0 | Servidor WSGI de produção dentro do contêiner |
+| Servidor de aplicação | Gunicorn | 27.0 | Servidor WSGI de produção dentro do contêiner |
 | Banco de dados | MySQL | `mysql:8.4` (LTS) | Definido no Plano; versão LTS com suporte longo |
 | Migrações | Scripts SQL versionados em `banco-de-dados/migracoes/` + executor próprio (`flask migrar`) | — | Scripts legíveis pelo DBA, versionados como IC (GYM-DB-001), com controle de checksum para impedir alteração de migração já aplicada (RNF11) |
 | Senhas | `werkzeug.security` (scrypt) | — | Hash seguro com sal (RNF01) |
