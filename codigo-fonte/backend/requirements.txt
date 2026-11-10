@@ -1,0 +1,8 @@
+# GymManager — dependências de execução do backend (versões fixadas)
+# ICs: GYM-SRC-001 a GYM-SRC-005 · Decisão: ADR-001 (GYM-ARQ-004)
+Flask==3.1.3
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.57
+PyMySQL==1.2.4
+cryptography==50.0.2
+gunicorn==27.0.0
