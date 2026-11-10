@@ -50,9 +50,10 @@ def create_app(config: dict | None = None) -> Flask:
 def _registrar_blueprints(app: Flask) -> None:
     from .alunos.rotas import bp as alunos_bp
     from .auth.rotas import bp as auth_bp
+    from .exercicios.rotas import bp as exercicios_bp
     from .usuarios.rotas import bp as usuarios_bp
 
-    for bp in (auth_bp, usuarios_bp, alunos_bp):
+    for bp in (auth_bp, usuarios_bp, alunos_bp, exercicios_bp):
         app.register_blueprint(bp, url_prefix=PREFIXO_API)
 
 
