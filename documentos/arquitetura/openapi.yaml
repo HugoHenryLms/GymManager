@@ -1,0 +1,787 @@
+# =============================================================================
+# GymManager — Contrato da API REST
+# IC: GYM-ARQ-003 · Caminho: documentos/arquitetura/openapi.yaml
+# Versão do IC: 0.1.0 · Status: Em elaboração · Baseline prevista: BL-IMPL-S2
+# Responsável: João Vitor Simonetti (Dev Backend e Frontend)
+# Apoio: Analista de Requisitos · Dependências: GYM-REQ-001 (ERS 4.5), GYM-REQ-002
+#
+# Histórico de revisões
+# | Versão | Data       | Autor                | Descrição                    | CR/Issue |
+# | 0.1.0  | 10/11/2026 | João Vitor Simonetti | Versão inicial do contrato   | —        |
+# =============================================================================
+openapi: 3.0.3
+info:
+  title: GymManager API
+  version: 0.1.0
+  description: |
+    API REST do GymManager, sistema web de gerenciamento de treinos de academia.
+
+    - Base: `/api/v1`. Formato: JSON (UTF-8).
+    - Autenticação: todas as rotas exigem `Authorization: Bearer <token>`, exceto `POST /auth/login` (RNF02).
+    - Perfis: `ADMIN`, `INSTRUTOR`, `ALUNO`. O administrador possui todas as permissões do instrutor.
+    - Erros seguem sempre o esquema `Erro`, com as mensagens da seção 4.3 do ERS.
+    - Datas: `AAAA-MM-DD`. Data/hora: ISO 8601 em UTC (sufixo `Z`).
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Ambiente local via proxy do frontend (docker compose)
+  - url: http://localhost:5000/api/v1
+    description: Backend direto (docker compose)
+security:
+  - bearerAuth: []
+tags:
+  - name: Autenticação
+    description: UC01 · RF02 · GYM-SRC-001
+  - name: Usuários
+    description: UC02 · RF06 · GYM-SRC-001
+  - name: Alunos
+    description: UC03 · RF01 · GYM-SRC-002
+  - name: Exercícios
+    description: UC04 · RF03 · GYM-SRC-003
+  - name: Fichas
+    description: UC05, UC06 · RF04 · GYM-SRC-004
+  - name: Execuções
+    description: UC07, UC08 · RF05 · GYM-SRC-005
+
+paths:
+  /auth/login:
+    post:
+      tags: [Autenticação]
+      summary: Autentica e retorna credencial de acesso
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, senha]
+              properties:
+                email: { type: string, format: email, example: admin@gymmanager.local }
+                senha: { type: string, format: password, example: senhaForte1 }
+      responses:
+        "200":
+          description: Autenticado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Sessao" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401":
+          description: Credenciais inválidas (sem indicar qual campo está incorreto)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "E-mail ou senha inválidos." }
+        "403":
+          description: Usuário inativo (RN05)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Usuário inativo." }
+
+  /auth/logout:
+    post:
+      tags: [Autenticação]
+      summary: Encerra a sessão (invalida o token)
+      responses:
+        "204": { description: "Sessão encerrada" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+
+  /usuarios:
+    get:
+      tags: [Usuários]
+      summary: Lista usuários (ADMIN)
+      parameters:
+        - { name: nome, in: query, schema: { type: string }, description: "Filtra por parte do nome" }
+        - { name: email, in: query, schema: { type: string }, description: "Filtra por parte do e-mail" }
+        - { name: perfil, in: query, schema: { $ref: "#/components/schemas/Perfil" } }
+        - { $ref: "#/components/parameters/FiltroAtivo" }
+      responses:
+        "200":
+          description: Lista de usuários
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Usuario" } }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+    post:
+      tags: [Usuários]
+      summary: Cadastra usuário ou instrutor (ADMIN, RN03)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UsuarioEntrada" }
+      responses:
+        "201":
+          description: Criado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "409": { $ref: "#/components/responses/Conflito" }
+
+  /usuarios/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    put:
+      tags: [Usuários]
+      summary: Atualiza usuário (ADMIN)
+      description: Campos omitidos não são alterados. O administrador não pode inativar nem rebaixar o próprio usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UsuarioAtualizacao" }
+      responses:
+        "200":
+          description: Atualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflito" }
+    delete:
+      tags: [Usuários]
+      summary: Inativa usuário (ADMIN, RN05)
+      description: Não exclui fisicamente; o usuário perde o acesso e as sessões abertas são encerradas.
+      responses:
+        "200":
+          description: Inativado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflito" }
+
+  /alunos:
+    get:
+      tags: [Alunos]
+      summary: Lista alunos (ADMIN, INSTRUTOR)
+      parameters:
+        - { name: nome, in: query, schema: { type: string }, description: "Filtra por parte do nome ou e-mail" }
+        - { $ref: "#/components/parameters/FiltroAtivo" }
+      responses:
+        "200":
+          description: Lista de alunos
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Usuario" } }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+    post:
+      tags: [Alunos]
+      summary: Cadastra aluno (ADMIN, INSTRUTOR)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AlunoEntrada" }
+      responses:
+        "201":
+          description: Criado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "409": { $ref: "#/components/responses/Conflito" }
+
+  /alunos/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    get:
+      tags: [Alunos]
+      summary: Consulta aluno (ADMIN, INSTRUTOR)
+      responses:
+        "200":
+          description: Aluno
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+    put:
+      tags: [Alunos]
+      summary: Atualiza aluno (ADMIN, INSTRUTOR)
+      description: Campos omitidos não são alterados. `ativo=true` reativa um aluno inativo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AlunoAtualizacao" }
+      responses:
+        "200":
+          description: Atualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflito" }
+    delete:
+      tags: [Alunos]
+      summary: Inativa aluno (ADMIN, INSTRUTOR, RN05)
+      description: O aluno deixa de autenticar e de receber fichas; o histórico é preservado.
+      responses:
+        "200":
+          description: Inativado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Usuario" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+
+  /alunos/{id}/historico:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    get:
+      tags: [Execuções]
+      summary: Histórico e evolução de carga do aluno
+      description: O aluno só consulta o próprio histórico (RN02); ADMIN e INSTRUTOR consultam qualquer aluno.
+      parameters:
+        - { name: data_inicio, in: query, schema: { type: string, format: date }, description: "Execuções iniciadas a partir desta data" }
+        - { name: data_fim, in: query, schema: { type: string, format: date }, description: "Execuções iniciadas até esta data (inclusive)" }
+        - { name: ficha_id, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: Histórico
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Historico" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+
+  /exercicios:
+    get:
+      tags: [Exercícios]
+      summary: Lista exercícios (todos os perfis)
+      parameters:
+        - { name: nome, in: query, schema: { type: string } }
+        - { name: grupo_muscular, in: query, schema: { type: string } }
+        - { $ref: "#/components/parameters/FiltroAtivo" }
+      responses:
+        "200":
+          description: Lista de exercícios
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Exercicio" } }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+    post:
+      tags: [Exercícios]
+      summary: Cadastra exercício (ADMIN, INSTRUTOR)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExercicioEntrada" }
+      responses:
+        "201":
+          description: Criado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Exercicio" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "409":
+          description: Nome duplicado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Exercício já cadastrado.", campo: nome }
+
+  /exercicios/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    put:
+      tags: [Exercícios]
+      summary: Atualiza exercício (ADMIN, INSTRUTOR)
+      description: Campos omitidos não são alterados. `ativo=true` reativa o exercício.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExercicioAtualizacao" }
+      responses:
+        "200":
+          description: Atualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Exercicio" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflito" }
+    delete:
+      tags: [Exercícios]
+      summary: Inativa exercício (ADMIN, INSTRUTOR, RN04)
+      description: Nunca exclui fisicamente; o exercício permanece nas fichas existentes.
+      responses:
+        "200":
+          description: Inativado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Exercicio" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+
+  /fichas:
+    get:
+      tags: [Fichas]
+      summary: Lista fichas
+      description: |
+        ALUNO recebe somente as próprias fichas (RN02), ignorando `aluno_id`.
+        ADMIN e INSTRUTOR recebem todas, podendo filtrar por `aluno_id`.
+        `ativa=true` retorna apenas fichas vigentes (ativas e dentro da data de fim).
+      parameters:
+        - { name: aluno_id, in: query, schema: { type: integer } }
+        - { name: ativa, in: query, schema: { type: boolean } }
+      responses:
+        "200":
+          description: Lista de fichas (com itens)
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Ficha" } }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+    post:
+      tags: [Fichas]
+      summary: Cria ficha e atribui a aluno (ADMIN, INSTRUTOR, RN01)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FichaEntrada" }
+      responses:
+        "201":
+          description: Criada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ficha" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "409":
+          description: Aluno inativo (RN05)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Aluno inativo não pode receber fichas.", campo: aluno_id }
+
+  /fichas/{id}:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    get:
+      tags: [Fichas]
+      summary: Detalha ficha
+      description: ALUNO só acessa a própria ficha (RN02); caso contrário, 403.
+      responses:
+        "200":
+          description: Ficha
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ficha" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+    put:
+      tags: [Fichas]
+      summary: Atualiza ficha (ADMIN, INSTRUTOR)
+      description: |
+        Campos omitidos não são alterados. Quando `exercicios` é enviado, ele representa a lista completa
+        de itens: itens com `id` são atualizados, itens sem `id` são criados e itens existentes ausentes
+        da lista são removidos da ficha (marcados como inativos, preservando o histórico).
+        `ativa=false` encerra a ficha (UC05 FA3).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FichaAtualizacao" }
+      responses:
+        "200":
+          description: Atualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ficha" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflito" }
+
+  /execucoes:
+    post:
+      tags: [Execuções]
+      summary: Inicia execução de uma ficha (ALUNO)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ficha_id]
+              properties:
+                ficha_id: { type: integer, example: 1 }
+      responses:
+        "201":
+          description: Execução iniciada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Execucao" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403":
+          description: Ficha não atribuída ao aluno (RN02, RN07) ou perfil sem permissão
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409":
+          description: Ficha não vigente
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Ficha inativa." }
+
+  /execucoes/{id}/exercicios:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    post:
+      tags: [Execuções]
+      summary: Registra repetições e carga de um exercício (ALUNO)
+      description: Registrar de novo o mesmo item da ficha corrige o registro anterior (UC07 FA1).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ficha_exercicio_id, repeticoes, carga_kg]
+              properties:
+                ficha_exercicio_id: { type: integer, example: 1 }
+                repeticoes: { type: integer, minimum: 1, example: 10 }
+                carga_kg: { type: number, minimum: 0, multipleOf: 0.01, example: 60 }
+      responses:
+        "200":
+          description: Registro corrigido
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Execucao" }
+        "201":
+          description: Registro criado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Execucao" }
+        "400": { $ref: "#/components/responses/DadosInvalidos" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409":
+          description: Execução já finalizada (UC07 FE3)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Execução já finalizada." }
+
+  /execucoes/{id}/finalizar:
+    parameters:
+      - { $ref: "#/components/parameters/Id" }
+    patch:
+      tags: [Execuções]
+      summary: Finaliza a execução (ALUNO)
+      responses:
+        "200":
+          description: Finalizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Execucao" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/SemPermissao" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409":
+          description: Execução já finalizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Erro" }
+              example: { erro: "Execução já finalizada." }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Token obtido em `POST /auth/login`.
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+    FiltroAtivo:
+      name: ativo
+      in: query
+      required: false
+      schema: { type: boolean }
+      description: Filtra por situação (ativo/inativo). Omitido = todos.
+
+  responses:
+    DadosInvalidos:
+      description: Dados inválidos (ERS 4.3)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Erro" }
+          example: { erro: "Senha fraca.", campo: senha }
+    NaoAutenticado:
+      description: Token ausente, inválido ou expirado
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Erro" }
+          example: { erro: "Não autenticado." }
+    SemPermissao:
+      description: Perfil sem permissão ou recurso de outro aluno
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Erro" }
+          example: { erro: "Acesso negado." }
+    NaoEncontrado:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Erro" }
+          example: { erro: "Recurso não encontrado." }
+    Conflito:
+      description: "Conflito com o estado atual (ex.: e-mail já cadastrado)"
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Erro" }
+          example: { erro: "E-mail inválido ou já cadastrado.", campo: email }
+
+  schemas:
+    Erro:
+      type: object
+      required: [erro]
+      properties:
+        erro: { type: string, description: "Mensagem para o usuário" }
+        campo: { type: string, description: "Campo que causou o erro, quando houver" }
+
+    Perfil:
+      type: string
+      enum: [ADMIN, INSTRUTOR, ALUNO]
+
+    Sessao:
+      type: object
+      properties:
+        token: { type: string, description: "Enviar em `Authorization: Bearer <token>`" }
+        expira_em: { type: string, format: date-time }
+        usuario: { $ref: "#/components/schemas/Usuario" }
+
+    Usuario:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: Mariana Costa }
+        email: { type: string, format: email, example: mariana@email.com }
+        perfil: { $ref: "#/components/schemas/Perfil" }
+        ativo: { type: boolean }
+        data_nascimento: { type: string, format: date, nullable: true }
+        telefone: { type: string, nullable: true, example: "(92) 99123-4567" }
+        criado_em: { type: string, format: date-time }
+
+    UsuarioEntrada:
+      type: object
+      required: [nome, email, senha, perfil]
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        email: { type: string, format: email }
+        senha: { type: string, format: password, minLength: 8, description: "Letras e números" }
+        perfil: { $ref: "#/components/schemas/Perfil" }
+        data_nascimento: { type: string, format: date, nullable: true }
+        telefone: { type: string, maxLength: 20, nullable: true }
+
+    UsuarioAtualizacao:
+      type: object
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        email: { type: string, format: email }
+        senha: { type: string, format: password, minLength: 8 }
+        perfil: { $ref: "#/components/schemas/Perfil" }
+        ativo: { type: boolean }
+        data_nascimento: { type: string, format: date, nullable: true }
+        telefone: { type: string, maxLength: 20, nullable: true }
+
+    AlunoEntrada:
+      type: object
+      required: [nome, email, senha]
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        email: { type: string, format: email }
+        senha: { type: string, format: password, minLength: 8 }
+        data_nascimento: { type: string, format: date, nullable: true }
+        telefone: { type: string, maxLength: 20, nullable: true }
+
+    AlunoAtualizacao:
+      type: object
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        email: { type: string, format: email }
+        senha: { type: string, format: password, minLength: 8 }
+        ativo: { type: boolean }
+        data_nascimento: { type: string, format: date, nullable: true }
+        telefone: { type: string, maxLength: 20, nullable: true }
+
+    Exercicio:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: Supino reto }
+        grupo_muscular: { type: string, nullable: true, example: Peito }
+        descricao: { type: string, nullable: true }
+        ativo: { type: boolean }
+
+    ExercicioEntrada:
+      type: object
+      required: [nome]
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        grupo_muscular: { type: string, maxLength: 50, nullable: true }
+        descricao: { type: string, nullable: true }
+
+    ExercicioAtualizacao:
+      type: object
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        grupo_muscular: { type: string, maxLength: 50, nullable: true }
+        descricao: { type: string, nullable: true }
+        ativo: { type: boolean }
+
+    ItemFicha:
+      type: object
+      properties:
+        id: { type: integer, description: "Identificador do item (ficha_exercicio)" }
+        exercicio: { $ref: "#/components/schemas/Exercicio" }
+        series: { type: integer, example: 4 }
+        repeticoes: { type: integer, example: 10 }
+        carga_kg: { type: number, example: 60 }
+        descanso_s: { type: integer, example: 60 }
+        ordem: { type: integer, example: 1 }
+
+    ItemFichaEntrada:
+      type: object
+      required: [exercicio_id, series, repeticoes]
+      properties:
+        id: { type: integer, description: "Somente em PUT: item existente a atualizar" }
+        exercicio_id: { type: integer }
+        series: { type: integer, minimum: 1 }
+        repeticoes: { type: integer, minimum: 1 }
+        carga_kg: { type: number, minimum: 0, multipleOf: 0.01, default: 0 }
+        descanso_s: { type: integer, minimum: 0, default: 0 }
+        ordem: { type: integer, minimum: 1, description: "Padrão: posição na lista" }
+
+    Ficha:
+      type: object
+      properties:
+        id: { type: integer }
+        nome: { type: string, example: Hipertrofia – Treino A }
+        aluno: { $ref: "#/components/schemas/Referencia" }
+        instrutor: { $ref: "#/components/schemas/Referencia" }
+        data_inicio: { type: string, format: date }
+        data_fim: { type: string, format: date, nullable: true }
+        ativa: { type: boolean }
+        vigente: { type: boolean, description: "ativa e (data_fim nula ou >= hoje)" }
+        exercicios: { type: array, items: { $ref: "#/components/schemas/ItemFicha" } }
+
+    FichaEntrada:
+      type: object
+      required: [nome, aluno_id, data_inicio, exercicios]
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        aluno_id: { type: integer }
+        data_inicio: { type: string, format: date }
+        data_fim: { type: string, format: date, nullable: true }
+        exercicios:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/ItemFichaEntrada" }
+
+    FichaAtualizacao:
+      type: object
+      properties:
+        nome: { type: string, minLength: 2, maxLength: 100 }
+        aluno_id: { type: integer, description: "Só pode mudar se a ficha ainda não tiver execuções" }
+        data_inicio: { type: string, format: date }
+        data_fim: { type: string, format: date, nullable: true }
+        ativa: { type: boolean }
+        exercicios:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/ItemFichaEntrada" }
+
+    Referencia:
+      type: object
+      properties:
+        id: { type: integer }
+        nome: { type: string }
+
+    RegistroExercicio:
+      type: object
+      properties:
+        ficha_exercicio_id: { type: integer }
+        exercicio: { $ref: "#/components/schemas/Referencia" }
+        repeticoes: { type: integer }
+        carga_kg: { type: number }
+        registrado_em: { type: string, format: date-time }
+
+    Execucao:
+      type: object
+      properties:
+        id: { type: integer }
+        ficha: { $ref: "#/components/schemas/Referencia" }
+        aluno_id: { type: integer }
+        inicio: { type: string, format: date-time }
+        fim: { type: string, format: date-time, nullable: true }
+        duracao_min: { type: integer, nullable: true }
+        registros: { type: array, items: { $ref: "#/components/schemas/RegistroExercicio" } }
+
+    Historico:
+      type: object
+      properties:
+        aluno: { $ref: "#/components/schemas/Referencia" }
+        execucoes:
+          type: array
+          description: Da mais recente para a mais antiga
+          items: { $ref: "#/components/schemas/Execucao" }
+        evolucao:
+          type: array
+          description: Evolução de carga e repetições por exercício, em ordem cronológica
+          items:
+            type: object
+            properties:
+              exercicio: { $ref: "#/components/schemas/Referencia" }
+              pontos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    data: { type: string, format: date-time }
+                    execucao_id: { type: integer }
+                    carga_kg: { type: number }
+                    repeticoes: { type: integer }
