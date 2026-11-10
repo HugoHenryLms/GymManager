@@ -1,0 +1,54 @@
+# GymManager — .gitignore
+# IC: GYM-CFG-001 · Versão 0.2.0 · Responsável: DBA/DevOps (João Vitor Simonetti)
+# Regra do Plano de GC (seção 4.3 e RNF03): segredos nunca são versionados.
+
+# --- Segredos e configuração local ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+segredos/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+instance/
+
+# --- Node / Newman ---
+node_modules/
+newman/
+
+# --- Banco de dados local ---
+*.sqlite
+*.sqlite3
+*.db
+mysql-data/
+
+# --- Logs e temporários ---
+*.log
+logs/
+tmp/
+*.tmp
+
+# --- Editores e sistema operacional ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
