@@ -20,8 +20,10 @@ Professor: Paulo Rodrigo Barbosa Alves
 
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
-| 0.1.0 | 2026-11-09 | Renata Martins da Silva | Versão inicial do documento | — |
-| 0.1.1 | 2026-11-09 | Renata Martins da Silva | Versão inicial do documento | — |
+| 0.1.0 | 09-11-2026 | Renata Martins da Silva | Versão inicial do documento | — |
+| 0.1.1 | 09-11-2026 | Renata Martins da Silva|
+| 0.1.2 | 10-11-2026| Renata Martins da Silva|
+
 ---
 
 ## 1. Introdução
@@ -146,7 +148,7 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RF01 | O sistema deve permitir **cadastrar, consultar, editar e inativar alunos**. | Admin, Instrutor | Alta |
 | RF02 | O sistema deve **autenticar** usuários por e-mail e senha e **controlar o acesso por perfil** (administrador, instrutor, aluno). | Todos | Alta |
 | RF03 | O sistema deve manter o **catálogo de exercícios** (cadastrar, consultar, editar e inativar), com nome, grupo muscular e descrição. | Admin, Instrutor | Alta |
-| RF04 | O sistema deve permitir **montar fichas de treino**, com exercício, séries, repetições, carga e descanso, e atribuí-las a um aluno. | Instrutor | Alta |
+| RF04 | O sistema deve permitir **montar fichas de treino**, com exercício, séries, repetições, carga e descanso, e atribuí-las a um aluno. | Admin, Instrutor | Alta |
 | RF05 | O sistema deve permitir ao aluno **registrar a execução** de cada treino e consultar o **histórico e a evolução de carga**. | Aluno, Instrutor | Alta |
 | RF06 | O sistema deve permitir **cadastrar e gerenciar instrutores e demais usuários**, definindo o perfil de cada um. | Admin | Alta |
 | RF07 | O sistema deve oferecer uma **interface web** que consuma a API e exiba apenas as funções permitidas ao perfil logado. | Todos | Média |
@@ -187,7 +189,7 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RN01 | Apenas administrador ou instrutor cria e atribui fichas de treino. | RF04 |
 | RN02 | O aluno acessa somente suas próprias fichas, execuções e histórico. | RF04, RF05 |
 | RN03 | Apenas o administrador cadastra instrutores e define perfis. | RF06 |
-| RN04 | Exercício vinculado a uma ficha não é excluído; apenas inativado. | RF04 |
+| RN04 | Exercício vinculado a uma ficha não é excluído; apenas inativado. | RF03 |
 | RN05 | Usuário ou aluno inativo não se autentica e não recebe novas fichas; o histórico é preservado. | RF01, RF02, RF04, RF06 |
 | RN06 | Uma ficha possui pelo menos um exercício e pertence a um único aluno. | RF04 |
 | RN07 | A execução de treino refere-se a uma ficha atribuída ao próprio aluno. | RF05 |
