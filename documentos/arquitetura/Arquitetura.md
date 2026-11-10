@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-ARQ-001 |
 | Caminho | `documentos/arquitetura/Arquitetura.md` |
-| Versão | 0.1.0 |
+| Versão | 0.1.1 |
 | Status | Em elaboração |
 | Baseline prevista | BL-IMPL-S2 |
 | Responsável | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -21,6 +21,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial do documento | — |
+| 0.1.1 | 10/11/2026 | João Vitor Simonetti | Porta padrão do MySQL no host passa a 3316 (evita conflito com MySQL local em 3306/3307) | — |
 
 ---
 
@@ -182,7 +183,7 @@ O modelo físico, o dicionário de dados e as restrições estão em `documentos
 
 | Serviço (`docker-compose.yml`) | Imagem | Porta no host | Observações |
 | --- | --- | --- | --- |
-| `db` | `mysql:8.4` | `MYSQL_PORTA_HOST` (3307) | Volume nomeado `mysql-data`; *healthcheck* com `mysqladmin ping` |
+| `db` | `mysql:8.4` | `MYSQL_PORTA_HOST` (3316) | Volume nomeado `mysql-data`; *healthcheck* com consulta `SELECT 1` usando o usuário da aplicação |
 | `backend` | `codigo-fonte/backend/Dockerfile` | `BACKEND_PORTA` (5000) | Ao iniciar: aguarda o banco → `flask migrar` → `flask criar-admin` → gunicorn |
 | `frontend` | `codigo-fonte/frontend/Dockerfile` | `FRONTEND_PORTA` (8080) | Nginx com proxy para o backend |
 
@@ -201,7 +202,7 @@ Executar o backend sem Docker (desenvolvimento):
 cd codigo-fonte/backend
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt -r requirements-dev.txt
-# exporte as variáveis do .env (MYSQL_HOST=localhost, MYSQL_PORT=3307 etc.)
+# exporte as variáveis do .env (MYSQL_HOST=localhost, MYSQL_PORT=3316 etc.)
 flask --app wsgi migrar
 flask --app wsgi criar-admin
 flask --app wsgi run --debug
