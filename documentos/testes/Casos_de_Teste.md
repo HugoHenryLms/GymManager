@@ -1,31 +1,33 @@
 # Casos de Teste – GymManager
 
 ## 1. Objetivo
-Verificar se as funcionalidades do GymManager funcionam corretamente.
+Verificar se as funcionalidades do GymManager atendem aos requisitos definidos no projeto.
 
 ## 2. Casos de teste
 
 | ID | Funcionalidade | Procedimento | Resultado esperado |
 |---|---|---|---|
-| CT01 | Cadastro | Cadastrar um novo usuário | Cadastro realizado |
-| CT02 | Login | Entrar com dados válidos | Acesso permitido |
-| CT03 | Login inválido | Informar senha incorreta | Acesso negado |
-| CT04 | Cadastro de aluno | Registrar um aluno | Aluno salvo |
-| CT05 | Cadastro de exercício | Adicionar um exercício | Exercício salvo |
-| CT06 | Criar treino | Montar uma ficha de treino | Treino registrado |
-| CT07 | Editar treino | Alterar uma ficha existente | Alterações salvas |
-| CT08 | Excluir treino | Excluir uma ficha | Treino removido |
-| CT09 | Consultar dados | Visualizar informações cadastradas | Dados exibidos corretamente |
-| CT10 | Campos obrigatórios | Tentar cadastrar sem preencher campos necessários | Sistema informa os campos obrigatórios |
+| CT01 | Login | Acessar com dados válidos | Usuário consegue entrar |
+| CT02 | Login inválido | Informar senha incorreta | Acesso negado |
+| CT03 | Cadastro de usuário | Cadastrar um novo usuário | Usuário registrado corretamente |
+| CT04 | Cadastro de instrutor | Administrador cadastrar um instrutor | Instrutor registrado |
+| CT05 | Cadastro de aluno | Instrutor cadastrar um aluno | Aluno registrado |
+| CT06 | Cadastro de exercício | Instrutor adicionar um exercício | Exercício salvo |
+| CT07 | Criar ficha de treino | Instrutor montar uma ficha | Ficha criada corretamente |
+| CT08 | Consultar ficha | Aluno acessar sua ficha | Ficha exibida corretamente |
+| CT09 | Registrar treino | Aluno registrar a execução de um treino | Registro salvo |
+| CT10 | Histórico de treinos | Consultar treinos anteriores | Histórico exibido |
+| CT11 | Privacidade | Aluno tentar acessar dados de outro aluno | Acesso negado |
+| CT12 | Permissões | Usuário tentar acessar função não autorizada | Acesso bloqueado |
 
-## 3. Situação dos testes
+## 3. Status dos testes
 
-Todos os casos estão inicialmente pendentes de execução.
+Todos os testes estão inicialmente pendentes de execução.
 
-- Pendente: ainda não testado.
-- Aprovado: resultado esperado alcançado.
-- Reprovado: resultado diferente do esperado.
+- **Aprovado:** resultado esperado alcançado.
+- **Reprovado:** resultado diferente do esperado.
+- **Pendente:** teste ainda não executado.
 
 ## 4. Observações
 
-Os testes serão executados conforme as funcionalidades forem disponibilizadas no aplicativo. Problemas encontrados serão registrados no relatório de defeitos.
+Os testes serão realizados após a disponibilização das funcionalidades do aplicativo. Os resultados e possíveis defeitos serão registrados nos documentos correspondentes.
