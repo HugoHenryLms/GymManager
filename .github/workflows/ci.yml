@@ -1,0 +1,143 @@
+# =============================================================================
+# GymManager — Pipeline de integração contínua
+# IC: GYM-CI-001 · Versão 0.1.0 · Responsável: DBA/DevOps (João Vitor Simonetti)
+# Plano de GC, seção 9: executa build e testes a cada Pull Request e a cada
+# push na main; PR com CI vermelho não é mesclado.
+# =============================================================================
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend — build, migrações e pytest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: gymmanager
+          MYSQL_USER: gymmanager
+          MYSQL_PASSWORD: ci-senha-banco
+          MYSQL_ROOT_PASSWORD: ci-senha-root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysql -h 127.0.0.1 -ugymmanager -pci-senha-banco -e 'SELECT 1' gymmanager"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
+
+    # Credenciais descartáveis, válidas só dentro deste job (sem segredos reais).
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: "3306"
+      MYSQL_DATABASE: gymmanager
+      MYSQL_USER: gymmanager
+      MYSQL_PASSWORD: ci-senha-banco
+      SECRET_KEY: ci-chave-somente-para-testes
+      ADMIN_NOME: Administrador CI
+      ADMIN_EMAIL: admin@ci.local
+      ADMIN_SENHA: ci-senha-admin1
+      DATABASE_URL: mysql+pymysql://gymmanager:ci-senha-banco@127.0.0.1:3306/gymmanager?charset=utf8mb4
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: codigo-fonte/backend/requirements*.txt
+
+      - name: Instalar dependências
+        run: pip install -r codigo-fonte/backend/requirements-dev.txt openapi-spec-validator==0.9.0
+
+      - name: Verificar sintaxe do código Python
+        run: python -m compileall -q codigo-fonte/backend
+
+      - name: Validar contrato OpenAPI (RNF09)
+        run: python -m openapi_spec_validator documentos/arquitetura/openapi.yaml
+
+      - name: Aplicar migrações (duas vezes, para garantir idempotência — RNF11)
+        working-directory: codigo-fonte/backend
+        run: |
+          flask --app wsgi migrar
+          flask --app wsgi migrar
+
+      - name: Criar administrador inicial
+        working-directory: codigo-fonte/backend
+        run: flask --app wsgi criar-admin
+
+      - name: Testes unitários e de integração (pytest)
+        env:
+          PYTHONPATH: codigo-fonte/backend
+        run: |
+          set +e
+          python -m pytest codigo-fonte/testes -v
+          codigo=$?
+          if [ "$codigo" -eq 5 ]; then
+            echo "::warning::Nenhum teste encontrado em codigo-fonte/testes (GYM-TST-002/003 ainda não entregues)."
+            exit 0
+          fi
+          exit $codigo
+
+  docker:
+    name: Docker — ambiente completo, fumaça e Newman
+    needs: backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar .env a partir do modelo
+        run: cp .env.example .env
+
+      - name: Subir os contêineres
+        run: docker compose up -d --build --wait --wait-timeout 300
+
+      - name: Teste de fumaça (login do administrador via proxy do frontend)
+        run: |
+          set -a; . ./.env; set +a
+          resposta=$(curl -fsS -X POST "http://localhost:${FRONTEND_PORTA}/api/v1/auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"email\":\"${ADMIN_EMAIL}\",\"senha\":\"${ADMIN_SENHA}\"}")
+          echo "$resposta" | jq -e '.token and .usuario.perfil == "ADMIN"' > /dev/null
+          curl -fsS "http://localhost:${FRONTEND_PORTA}/" | grep -q "GymManager"
+
+      - name: Coleção Postman (Newman)
+        run: |
+          set -a; . ./.env; set +a
+          shopt -s nullglob
+          colecoes=(codigo-fonte/testes/postman/*.postman_collection.json)
+          if [ ${#colecoes[@]} -eq 0 ]; then
+            echo "::warning::Nenhuma coleção Postman em codigo-fonte/testes/postman (GYM-TST-004 ainda não entregue)."
+            exit 0
+          fi
+          for colecao in "${colecoes[@]}"; do
+            npx --yes newman@6.2.3 run "$colecao" \
+              --env-var "baseUrl=http://localhost:${FRONTEND_PORTA}/api/v1" \
+              --env-var "adminEmail=${ADMIN_EMAIL}" \
+              --env-var "adminSenha=${ADMIN_SENHA}"
+          done
+
+      - name: Logs dos contêineres (em caso de falha)
+        if: failure()
+        run: docker compose logs
+
+      - name: Derrubar o ambiente
+        if: always()
+        run: docker compose down -v
