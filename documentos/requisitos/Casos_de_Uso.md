@@ -430,4 +430,15 @@ A matriz completa, com todos os requisitos funcionais e não funcionais, está e
 - Cada revisão incrementa a versão (SemVer) no início do documento, no histórico de revisões e na planilha de ICs (GYM-GER-002).
 - Antes da baseline, o documento passa por revisão técnica formal do QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa).
 
+## 8. Notas de implementação
+
+Comportamentos do sistema implementado que o leitor dos fluxos acima deve conhecer (detalhes e situação de cada requisito na seção 7 do ERS):
+
+- **Exclusões são sempre lógicas:** não há exclusão física de usuários, alunos, exercícios, fichas ou execuções; "Inativar" mantém o histórico.
+- **Instrutor da ficha:** é sempre o usuário que a criou, mesmo quando é o administrador; qualquer instrutor ou administrador pode editar qualquer ficha.
+- **Execuções simultâneas:** a API não impede iniciar uma nova execução da mesma ficha enquanto outra está em andamento; a interface retoma a execução aberta (UC07, FA3).
+- **Vigência da ficha:** é verificada ao iniciar a execução; uma execução já iniciada pode continuar a ser registrada e finalizada mesmo que a ficha seja encerrada depois.
+- **Evolução na interface:** o gráfico exibe a carga; as repetições de cada ponto são entregues pela API, mas ainda não aparecem na tela.
+- **Telas e menu por perfil:** ver a seção 4.4 do ERS.
+
   
