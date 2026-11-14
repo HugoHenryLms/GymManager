@@ -47,11 +47,11 @@ O GymManager centraliza o cadastro de alunos, o catálogo de exercícios, a mont
 - API REST documentada (OpenAPI) e interface web.
 - Testes automatizados e pipeline de integração contínua.
 
-**Fora do escopo:** aplicativo móvel nativo, pagamentos e mensalidades, integração com catracas ou wearables.
+**Fora do escopo:** aplicativo móvel nativo, pagamentos e mensalidades, integração com catracas ou wearables.Também não fazem parte da versão atual funções que aparecem nos protótipos mas não foram implementadas (ver seção 4.4.3): relatórios, metas semanais, avaliação física e perfil do usuário.
 
 ### 1.3 Visão geral do documento
 
-A seção 2 apresenta a descrição geral do produto; a seção 3, os requisitos específicos (funcionais, não funcionais e regras de negócio); a seção 4, a modelagem (casos de uso, dados, interface e API); a seção 5, a rastreabilidade entre requisitos e Itens de Configuração (ICs); a seção 6, o controle de configuração deste documento.
+A seção 2 apresenta a descrição geral do produto; a seção 3, os requisitos específicos (funcionais, não funcionais e regras de negócio); a seção 4, a modelagem (casos de uso, dados, interface e API); a seção 5, a rastreabilidade entre requisitos e Itens de Configuração (ICs); a seção 6, o controle de configuração deste documento. a seção 7, a situação de atendimento dos requisitos pelo sistema implementado.
 
 ### 1.4 Definições, acrônimos e abreviações
 
