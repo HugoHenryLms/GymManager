@@ -68,6 +68,8 @@ A seção 2 apresenta a descrição geral do produto; a seção 3, os requisitos
 | API REST | Interface de programação baseada em HTTP e recursos |
 | Ficha de treino | Conjunto de exercícios com séries, repetições, carga e descanso, atribuído a um aluno |
 | Execução de treino | Registro de uma sessão em que o aluno realizou a ficha |
+| Inativar | Marcar um registro como inativo, sem excluí-lo; o histórico é preservado|
+| Token de acesso |	Credencial aleatória devolvida no login e enviada no cabeçalho Authorization: Bearer|
 
 ### 1.5 Referências
 
@@ -113,7 +115,7 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 4. Montar fichas de treino e atribuí-las a alunos.
 5. Registrar a execução dos treinos.
 6. Consultar o histórico e a evolução de carga.
-
+7. Exibir um painel inicial conforme o perfil (resumo da academia para a equipe; semana e progresso para o aluno).
 ### 2.4 Usuários e perfis
 
 | Perfil | Descrição | Principais funções |
@@ -135,7 +137,7 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 - Os usuários dispõem de navegador atualizado e acesso à rede da academia ou à internet.
 - O primeiro usuário administrador é criado na implantação (migração ou script de carga inicial).
 - O cadastro de alunos é feito por administrador ou instrutor; não há autocadastro.
-- O ambiente de execução disponibiliza Docker e MySQL.
+- O ambiente de execução disponibiliza Docker e MySQL. As datas e horas são gravadas em UTC e exibidas pelo navegador no fuso local do usuário.
 
 ---
 
@@ -151,7 +153,7 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RF04 | O sistema deve permitir **montar fichas de treino**, com exercício, séries, repetições, carga e descanso, e atribuí-las a um aluno. | Admin, Instrutor | Alta |
 | RF05 | O sistema deve permitir ao aluno **registrar a execução** de cada treino e consultar o **histórico e a evolução de carga**. | Aluno, Instrutor | Alta |
 | RF06 | O sistema deve permitir **cadastrar e gerenciar instrutores e demais usuários**, definindo o perfil de cada um. | Admin | Alta |
-| RF07 | O sistema deve oferecer uma **interface web** que consuma a API e exiba apenas as funções permitidas ao perfil logado. | Todos | Média |
+| RF07 | O sistema deve oferecer uma **interface web** que consuma a API e exiba apenas as funções permitidas ao perfil logado e apresente um painel inicial por perfil.. | Todos | Média |
 
 **Critérios de aceite (resumo):**
 
@@ -181,6 +183,8 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RNF10 | Portabilidade | Ambiente reproduzível com Docker e docker-compose, a partir do `.env.example`. |
 | RNF11 | Confiabilidade | Evolução do esquema do banco por migrações versionadas, sem alterações manuais. |
 | RNF12 | Rastreabilidade | Cada requisito deve estar vinculado a ICs de projeto, código e teste na RTM (GYM-REQ-003). |
+| RNF13	| Segurança |	A sessão é identificada por token aleatório de 256 bits, enviado no cabeçalho Authorization: Bearer; o banco guarda apenas o hash SHA-256 do token; a sessão expira em 8 horas (valor configurável em SESSAO_HORAS), termina no logout e é encerrada quando o usuário é inativado. |
+| RNF14 |	Segurança |	A interface é servida com política de segurança de conteúdo (CSP) e cabeçalhos de proteção; os textos vindos da API são escapados antes de serem exibidos; a API é acessada pela mesma origem (CORS fechado por padrão); o corpo das requisições é limitado a 1 MB. |
 
 ### 3.3 Regras de negócio
 
