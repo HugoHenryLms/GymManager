@@ -28,7 +28,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 
 ### 1.1 Propósito
 
-Este documento apresenta a modelagem de casos de uso do **GymManager**, detalhando como cada ator interage com o sistema para cumprir os requisitos do ERS (GYM-REQ-001). Ele serve de base para a especificação da API (GYM-ARQ-003), a interface web (GYM-SRC-006), o Plano de Testes (GYM-TST-001) e o Manual do Usuário (GYM-DOC-002).
+Este documento apresenta a modelagem de casos de uso do **GymManager**, detalhando como cada ator interage com o sistema para cumprir os requisitos do ERS (GYM-REQ-001). Ele serve de base para a especificação da API (GYM-ARQ-003), a interface web (GYM-SRC-006), o Plano de Testes (GYM-TST-001) e o Manual do Usuário (GYM-DOC-002). Na versão 0.2.0, os fluxos foram conferidos com o sistema implementado.
 
 ### 1.2 Convenções
 
@@ -37,7 +37,8 @@ Este documento apresenta a modelagem de casos de uso do **GymManager**, detalhan
 - **Fluxos alternativos (FA):** variações válidas do fluxo principal.
 - **Fluxos de exceção (FE):** situações de erro, com a resposta do sistema.
 - Mensagens de erro de validação seguem a seção 4.3 do ERS.
-
+- Mensagens de erro de validação e de regras de negócio seguem a seção 4.3 do ERS.
+- Ficha vigente: ficha ativa cuja data de fim está vazia ou não é anterior à data atual (RN10).
 ---
 
 ## 2. Atores
@@ -46,10 +47,9 @@ Este documento apresenta a modelagem de casos de uso do **GymManager**, detalhan
 | --- | --- | --- |
 | Administrador | Responsável pela gestão do sistema: usuários, instrutores e perfis | Herda todas as permissões do Instrutor |
 | Instrutor | Profissional da academia que gerencia alunos, exercícios e fichas e acompanha a evolução | — |
-| Aluno | Praticante atendido pela academia; consulta fichas, registra execuções e vê seu histórico | Acessa apenas os próprios dados (RN02) |
+| Aluno | Praticante atendido pela academia; consulta fichas, registra execuções e vê seu histórico | Acessa apenas os próprios dados (RN02) não herda permissões da equipe  |
 
 ---
-
 ## 3. Diagrama de casos de uso
 
 ```mermaid
@@ -91,10 +91,12 @@ flowchart LR
     UC05 -. "«include»" .-> UC04
 ```
 
+
+
 **Leitura do diagrama:**
 
 - Todos os casos de uso, exceto UC01, exigem autenticação (RNF02); por isso incluem UC01.
-- O Administrador herda do Instrutor e, por isso, também realiza UC03, UC04, UC05 e UC08, além de UC02.
+- O Administrador herda do Instrutor e, por isso, também realiza UC03, UC04, UC05 e UC08, além de UC02. **Não** realiza UC06 e UC07, que são exclusivos do Aluno.
 - UC05 depende de alunos e exercícios já cadastrados (UC03 e UC04), representados como inclusões.
 - UC01 é realizado por todos os atores.
 
@@ -133,19 +135,22 @@ flowchart LR
 
 1. O usuário acessa a tela de login (TL01).
 2. Informa e-mail e senha.
-3. O sistema valida o formato dos dados e confere as credenciais.
+3. O sistema valida o formato dos dados e confere as credenciais (o e-mail não diferencia maiúsculas de minúsculas).
 4. O sistema inicia a sessão e identifica o perfil do usuário.
-5. O sistema exibe o painel inicial (TL02) com as funções permitidas ao perfil.
+5. O sistema exibe o painel inicial (TL02) com as funções permitidas ao perfil: para administrador e instrutor, o resumo da academia (alunos ativos, fichas vigentes, fichas a renovar em 7 dias e alunos sem ficha); para o aluno, o treino atual, a semana e a evolução de carga.
 
 **Fluxos alternativos**
 
 - **FA1 — Encerrar sessão:** no passo 5 em diante, o usuário aciona "Sair"; o sistema encerra a sessão e retorna à TL01.
-
+- **FA2 — Sessão já aberta:** se o navegador já tem sessão válida e o usuário acessa a TL01, o sistema o leva ao painel.
+- 
 **Fluxos de exceção**
 
 - **FE1 — Credenciais inválidas:** o sistema informa o erro sem indicar qual campo está incorreto e permanece na TL01.
 - **FE2 — Usuário inativo:** o sistema nega o acesso e informa que o usuário está inativo (RN05).
-- **FE3 — Dados inválidos:** e-mail em formato inválido ou campo vazio; o sistema exibe a mensagem de validação.
+- **FE3 — Dados inválidos:** e-mail ou senha em branco; a interface exibe "Informe e-mail e senha." e a API responde `400`.
+- **FE4 — Sessão expirada ou encerrada:** ao receber `401` em qualquer chamada, a interface descarta a sessão e volta à TL01. Isso ocorre também quando o usuário é inativado durante a sessão (RN05).
+- **FE5 — Rota não permitida ao perfil:** a interface redireciona ao painel; se a chamada chegar à API, ela responde `403`.
 
 ---
 
@@ -155,11 +160,11 @@ flowchart LR
 | --- | --- |
 | Ator | Administrador |
 | Requisitos | RF06 |
-| Regras de negócio | RN03, RN05 |
+| Regras de negócio | RN03, RN05, RN08 |
 | Tela | TL03 (Usuários e instrutores) |
 | Endpoints | `GET /usuarios`, `POST /usuarios`, `PUT /usuarios/{id}`, `DELETE /usuarios/{id}` |
 | Pré-condição | Administrador autenticado (UC01) |
-| Pós-condição | Cadastro de usuário criado, atualizado ou inativado |
+| Pós-condição | Cadastro de usuário criado, atualizado, inativado ou rativado. |
 
 **Fluxo principal (cadastrar usuário ou instrutor)**
 
@@ -174,12 +179,15 @@ flowchart LR
 - **FA1 — Consultar:** o administrador visualiza a listagem e filtra por nome, e-mail ou perfil.
 - **FA2 — Editar:** o administrador seleciona um usuário, altera nome, e-mail ou perfil, e salva.
 - **FA3 — Inativar:** o administrador seleciona "Inativar" e confirma; o usuário passa a inativo e perde o acesso, e o histórico é preservado (RN05).
-
+- **FA4 — Reativar:** ao editar um usuário inativo, o administrador marca "Ativo" e salva; o usuário volta a poder autenticar-se.
+- 
 **Fluxos de exceção**
 
 - **FE1 — E-mail já cadastrado:** o sistema exibe "E-mail inválido ou já cadastrado."
 - **FE2 — Senha fraca:** o sistema exibe "Senha fraca."
 - **FE3 — Sem permissão:** usuário que não seja administrador tenta acessar; o sistema retorna erro 403 (RN03).
+- **FE4 — Administrador altera a si mesmo:** ao tentar inativar a própria conta ou mudar o próprio perfil, o sistema responde `409` com "Não é possível inativar ou alterar o perfil do próprio usuário." (RN08). Na interface, a ação "Inativar" não aparece na própria linha e o campo perfil fica desabilitado.
+- **FE5 — Usuário não encontrado:** o sistema retorna `404`.
 
 ---
 
@@ -193,7 +201,7 @@ flowchart LR
 | Tela | TL04 (Alunos) |
 | Endpoints | `GET /alunos`, `POST /alunos`, `GET /alunos/{id}`, `PUT /alunos/{id}`, `DELETE /alunos/{id}` |
 | Pré-condição | Usuário autenticado (UC01) com perfil de instrutor ou administrador |
-| Pós-condição | Aluno cadastrado, atualizado ou inativado |
+| Pós-condição | Aluno cadastrado, atualizado, inativado ou reativado |
 
 **Fluxo principal (cadastrar aluno)**
 
@@ -208,6 +216,7 @@ flowchart LR
 - **FA1 — Consultar:** o ator pesquisa e visualiza os dados de um aluno.
 - **FA2 — Editar:** o ator altera os dados do aluno e salva.
 - **FA3 — Inativar:** o ator inativa o aluno após confirmação; o aluno não se autentica nem recebe novas fichas, e o histórico é mantido (RN05).
+- **FA4 — Reativar:** o ator aciona "Reativar" em um aluno inativo; o aluno volta a poder autenticar-se e receber fichas.
 
 **Fluxos de exceção**
 
@@ -226,7 +235,7 @@ flowchart LR
 | Tela | TL05 (Catálogo de exercícios) |
 | Endpoints | `GET /exercicios`, `POST /exercicios`, `PUT /exercicios/{id}`, `DELETE /exercicios/{id}` |
 | Pré-condição | Usuário autenticado (UC01) com perfil de instrutor ou administrador |
-| Pós-condição | Exercício cadastrado, atualizado ou inativado no catálogo |
+| Pós-condição | Exercício cadastrado, atualizado, reativado ou inativado no catálogo |
 
 **Fluxo principal (cadastrar exercício)**
 
@@ -241,11 +250,13 @@ flowchart LR
 - **FA1 — Consultar:** o ator lista e filtra os exercícios por nome ou grupo muscular.
 - **FA2 — Editar:** o ator altera os dados e salva.
 - **FA3 — Inativar:** o ator inativa o exercício; ele deixa de ser oferecido para novas fichas, mas permanece nas fichas existentes (RN04).
+- **FA4 — Reativar:** o ator aciona "Reativar"; o exercício volta a ser oferecido para novas fichas.
 
 **Fluxos de exceção**
 
 - **FE1 — Nome duplicado:** o sistema exibe "Exercício já cadastrado."
 - **FE2 — Tentativa de exclusão de exercício em uso:** o sistema não exclui e propõe a inativação (RN04).
+- **FE3 — Exercício não encontrado:** o sistema retorna `404`.
 
 ---
 
@@ -263,25 +274,32 @@ flowchart LR
 
 **Fluxo principal**
 
-1. O instrutor acessa a TL06 e seleciona o aluno.
-2. Cria a ficha informando nome, data de início e, opcionalmente, data de fim.
-3. Adiciona exercícios do catálogo, informando para cada um séries, repetições, carga (kg), descanso (s) e ordem.
+1. O instrutor acessa a TL06 e aciona "+ Novo treino" (a partir do painel, o atalho "Montar ficha" já traz o aluno selecionado).
+2. Informa o nome da ficha, seleciona o aluno (somente alunos ativos) e informa a data de início (preenchida com a data atual) e, opcionalmente, a data de fim.
+3. Adiciona exercícios da biblioteca do catálogo (somente exercícios ativos; busca por nome e filtro por grupo), informando para cada um séries, repetições, carga (kg) e descanso (s); novos itens iniciam com 3 séries, 12 repetições, 0 kg e 60 s. A ordem é ajustada pelos botões de subir e descer.
 4. Salva a ficha.
 5. O sistema valida os dados e confere que há ao menos um exercício (RN06).
-6. O sistema grava a ficha, atribui ao aluno e confirma a operação.
+6. O sistema grava a ficha, registra o usuário logado como instrutor (RN01), atribui ao aluno e confirma a operação.
+
 
 **Fluxos alternativos**
 
 - **FA1 — Editar ficha:** o instrutor abre uma ficha existente, altera exercícios ou parâmetros e salva.
 - **FA2 — Consultar fichas:** o instrutor lista as fichas, filtrando por aluno.
 - **FA3 — Encerrar ficha:** o instrutor informa a data de fim ou marca a ficha como inativa; ela deixa de aparecer como ativa para o aluno, e o histórico é mantido.
+- **FA4 — Reativar ficha:** ao editar uma ficha encerrada, o instrutor pode torná-la ativa novamente, desde que o aluno esteja ativo (RN09).
+- **FA5 — Trocar o aluno da ficha:** permitido apenas enquanto a ficha não tiver execuções registradas (RN09).
+
 
 **Fluxos de exceção**
 
-- **FE1 — Ficha sem exercício:** o sistema impede o salvamento (RN06).
-- **FE2 — Valores inválidos:** séries ou repetições menores ou iguais a zero, carga negativa ou data de fim anterior à de início; o sistema mantém a ficha em edição e exibe a mensagem de validação.
-- **FE3 — Aluno inativo:** o sistema não permite atribuir a ficha (RN05).
-- **FE4 — Usuário sem permissão:** perfil aluno tenta criar ou alterar ficha; o sistema retorna erro 403 (RN01).
+- **FE1 — Ficha sem exercício:** o sistema impede o salvamento e responde `400` com "A ficha deve ter pelo menos um exercício." (RN06).
+- **FE2 — Valores inválidos:** séries ou repetições menores ou iguais a zero ("Valor deve ser maior que zero."), carga negativa ou fora do limite ("Carga inválida."), descanso inválido ("Descanso inválido."), nome fora do tamanho ("Nome obrigatório.") ou data de fim anterior à de início ("Data final anterior à inicial."); o sistema mantém a ficha em edição e destaca o campo (e a linha do exercício) com erro.
+- **FE3 — Aluno inativo:** o sistema não permite atribuir a ficha e responde `409` com "Aluno inativo não pode receber fichas." (RN05).
+- **FE4 — Exercício inativo:** o sistema não aceita adicionar exercício inativo a uma ficha e responde `400` (RN04); um exercício que já consta na ficha e foi inativado depois continua nela.
+- **FE5 — Ficha com execuções muda de aluno:** o sistema responde `409` com "Ficha com execuções registradas não pode mudar de aluno." (RN09).
+- **FE6 — Usuário sem permissão:** perfil aluno tenta criar ou alterar ficha; o sistema retorna erro `403` (RN01).
+- **FE7 — Ficha não encontrada:** o sistema retorna `404`.
 
 ---
 
@@ -299,10 +317,9 @@ flowchart LR
 
 **Fluxo principal**
 
-1. O aluno acessa a TL07.
-2. O sistema lista as fichas ativas atribuídas ao aluno logado.
-3. O aluno seleciona uma ficha.
-4. O sistema exibe os exercícios, com séries, repetições, carga e descanso, na ordem definida.
+1. O aluno acessa a TL07 (item "Meu treino" do menu).
+2. O sistema lista as fichas vigentes atribuídas ao aluno logado, com instrutor e período.
+3. Para cada ficha, o sistema exibe os exercícios, com séries, repetições, carga e descanso, na ordem definida.
 
 **Fluxos alternativos**
 
@@ -340,13 +357,17 @@ flowchart LR
 
 - **FA1 — Corrigir registro:** antes de finalizar, o aluno altera a repetição ou a carga de um exercício já registrado.
 - **FA2 — Finalizar parcialmente:** o aluno finaliza sem ter registrado todos os exercícios; o sistema grava apenas os informados.
+- **FA3 — Retomar treino em andamento:** ao abrir a ficha que já tem execução em andamento, a interface a retoma, exibindo os exercícios já registrados e o botão "Continuar treino" no painel.
+
 
 **Fluxos de exceção**
 
 - **FE1 — Valores inválidos:** repetições ou carga negativas; o sistema exibe "Carga inválida." ou "Valor deve ser maior que zero." e não grava o registro.
 - **FE2 — Ficha não atribuída ao aluno:** o sistema retorna erro 403 (RN02, RN07).
 - **FE3 — Execução já finalizada:** o sistema impede novos registros na execução encerrada.
-
+- **FE4 — Ficha não vigente:** ficha encerrada ou com data de fim vencida; o sistema não inicia a execução e responde `409` com "Ficha inativa." (RN10). Na interface, o botão "Iniciar treino" não é exibido para fichas não vigentes.
+- **FE5 — Exercício de outra ficha:** o registro de um item que não pertence à ficha da execução é recusado (`400`, "Exercício não pertence à ficha desta execução.").
+- **FE6 — Execução de outro aluno ou inexistente:** o sistema retorna `403` ou `404`, respectivamente (RN02).
 ---
 
 ### UC08 — Consultar histórico e evolução de carga
@@ -366,7 +387,7 @@ flowchart LR
 1. O ator acessa a TL09 (o aluno vê o próprio histórico; o instrutor seleciona um aluno).
 2. O sistema lista as execuções realizadas, da mais recente para a mais antiga, com data, ficha e duração.
 3. O ator seleciona um exercício.
-4. O sistema exibe a evolução da carga e das repetições desse exercício ao longo do tempo.
+4. O sistema exibe o gráfico de evolução da carga desse exercício ao longo do tempo e a variação desde o primeiro registro. A API entrega também as repetições de cada ponto da evolução.
 
 **Fluxos alternativos**
 
@@ -377,6 +398,8 @@ flowchart LR
 
 - **FE1 — Sem execuções:** o sistema informa que ainda não há treinos registrados.
 - **FE2 — Histórico de outro aluno:** o aluno tenta consultar o histórico de terceiros; o sistema retorna erro 403 (RN02).
+- **FE3 — Aluno não encontrado:** o identificador informado não pertence a um aluno; o sistema retorna `404`.
+- **FE4 — Período inválido:** data final anterior à inicial; o sistema responde `400` com "Data final anterior à inicial."
 
 ---
 
@@ -393,6 +416,8 @@ flowchart LR
 | UC07 | RF05 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001 a GYM-TST-004 | TL08 |
 | UC08 | RF05 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001 a GYM-TST-004 | TL09 |
 
+Correspondência com os casos de teste funcionais (GYM-TST-005): CT01 e CT02 → UC01; CT03 e CT04 → UC02; CT05 → UC03; CT06 → UC04; CT07 → UC05; CT08 → UC06; CT09 → UC07; CT10 → UC08; CT11 → UC06, UC07 e UC08 (RN02); CT12 → UC01 a UC08 (RNF02).
+
 A matriz completa, com todos os requisitos funcionais e não funcionais, está em `documentos/requisitos/RTM.xlsx` (GYM-REQ-003).
 
 ---
@@ -404,3 +429,5 @@ A matriz completa, com todos os requisitos funcionais e não funcionais, está e
 - Qualquer mudança de caso de uso deve manter coerência com o ERS (GYM-REQ-001), a RTM (GYM-REQ-003), os protótipos (GYM-REQ-004), a especificação OpenAPI (GYM-ARQ-003) e o Plano de Testes (GYM-TST-001).
 - Cada revisão incrementa a versão (SemVer) no início do documento, no histórico de revisões e na planilha de ICs (GYM-GER-002).
 - Antes da baseline, o documento passa por revisão técnica formal do QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa).
+
+  
