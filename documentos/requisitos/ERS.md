@@ -197,7 +197,11 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RN05 | Usuário ou aluno inativo não se autentica e não recebe novas fichas; o histórico é preservado. | RF01, RF02, RF04, RF06 |
 | RN06 | Uma ficha possui pelo menos um exercício e pertence a um único aluno. | RF04 |
 | RN07 | A execução de treino refere-se a uma ficha atribuída ao próprio aluno. | RF05 |
-
+| RN08 | O administrador não pode inativar a própria conta nem alterar o próprio perfil. |	RF06 |
+| RN09 | Ficha que já possui execuções registradas não pode ser transferida para outro aluno; uma ficha encerrada só pode ser reativada se o aluno estiver ativo. | RF04, RF05 |
+| RN10 |	Uma execução só pode ser iniciada em ficha vigente: ativa e com data de fim vazia ou não anterior à data atual. | RF05 |
+| RN11 |	Em uma execução, cada exercício da ficha tem um único registro: registrar de novo corrige o anterior. Execução finalizada não aceita novos registros.	| RF05 |
+| RN12 |	O exercício removido de uma ficha é apenas inativado no item da ficha, preservando as execuções que o referenciam. RF04, | RF05 |
 ---
 
 ## 4. Modelagem
@@ -236,28 +240,32 @@ erDiagram
 
 | Entidade | Atributos principais |
 | --- | --- |
-| USUARIO | id, nome, e-mail (único), senha (hash), perfil (ADMIN, INSTRUTOR, ALUNO), ativo, dados do aluno (data de nascimento, telefone) |
-| EXERCICIO | id, nome (único), grupo muscular, descrição, ativo |
-| FICHA | id, nome, aluno, instrutor, data de início, data de fim, ativa |
-| FICHA_EXERCICIO | id, ficha, exercício, séries, repetições, carga (kg), descanso (s), ordem |
-| EXECUCAO | id, ficha, aluno, data/hora de início, data/hora de fim |
-| EXECUCAO_EXERCICIO | id, execução, item da ficha, repetições realizadas, carga realizada (kg) |
+| USUARIO | id, nome, e-mail (único), senha (hash), perfil (ADMIN, INSTRUTOR, ALUNO), ativo, data de nascimento, telefone, criado em, atualizado em |
+| SESSAO |	id, usuário, hash do token (único), criado em, expira em |
+| EXERCICIO | id, nome (único), grupo muscular, descrição, ativo, criado em, atualizado em |
+| FICHA | id, nome, aluno, instrutor, data de início, data de fim, ativa, criado em, atualizado em |
+| FICHA_EXERCICIO |  id, ficha, exercício, séries, repetições, carga (kg), descanso (s), ordem, ativo |
+| EXECUCAO | id, ficha, aluno, data/hora de início, data/hora de fim (vazia enquanto em andamento) |
+| EXECUCAO_EXERCICIO | id, execução, item da ficha, repetições realizadas, carga realizada (kg), registrado em; um único registro por item em cada execução |
 
 ### 4.3 Regras de validação
 
 | Campo | Regra | Mensagem de erro |
 | --- | --- | --- |
-| e-mail | Formato válido e único | "E-mail inválido ou já cadastrado." |
-| senha | Mínimo de 8 caracteres, com letras e números | "Senha fraca." |
+| e-mail | Formato válido, até 254 caracteres, único (sem diferenciar maiúsculas de minúsculas); é gravado em minúsculas | "E-mail inválido ou já cadastrado." |
+| senha | 	De 8 a 128 caracteres, com letras e número | "Senha fraca." |
 | nome | Obrigatório, de 2 a 100 caracteres | "Nome obrigatório." |
 | perfil | Um de ADMIN, INSTRUTOR ou ALUNO | "Perfil inválido." |
-| exercício (nome) | Obrigatório e único | "Exercício já cadastrado." |
-| séries, repetições | Inteiros maiores que zero | "Valor deve ser maior que zero." |
-| carga (kg) | Número maior ou igual a zero, até 2 casas decimais | "Carga inválida." |
+| exercício (nome) | Obrigatório e único (sem diferenciar maiúsculas de minúsculas)  | "Exercício já cadastrado." |
+| séries, repetições | Inteiros maiores que zero (até 65535) | "Valor deve ser maior que zero." |
+| carga (kg) | 	Número de 0 a 9999,99, com até 2 casas decimais | "Carga inválida." |
 | descanso (s) | Inteiro maior ou igual a zero | "Descanso inválido." |
 | data de fim | Maior ou igual à data de início | "Data final anterior à inicial." |
+| datas (nascimento, início, fim) |	Formato AAAA-MM-DD; a data de início da ficha é obrigatória	| "Data inválida." |
+| telefone, grupo muscular, descrição |	Opcionais; até 20, 50 e 5000 caracteres, respectivamente	"Campo <nome do campo> inválido." |
+| corpo da requisição |	Deve ser um objeto JSON	| "Envie os dados em JSON."|
 
-As validações são aplicadas no backend; o frontend as replica para melhorar a usabilidade.
+
 
 ### 4.4 Requisitos de interface
 
