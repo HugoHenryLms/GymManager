@@ -14,7 +14,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
 | Dependência | GYM-GER-001 (Plano de Projeto) |
-| ICs relacionados | GYM-REQ-002 (Casos de Uso), GYM-REQ-003 (RTM), GYM-REQ-004 (Protótipos de tela) |
+| ICs relacionados | GYM-REQ-002 (Casos de Uso), GYM-REQ-003 (RTM) |
 
 ## Histórico de revisões
 
@@ -199,9 +199,9 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RN07 | A execução de treino refere-se a uma ficha atribuída ao próprio aluno. | RF05 |
 | RN08 | O administrador não pode inativar a própria conta nem alterar o próprio perfil. |	RF06 |
 | RN09 | Ficha que já possui execuções registradas não pode ser transferida para outro aluno; uma ficha encerrada só pode ser reativada se o aluno estiver ativo. | RF04, RF05 |
-| RN10 |	Uma execução só pode ser iniciada em ficha vigente: ativa e com data de fim vazia ou não anterior à data atual. | RF05 |
-| RN11 |	Em uma execução, cada exercício da ficha tem um único registro: registrar de novo corrige o anterior. Execução finalizada não aceita novos registros.	| RF05 |
-| RN12 |	O exercício removido de uma ficha é apenas inativado no item da ficha, preservando as execuções que o referenciam. RF04, | RF05 |
+| RN10 | Uma execução só pode ser iniciada em ficha vigente: ativa e com data de fim vazia ou não anterior à data atual. | RF05 |
+| RN11 | Em uma execução, cada exercício da ficha tem um único registro: registrar de novo corrige o anterior. Execução finalizada não aceita novos registros.	| RF05 |
+| RN12 | O exercício removido de uma ficha é apenas inativado no item da ficha, preservando as execuções que o referenciam. | RF04,  RF05 |
 ---
 
 ## 4. Modelagem
@@ -269,81 +269,85 @@ erDiagram
 
 ### 4.4 Requisitos de interface
 
-Os protótipos estão em `prototipos/` (`telas-login.png`, `telas-cadastro.png`, `outras-telas.png`), mantidos em GYM-REQ-004.
+4.4.1 Telas
 
-| ID | Tela | Perfil | Requisito(s) |
-| --- | --- | --- | --- |
-| TL01 | Login | Todos | RF02, RF07 |
-| TL02 | Painel inicial | Todos | RF07 |
-| TL03 | Usuários e instrutores | Administrador | RF06 |
-| TL04 | Alunos (lista e cadastro) | Administrador, Instrutor | RF01 |
-| TL05 | Catálogo de exercícios | Administrador, Instrutor | RF03 |
-| TL06 | Montagem de ficha de treino | Instrutor | RF04 |
-| TL07 | Minhas fichas | Aluno | RF04, RF07 |
-| TL08 | Registro de execução | Aluno | RF05 |
-| TL09 | Histórico e evolução de carga | Aluno, Instrutor | RF05 |
+As telas abaixo são as implementadas na versão 0.1.0 do sistema; os protótipos feitos antes do desenvolvimento não são referência para este documento, pois não foram implementados. A interface é uma aplicação de página única, com navegação por hash (#/rota).
 
-**Diretrizes:** layout responsivo; menu conforme o perfil; mensagens de erro e sucesso claras; confirmação antes de ações destrutivas (inativar).
+| ID |	Tela |	Rota | Perfil | Requisito(s) |
+| --- | --- | --- | | --- | --- |
+| TL01 | Login | #/login	| Todos | RF02, RF07 |
+| TL02 | Painel inicial | #/painel | Todos | RF07 |
+| TL03 | Usuários e instrutores	| #/usuarios | Administrador | RF06 |
+| TL04 | Alunos (lista e cadastro) | #/alunos | Administrador, Instrutor | RF01 |
+| TL05 | Catálogo de exercícios | #/exercicios | Administrador, Instrutor | RF03 |
+| TL06 | Treinos: lista de fichas e montagem de ficha | #/fichas, #/fichas/nova, #/fichas/{id}	Administrador, Instrutor | RF04 |
+| TL07 | Minhas fichas | #/minhas-fichas | Aluno | RF04, RF07 |
+| TL08	Registro de execução | #/treino/{id} | Aluno | RF05 |
+|TL09 |	Histórico e evolução de carga | #/historico	| Aluno, Instrutor, Administrador | RF05 |
 
 ### 4.5 Requisitos da API REST
 
-O contrato completo será mantido em `documentos/arquitetura/openapi.yaml` (GYM-ARQ-003). Base: `/api/v1`; formato: JSON; autenticação obrigatória, exceto no login.
+O contrato completo é mantido em documentos/arquitetura/openapi.yaml (GYM-ARQ-003), com as mesmas 23 operações da tabela abaixo. Base: /api/v1; formato: JSON (UTF-8); autenticação obrigatória, exceto no login, pelo cabeçalho Authorization: Bearer <token>.
+
+Formato de erro: {"erro": "<mensagem>", "campo": "<campo>"}; o campo campo só aparece quando o erro está ligado a um campo específico.
 
 | Método | Endpoint | Descrição | Perfil | RF |
-| --- | --- | --- | --- | --- |
-| POST | `/auth/login` | Autentica e retorna credencial de acesso | Público | RF02 |
-| POST | `/auth/logout` | Encerra a sessão | Todos | RF02 |
-| GET | `/usuarios` | Lista usuários | Admin | RF06 |
-| POST | `/usuarios` | Cadastra usuário ou instrutor | Admin | RF06 |
-| PUT | `/usuarios/{id}` | Atualiza usuário | Admin | RF06 |
-| DELETE | `/usuarios/{id}` | Inativa usuário | Admin | RF06 |
-| GET | `/alunos` | Lista alunos | Admin, Instrutor | RF01 |
-| POST | `/alunos` | Cadastra aluno | Admin, Instrutor | RF01 |
+| ------ | -------- | --------- | ------ | -- |
+| POST | `/auth/login` | Autentica e retorna `token`, `expira_em` e os dados do usuário (`200`) | Público | RF02 |
+| POST | `/auth/logout` | Encerra a sessão atual (`204`) | Todos | RF02 |
+| GET | `/usuarios` | Lista usuários; filtros: `nome`, `email`, `perfil`, `ativo` | Admin | RF06 |
+| POST | `/usuarios` | Cadastra usuário ou instrutor (`201`) | Admin | RF06 |
+| PUT | `/usuarios/{id}` | Atualiza campos enviados (nome, e-mail, senha, perfil, `ativo`, telefone, data de nascimento); `ativo: true` reativa | Admin | RF06 |
+| DELETE | `/usuarios/{id}` | Inativa o usuário e encerra suas sessões; retorna o usuário (`200`) | Admin | RF06 |
+| GET | `/alunos` | Lista alunos; filtros: `nome` (busca em nome e e-mail), `ativo` | Admin, Instrutor | RF01 |
+| POST | `/alunos` | Cadastra aluno, com perfil ALUNO e situação ativa (`201`) | Admin, Instrutor | RF01 |
 | GET | `/alunos/{id}` | Consulta aluno | Admin, Instrutor | RF01 |
-| PUT | `/alunos/{id}` | Atualiza aluno | Admin, Instrutor | RF01 |
-| DELETE | `/alunos/{id}` | Inativa aluno | Admin, Instrutor | RF01 |
-| GET | `/exercicios` | Lista exercícios | Todos | RF03 |
-| POST | `/exercicios` | Cadastra exercício | Admin, Instrutor | RF03 |
-| PUT | `/exercicios/{id}` | Atualiza exercício | Admin, Instrutor | RF03 |
-| DELETE | `/exercicios/{id}` | Inativa exercício | Admin, Instrutor | RF03 |
-| GET | `/fichas` | Lista fichas (do aluno logado ou filtradas) | Todos | RF04 |
-| POST | `/fichas` | Cria ficha e atribui a aluno | Admin, Instrutor | RF04 |
-| GET | `/fichas/{id}` | Detalha ficha | Todos | RF04 |
-| PUT | `/fichas/{id}` | Atualiza ficha | Admin, Instrutor | RF04 |
-| POST | `/execucoes` | Inicia execução de uma ficha | Aluno | RF05 |
-| POST | `/execucoes/{id}/exercicios` | Registra repetições e carga de um exercício | Aluno | RF05 |
-| PATCH | `/execucoes/{id}/finalizar` | Finaliza a execução | Aluno | RF05 |
-| GET | `/alunos/{id}/historico` | Histórico e evolução de carga | Aluno (próprio), Admin, Instrutor | RF05 |
+| PUT | `/alunos/{id}` | Atualiza aluno; `ativo: true` reativa | Admin, Instrutor | RF01 |
+| DELETE | `/alunos/{id}` | Inativa aluno (não autentica nem recebe fichas; histórico mantido); retorna o aluno (`200`) | Admin, Instrutor | RF01 |
+| GET | `/exercicios` | Lista exercícios; filtros: `nome`, `grupo_muscular`, `ativo` | Todos | RF03 |
+| POST | `/exercicios` | Cadastra exercício (`201`) | Admin, Instrutor | RF03 |
+| PUT | `/exercicios/{id}` | Atualiza exercício; `ativo: true` reativa | Admin, Instrutor | RF03 |
+| DELETE | `/exercicios/{id}` | Inativa exercício (nunca exclui); retorna o exercício (`200`) | Admin, Instrutor | RF03 |
+| GET | `/fichas` | Lista fichas: o aluno recebe apenas as próprias; a equipe recebe todas; filtros: `aluno_id` (equipe) e `ativa` (`true` = vigentes; `false` = encerradas ou vencidas) | Todos | RF04 |
+| POST | `/fichas` | Cria ficha (`nome`, `aluno_id`, `data_inicio`, `data_fim`, lista `exercicios`) e atribui ao aluno; o instrutor é o usuário logado (`201`) | Admin, Instrutor | RF04 |
+| GET | `/fichas/{id}` | Detalha ficha, com `vigente` e os exercícios ativos (o aluno só acessa a própria) | Todos | RF04 |
+| PUT | `/fichas/{id}` | Atualiza ficha; `ativa: false` encerra; a lista `exercicios` substitui os itens (com `id` atualiza, sem `id` inclui, ausente inativa) | Admin, Instrutor | RF04 |
+| POST | `/execucoes` | Inicia execução de uma ficha própria e vigente (`201`) | Aluno | RF05 |
+| POST | `/execucoes/{id}/exercicios` | Registra repetições e carga de um item da ficha; repetir o item corrige o registro (`201` no primeiro registro, `200` na correção) | Aluno | RF05 |
+| PATCH | `/execucoes/{id}/finalizar` | Finaliza a execução e registra o término | Aluno | RF05 |
+| GET | `/alunos/{id}/historico` | Retorna `aluno`, `execucoes` (da mais recente para a mais antiga) e `evolucao` (pontos de carga e repetições por exercício); filtros: `data_inicio`, `data_fim` (AAAA-MM-DD), `ficha_id` | Aluno (próprio), Admin, Instrutor | RF05 |
 
 **Códigos de resposta:** `200` sucesso; `201` criado; `400` dados inválidos; `401` não autenticado; `403` sem permissão; `404` não encontrado; `409` conflito; `500` erro interno.
 
 ---
 
-## 5. Rastreabilidade (visão inicial da RTM)
+## 5. Rastreabilidade 
 
-Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa é mantida em `documentos/requisitos/RTM.xlsx` (GYM-REQ-003).
+Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa, com a situação de implementação e de verificação, é mantida em documentos/requisitos/RTM.xlsx (GYM-REQ-003). Os testes funcionais manuais (GYM-TST-005, casos CT01 a CT12) cobrem os requisitos funcionais; os testes automatizados (GYM-TST-002 a 004) ainda não foram entregues
 
 | Requisito | Casos de uso | Telas | IC de projeto | IC de código | IC de teste |
-| --- | --- | --- | --- | --- | --- |
-| RF01 | UC03 | TL04 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-002, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF02 | UC01 | TL01 | GYM-REQ-001, GYM-ARQ-001, GYM-ARQ-003 | GYM-SRC-001, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF03 | UC04 | TL05 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-003, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF04 | UC05, UC06 | TL06, TL07 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-004, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF05 | UC07, UC08 | TL08, TL09 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF06 | UC02 | TL03 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-001, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RF07 | UC01 a UC08 | TL01 a TL09 | GYM-REQ-004, GYM-ARQ-003 | GYM-SRC-006 | GYM-TST-001, GYM-TST-004 |
+| --------- | ------------ | ----- | ------------- | ----------- | ----------- |
+| RF01 | UC03 | TL04 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-002, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF02 | UC01 | TL01 | GYM-REQ-001, GYM-ARQ-001, GYM-ARQ-003 | GYM-SRC-001, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF03 | UC04 | TL05 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-003, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF04 | UC05, UC06 | TL06, TL07 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-004, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF05 | UC07, UC08 | TL08, TL09 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF06 | UC02 | TL03 | GYM-REQ-001, GYM-ARQ-003, GYM-ARQ-002 | GYM-SRC-001, GYM-SRC-006 | GYM-TST-001, GYM-TST-002, GYM-TST-003, GYM-TST-004, GYM-TST-005 |
+| RF07 | UC01 a UC08 | TL01 a TL09 | GYM-REQ-001, GYM-ARQ-003 | GYM-SRC-006 | GYM-TST-001, GYM-TST-004, GYM-TST-005 |
 
 | Requisito não funcional | IC de projeto | IC de código / configuração | IC de teste |
-| --- | --- | --- | --- |
-| RNF01, RNF02 | GYM-ARQ-001 | GYM-SRC-001 | GYM-TST-002, GYM-TST-003 |
+| ----------------------- | ------------- | --------------------------- | ------------ |
+| RNF01, RNF02 | GYM-ARQ-001 | GYM-SRC-001 | GYM-TST-002, GYM-TST-003, GYM-TST-005 |
 | RNF03 | GYM-GER-003 | GYM-CFG-001, GYM-CFG-002 | GYM-CI-001 |
 | RNF04, RNF05, RNF06 | GYM-ARQ-001 | GYM-SRC-006 | GYM-TST-001 |
 | RNF07 | GYM-GER-003, GYM-GER-004 | GYM-CFG-001 | GYM-CI-001 |
 | RNF08 | GYM-TST-001 | GYM-CI-001 | GYM-TST-002, GYM-TST-003, GYM-TST-004 |
-| RNF09 | GYM-ARQ-003 | GYM-SRC-001 a GYM-SRC-005 | GYM-TST-004 |
+| RNF09 | GYM-ARQ-003 | GYM-SRC-001 a GYM-SRC-005 | GYM-TST-004, GYM-CI-001 |
 | RNF10 | GYM-ARQ-004 | GYM-IAC-001, GYM-CFG-002 | GYM-CI-001 |
-| RNF11 | GYM-ARQ-002 | GYM-DB-001 | GYM-TST-003 |
+| RNF11 | GYM-ARQ-002 | GYM-DB-001 | GYM-TST-003, GYM-CI-001 |
 | RNF12 | GYM-REQ-003 | GYM-GER-002 | GYM-GER-003 |
+| RNF13 | GYM-ARQ-001 | GYM-SRC-001, GYM-DB-001 | GYM-TST-002, GYM-TST-003, GYM-TST-005 |
+| RNF14 | GYM-ARQ-001 | GYM-SRC-006, GYM-IAC-001 | GYM-TST-001 |
 
 ---
 
@@ -365,3 +369,29 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | 4 | Tecnologias coerentes com o Plano de Projeto e o ADR da stack | ☐ |
 | 5 | Revisão técnica do QA/Testes registrada | ☐ |
 | 6 | Aprovação do CCB registrada | ☐ |
+
+## 7. Situação de atendimento dos requisitos (sistema versão 0.1.0)
+| ID | Situação | Evidência no repositório / observação |
+| -- | -------- | ------------------------------------- |
+| RF01 | Atendido | `backend/gymmanager/alunos/rotas.py`; tela TL04 |
+| RF02 | Atendido | `backend/gymmanager/auth/`; tela TL01 |
+| RF03 | Atendido | `backend/gymmanager/exercicios/rotas.py`; tela TL05 |
+| RF04 | Atendido | `backend/gymmanager/fichas/rotas.py`; telas TL06 e TL07 |
+| RF05 | Atendido, com ressalva | `backend/gymmanager/execucoes/rotas.py`; telas TL08 e TL09. A API devolve a evolução de carga e de repetições, mas o gráfico da interface mostra apenas a carga |
+| RF06 | Atendido | `backend/gymmanager/usuarios/`; tela TL03 |
+| RF07 | Atendido | `frontend/` (menu e rotas por perfil, painel por perfil, mensagens de erro e sucesso) |
+| RNF01 | Atendido | Hash scrypt com sal (`auth/seguranca.py`) |
+| RNF02 | Atendido | Todas as rotas usam `@autenticado` ou `@exige_perfil`, exceto `POST /auth/login` |
+| RNF03 | Atendido | `config.py` sem valores padrão para segredos; `.env.example`; `.gitignore` exclui `.env` |
+| RNF04 | Não verificado | Não há medição de tempo de resposta (a definir no Plano de Testes) |
+| RNF05 | Atendido, com ressalva | CSS com adaptações para 1100 px e 760 px e menu recolhível; falta validação em dispositivos reais |
+| RNF06 | Não verificado | Sem teste em múltiplos navegadores |
+| RNF07 | Parcial | Código organizado em módulos por domínio; o uso de Conventional Commits e do vínculo commit–issue não pôde ser verificado, pois o pacote analisado não inclui o histórico do Git |
+| RNF08 | **Pendente** | `codigo-fonte/testes/` contém apenas `.gitkeep`; o CI executa o pytest e o Newman, mas apenas emite aviso quando não encontra testes |
+| RNF09 | Atendido | `openapi.yaml` com as mesmas 23 operações do ERS (4.5); validado no CI |
+| RNF10 | Atendido | `docker-compose.yml`, Dockerfiles do backend e do frontend e `.env.example`; o CI sobe o ambiente completo |
+| RNF11 | Atendido | Migração `V001__cria_tabelas.sql`; executor com checksum (`migracoes.py`, `flask migrar`); o CI aplica as migrações duas vezes |
+| RNF12 | Parcial | RTM atualizada na versão 0.2.0; a cobertura de teste só será completa quando GYM-TST-002 a 004 forem entregues |
+| RNF13 | Atendido | `auth/seguranca.py`, tabela `sessao`; `SESSAO_HORAS` em `.env.example` |
+| RNF14 | Atendido | `frontend/nginx.conf` (CSP e demais cabeçalhos); função `esc()` em `ui.js`; `MAX_CONTENT_LENGTH` em `config.py` |
+| RN01 a RN12 | Atendidas | Aplicadas no backend (módulos `fichas`, `execucoes`, `usuarios`, `exercicios`, `auth`) |
