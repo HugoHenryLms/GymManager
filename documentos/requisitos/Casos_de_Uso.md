@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
 | Versão | 0.2.0 |
-| Status | Encerrado |
+| Status | Finalizado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
