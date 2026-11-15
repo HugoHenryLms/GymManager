@@ -8,7 +8,7 @@
 | ID do IC | GYM-GER-001 |
 | Caminho | `documentos/gerencia/Plano_de_Projeto.md` |
 | Versão | 0.9.0 |
-| Status | Finalizado |
+| Status | Em revisão |
 | Baseline prevista | BL-PLAN |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 
