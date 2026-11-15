@@ -7,8 +7,8 @@
 | --- | --- |
 | ID do IC | GYM-GER-001 |
 | Caminho | `documentos/gerencia/Plano_de_Projeto.md` |
-| Versão | 1.2.0 |
-| Status | Em revisão |
+| Versão | 0.9.0 |
+| Status | Finalizado |
 | Baseline prevista | BL-PLAN |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 
@@ -26,8 +26,9 @@
 ## Histórico de revisões
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
-| 1.1.0 | — | Hugo Henry Lemos Carvalho | Atualização da 1ª entrega: inclusão do ERS (GYM-REQ-001) como IC sob controle de versão | — |
-| 1.2.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
+| 0.1.0 | — | Hugo Henry Lemos Carvalho | Versão inicial | — |
+| 0.2.0 | — | Hugo Henry Lemos Carvalho | Atualização da 1ª entrega: inclusão do ERS (GYM-REQ-001) como IC sob controle de versão | — |
+| 0.9.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
 
 ## 2. Visão geral e objetivos
 
@@ -116,61 +117,58 @@ Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TI
 
 ```
 GymManager/
-│
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── .gitignore
-├── .env.example
-├── docker-compose.yml
-│
 ├── .github/
-│   ├── workflows/
-│   │   └── ci.yml
-│   └── ISSUE_TEMPLATE/
-│       └── change-request.md
-│
-├── prototipos/
-│   ├── telas-login.png
-│   ├── telas-cadastro.png
-│   └── outras-telas.png
-│
+│   └── workflows/
+│       └── ci.yml
+├── banco-de-dados/
+│   └── migracoes/
+├── codigo-fonte/
+│   ├── backend/
+│   │   ├── gymmanager/
+│   │   ├── Dockerfile
+│   │   ├── iniciar.py
+│   │   ├── requirements-dev.txt
+│   │   ├── requirements.txt
+│   │   └── wsgi.py
+│   ├── frontend/
+│   │   ├── css/
+│   │   ├── js/
+│   │   ├── Dockerfile
+│   │   ├── index.html
+│   │   └── nginx.conf
+│   └── testes/
+│       ├── integracao/
+│       ├── postman/
+│       └── unitarios/
 ├── documentos/
-│   ├── gerencia/
-│   │   ├── Plano_de_Projeto.md
-│   │   ├── Planilha_Controle_de_ICs.xlsx
-│   │   ├── Plano_de_Gerencia_de_Configuracao.md
-│   │   ├── Modelo_CRF.md
-│   │   └── Status_Accounting.xlsx
-│   ├── requisitos/
-│   │   ├── ERS.md
-│   │   ├── Casos_de_Uso.md
-│   │   └── RTM.xlsx
 │   ├── arquitetura/
+│   │   ├── adr/
 │   │   ├── Arquitetura.md
 │   │   ├── Modelo_de_Dados.md
-│   │   ├── openapi.yaml
-│   │   └── adr/
+│   │   └── openapi.yaml
+│   ├── gerencia/
+│   │   ├── Planilha_Controle_de_ICs.xlsx
+│   │   ├── Plano_de_Gerencia_de_Configuracao.md
+│   │   └── Plano_de_Projeto.md
+│   ├── requisitos/
+│   │   ├── Casos_de_Uso.md
+│   │   ├── ERS.md
+│   │   └── RTM.xlsx
 │   ├── testes/
-│   │   └── Plano_de_Testes.md
+│   │   ├── Casos_de_Teste.md
+│   │   ├── Plano_de_Testes.md
+│   │   ├── Registro_de_Defeitos.md
+│   │   └── Relatorio_de_Testes.md
 │   └── usuario/
 │       ├── Manual_do_Usuario.md
 │       └── Notas_de_Versao.md
-│
-├── codigo-fonte/
-│   ├── frontend/
-│   │   ├── index.html
-│   │   ├── css/
-│   │   └── js/
-│   ├── backend/
-│   │   └── ...
-│   └── testes/
-│       ├── unitarios/
-│       ├── integracao/
-│       └── postman/
-│
-└── banco-de-dados/
-    └── migracoes/
+├── prototipos/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── LICENSE
+└── README.md
 ```
 
 ### 8.3 Commits e versionamento
