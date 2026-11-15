@@ -7,8 +7,8 @@
 | --- | --- |
 | ID do IC | GYM-GER-001 |
 | Caminho | `documentos/gerencia/Plano_de_Projeto.md` |
-| Versão | 0.9.0 |
-| Status | Em revisão |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-PLAN |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 
@@ -29,6 +29,7 @@
 | 0.1.0 | — | Hugo Henry Lemos Carvalho | Versão inicial | — |
 | 0.2.0 | — | Hugo Henry Lemos Carvalho | Atualização da 1ª entrega: inclusão do ERS (GYM-REQ-001) como IC sob controle de versão | — |
 | 0.9.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
+| 1.0.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização versão do documento.
 
 ## 2. Visão geral e objetivos
 
