@@ -2,6 +2,16 @@
 
 **Sistema web de gerenciamento de treinos de academia** Disciplina: Gerência de Configuração (6º período) Professor: Paulo Rodrigo Barbosa Alves.
 
+
+| Campo | Valor |
+| --- | --- |
+| ID do IC | GYM-GER-001 |
+| Caminho | `documentos/gerencia/Plano_de_Projeto.md` |
+| Versão | 1.2.0 |
+| Status | Em revisão |
+| Baseline prevista | BL-PLAN |
+| Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
+
 ## 1. Identificação do projeto
 
 | Item | Descrição |
@@ -11,7 +21,13 @@
 | Tipo | Aplicação web |
 | Repositório | GitHub (link compartilhado com o professor; todos os integrantes como colaboradores) |
 | Gerente de Projeto/Configuração | Hugo Henry Lemos Carvalho |
-| Equipe | Renata Martins Da Silva, João vitor Simonetti, Iago Medice Ferrreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
+| Equipe | Renata Martins da Silva, João Vitor Simonetti, Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa |
+
+## Histórico de revisões
+| Versão | Data | Autor | Descrição | CR/Issue |
+| --- | --- | --- | --- | --- |
+| 1.1.0 | — | Hugo Henry Lemos Carvalho | Atualização da 1ª entrega: inclusão do ERS (GYM-REQ-001) como IC sob controle de versão | — |
+| 1.2.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
 
 ## 2. Visão geral e objetivos
 
@@ -88,11 +104,13 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 
 As entregas são semanais, sempre às **quartas-feiras**, acompanhando o conteúdo das aulas. As datas após a Entrega 1 devem ser ajustadas ao calendário da disciplina.
 
+**Situação em 14/11/2026:** o sistema (versão 0.1.0) está implementado — backend, banco de dados, interface web, CI e Docker. Pendentes: testes automatizados, Plano de Testes, `CONTRIBUTING.md`, modelo de CRF, template de issue, status accounting, revisão técnica e criação de alguamas baselines.
+
 ## 8. Gerência de configuração
 
 ### 8.1 Identificação
 
-Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `documentos/gerencia/Planilha_Controle_de_ICs.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4).
+Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `documentos/gerencia/Planilha_Controle_de_ICs.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4). A estrutura abaixo é a do repositório atual; os arquivos `CONTRIBUTING.md`, `change-request.md`, `Modelo_CRF.md` e `Status_Accounting.xlsx` são ICs previstos ainda não criados.
 
 ### 8.2 Estrutura do repositório
 
