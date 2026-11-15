@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
-| Versão | 0.2.0 |
-| Status | Finalizado |
+| Versão | 1.0.0 |
+| Status | Aprovado|
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
@@ -24,6 +24,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.1.1 | 09-11-2026 | Renata Martins da Silva| Atualização de versão do documento | — |
 | 0.1.2 | 10-11-2026| Renata Martins da Silva| Atualização de versão do documento e correção de dados. | — |
 | 0.2.0 | 14-11-2026| Renata Martins da Silva| Atualização conforme o sistema implementado (versão 0.1.0 do produto): requisitos refinados (RF01, RF03 a RF06), novas regras de negócio RN08 a RN12 e requisitos RNF13 e RNF14, regras e mensagens de validação completas, telas e rotas reais, contrato da API detalhado, modelo conceitual com a entidade SESSAO e nova seção 7 (situação de atendimento dos requisitos)  e atualização da versão do documento| — |
+| 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado.
 ---
 
 ## 1. Introdução
