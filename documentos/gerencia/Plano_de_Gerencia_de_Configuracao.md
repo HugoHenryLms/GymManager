@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-GER-003 |
 | Caminho | `documentos/gerencia/Plano_de_Gerencia_de_Configuracao.md` |
-| Versão | 0.1.1 |
-| Status | Em elaboração |
+| Versão | 0.9.0 |
+| Status | Em revisão |
 | Baseline prevista | BL-REQ-S1 |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 | Apoio | QA/Testes |
@@ -19,8 +19,9 @@ Professor: Paulo Rodrigo Barbosa Alves
 
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
-| 0.1.1 | 09/11/2026 | Hugo Henry Lemos Carvalho | Versão inicial do plano | — |
-
+| 0.1.0 | 09/11/2026 | Hugo Henry Lemos Carvalho | Versão inicial do plano | — |
+| 0.1.1 | 09/11/2026 | Hugo Henry Lemos Carvalho | — |
+| 0.9.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
 ---
 
 ## 1. Introdução
@@ -116,29 +117,60 @@ O repositório segue a estrutura da seção 8.2 do Plano de Projeto:
 
 ```
 GymManager/
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── .gitignore
-├── .env.example
-├── docker-compose.yml
 ├── .github/
-│   ├── workflows/ci.yml
-│   └── ISSUE_TEMPLATE/change-request.md
-├── prototipos/
-├── documentos/
-│   ├── gerencia/        (Plano_de_Projeto, Planilha_Controle_de_ICs, este plano, Modelo_CRF, Status_Accounting)
-│   ├── requisitos/      (ERS, Casos_de_Uso, RTM)
-│   ├── arquitetura/     (Arquitetura, Modelo_de_Dados, openapi.yaml, adr/)
-│   ├── testes/          (Plano_de_Testes)
-│   └── usuario/         (Manual_do_Usuario, Notas_de_Versao)
+│   └── workflows/
+│       └── ci.yml
+├── banco-de-dados/
+│   └── migracoes/
 ├── codigo-fonte/
-│   ├── frontend/
 │   ├── backend/
-│   └── testes/          (unitarios/, integracao/, postman/)
-└── banco-de-dados/
-    └── migracoes/
+│   │   ├── gymmanager/
+│   │   ├── Dockerfile
+│   │   ├── iniciar.py
+│   │   ├── requirements-dev.txt
+│   │   ├── requirements.txt
+│   │   └── wsgi.py
+│   ├── frontend/
+│   │   ├── css/
+│   │   ├── js/
+│   │   ├── Dockerfile
+│   │   ├── index.html
+│   │   └── nginx.conf
+│   └── testes/
+│       ├── integracao/
+│       ├── postman/
+│       └── unitarios/
+├── documentos/
+│   ├── arquitetura/
+│   │   ├── adr/
+│   │   ├── Arquitetura.md
+│   │   ├── Modelo_de_Dados.md
+│   │   └── openapi.yaml
+│   ├── gerencia/
+│   │   ├── Planilha_Controle_de_ICs.xlsx
+│   │   ├── Plano_de_Gerencia_de_Configuracao.md
+│   │   └── Plano_de_Projeto.md
+│   ├── requisitos/
+│   │   ├── Casos_de_Uso.md
+│   │   ├── ERS.md
+│   │   └── RTM.xlsx
+│   ├── testes/
+│   │   ├── Casos_de_Teste.md
+│   │   ├── Plano_de_Testes.md
+│   │   ├── Registro_de_Defeitos.md
+│   │   └── Relatorio_de_Testes.md
+│   └── usuario/
+│       ├── Manual_do_Usuario.md
+│       └── Notas_de_Versao.md
+├── prototipos/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── LICENSE
+└── README.md
 ```
+
 
 Nenhuma alteração estrutural (criar, mover ou remover pastas de primeiro nível) é feita sem registro na planilha de ICs e aprovação do Gerente de Projeto/Configuração.
 
@@ -177,6 +209,29 @@ A versão do **produto** é marcada por *tag* no Git (`vMAJOR.MINOR.PATCH`); a p
 - **`main`**: contém sempre a última versão estável; protegida (sem push direto; alteração apenas via Pull Request aprovado e CI verde). Cada baseline é marcada nela.
 - **Branches de trabalho curtos**, criados a partir da `main` e integrados com frequência (integração diária), para reduzir conflitos de merge. Nomenclatura: `<tipo>/<id-issue>-<descricao-curta>` (ex.: `feat/12-ficha-de-treino`, `docs/7-ers`, `fix/21-calculo-carga`).
 - Branches são removidos após o merge.
+
+- #### Branches utilizadas no projeto
+
+Todos os branches abaixo já foram integrados à `main` (via Pull Request) e a `main` está atualizada em `origin/main`. Na prática, o identificador usado no nome foi o **ID do IC** (`gym-<tipo>-<nnn>`) e não o número da issue; essa é a convenção adotada a partir de agora.
+
+| Branch | IC(s) | Conteúdo |
+| --- | --- | --- |
+| `chore/gym-cfg-001-002-estrutura-e-ambiente` | GYM-CFG-001, GYM-CFG-002 | Estrutura do repositório e variáveis de ambiente |
+| `ci/gym-ci-001-pipeline` | GYM-CI-001 | Pipeline de integração contínua |
+| `docs/gym-arq-001-002-004-arquitetura-e-dados` | GYM-ARQ-001, 002, 004 | Arquitetura, modelo de dados e ADR da stack |
+| `docs/gym-arq-003-contrato-openapi` | GYM-ARQ-003 | Contrato OpenAPI |
+| `docs/gym-doc-002-003-manual-e-notas` | GYM-DOC-002, 003 | Manual do usuário e notas de versão |
+| `docs/gym-ger-002-ics-de-testes` | GYM-GER-002 | Planilha de ICs: inclusão dos ICs de testes |
+| `docs/gym-ger-002-atualiza-planilha-ics` | GYM-GER-002 | Atualização da planilha de ICs |
+| `feat/gym-db-001-migracoes` | GYM-DB-001 | Migrações do banco de dados |
+| `feat/gym-iac-001-docker` | GYM-IAC-001 | Docker e docker-compose |
+| `feat/gym-src-001-autenticacao-usuarios` | GYM-SRC-001 | Autenticação e usuários |
+| `feat/gym-src-002-alunos` | GYM-SRC-002 | Módulo de alunos |
+| `feat/gym-src-003-exercicios` | GYM-SRC-003 | Módulo de exercícios |
+| `feat/gym-src-004-fichas-de-treino` | GYM-SRC-004 | Módulo de fichas de treino |
+| `feat/gym-src-005-execucoes-historico` | GYM-SRC-005 | Execuções e histórico |
+| `feat/gym-src-006-interface-web` | GYM-SRC-006 | Interface web |
+
 
 ### 4.3 Commits
 
