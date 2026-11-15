@@ -4,7 +4,7 @@ Sistema web de gerenciamento de treinos de academia: cadastro de alunos e exerc�
 
 Projeto Integrador da disciplina **Gerência de Configuração** (6º período), CENTRO UNIVERSITÁRIO FAMETRO. Professor: Paulo Rodrigo Barbosa Alves.
 
-> **Status:** em desenvolvimento.
+> **Status:** versão do sistema 0.1.0. Backend, banco de dados, interface web e ambiente Docker implementados; testes automatizados ainda pendentes. A release v1.0.0 está prevista para a baseline BL-REL-S3.
 
 
 ## Sobre o projeto
@@ -15,12 +15,18 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 
 Escopo da versão 1.0.0:
 
-- Autenticação e perfis de acesso (administrador, instrutor e aluno)
-- Gestão de alunos, exercícios e fichas de treino (exercício, séries, repetições, carga e descanso)
-- Registro e histórico de execução de treinos, com acompanhamento da evolução de carga
-- API REST documentada com OpenAPI
-- Interface web
-- Testes automatizados e integração contínua
+Implementado na versão 0.1.0:
+
+Autenticação por e-mail e senha, com sessão por token (validade de 8 horas) e perfis de acesso: administrador, instrutor e aluno
+Gestão de usuários instrutores (administrador) e de alunos
+Catálogo de exercícios
+Fichas de treino (exercício, séries, repetições, carga e descanso), com uma ficha vigente por aluno
+Registro e histórico de execução de treinos, com acompanhamento da evolução de carga
+Exclusão lógica (inativação) com possibilidade de reativação
+API REST (/api/v1) documentada com OpenAPI
+Interface web
+
+Previsto para a versão 1.0.0: testes automatizados (pytest e Postman/Newman) e manual do usuário completo.
 
 Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integração com catracas ou wearables.
 
@@ -40,62 +46,58 @@ Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integraçã
 
 ```
 GymManager/
-│
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── .gitignore
-├── .env.example
-├── docker-compose.yml
-│
 ├── .github/
-│   ├── workflows/
-│   │   └── ci.yml
-│   └── ISSUE_TEMPLATE/
-│       └── change-request.md
-│
-├── prototipos/
-│   ├── telas-login.png
-│   ├── telas-cadastro.png
-│   └── outras-telas.png
-│
+│   └── workflows/
+│       └── ci.yml
+├── banco-de-dados/
+│   └── migracoes/
+├── codigo-fonte/
+│   ├── backend/
+│   │   ├── gymmanager/
+│   │   ├── Dockerfile
+│   │   ├── iniciar.py
+│   │   ├── requirements-dev.txt
+│   │   ├── requirements.txt
+│   │   └── wsgi.py
+│   ├── frontend/
+│   │   ├── css/
+│   │   ├── js/
+│   │   ├── Dockerfile
+│   │   ├── index.html
+│   │   └── nginx.conf
+│   └── testes/
+│       ├── integracao/
+│       ├── postman/
+│       └── unitarios/
 ├── documentos/
-│   ├── gerencia/
-│   │   ├── Plano_de_Projeto.md
-│   │   ├── Planilha_Controle_de_ICs.xlsx
-│   │   ├── Plano_de_Gerencia_de_Configuracao.md
-│   │   ├── Modelo_CRF.md
-│   │   └── Status_Accounting.xlsx
-│   ├── requisitos/
-│   │   ├── ERS.md
-│   │   ├── Casos_de_Uso.md
-│   │   └── RTM.xlsx
 │   ├── arquitetura/
+│   │   ├── adr/
 │   │   ├── Arquitetura.md
 │   │   ├── Modelo_de_Dados.md
-│   │   ├── openapi.yaml
-│   │   └── adr/
+│   │   └── openapi.yaml
+│   ├── gerencia/
+│   │   ├── Planilha_Controle_de_ICs.xlsx
+│   │   ├── Plano_de_Gerencia_de_Configuracao.md
+│   │   └── Plano_de_Projeto.md
+│   ├── requisitos/
+│   │   ├── Casos_de_Uso.md
+│   │   ├── ERS.md
+│   │   └── RTM.xlsx
 │   ├── testes/
-│   │   └── Plano_de_Testes.md
+│   │   ├── Casos_de_Teste.md
+│   │   ├── Plano_de_Testes.md
+│   │   ├── Registro_de_Defeitos.md
+│   │   └── Relatorio_de_Testes.md
 │   └── usuario/
 │       ├── Manual_do_Usuario.md
 │       └── Notas_de_Versao.md
-│
-├── codigo-fonte/
-│   ├── frontend/
-│   │   ├── index.html
-│   │   ├── css/
-│   │   └── js/
-│   ├── backend/
-│   │   └── ...
-│   └── testes/
-│       ├── unitarios/
-│       ├── integracao/
-│       └── postman/
-│
-└── banco-de-dados/
-    └── migracoes/
-
+├── prototipos/
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── LICENSE
+└── README.md
 ```
 
 ## Gerência de configuração
@@ -107,6 +109,7 @@ GymManager/
 -**Baselines:** BL-PLAN, BL-REQ-S1, BL-IMPL-S2 e BL-REL-S3 (release v1.0.0), um IC sob baseline só muda mediante Change Request aprovada
 
 -**Commits:** padrão Conventional Commits (feat:, fix:, docs:, test:, chore:), CONTRIBUTING.md
+Branches: <tipo>/<id-do-ic>-<descricao-curta> (ex.: feat/gym-src-004-fichas-de-treino), integrados à main por Pull Request. A lista dos branches utilizados está no Plano de Gerência de Configuração, seção 4.2.
 
 ## Equipe
 
@@ -119,13 +122,15 @@ GymManager/
 | QA/Testes | Iago Medice Ferreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
 
 ## Documentação
-
-- [Plano de Projeto](documentos/gerencia/Plano-De-Projeto.md)
-- [Inventário de ICs](documentos/gerencia/Planilha-de-Controle-ICs.xlsx)
-- [Documento de Requisitos (ERS)](documentos/requisitos/ERS.md) *(em elaboração)*
-- [Contrato da API (OpenAPI)](documentos/api/openapi.yaml) *(planejado)*
-- [Decisões arquiteturais (ADR)](documentos/adr/)
-
----
+Plano de Projeto
+Plano de Gerência de Configuração
+Inventário de ICs
+Documento de Requisitos (ERS)
+Casos de Uso
+Matriz de Rastreabilidade (RTM)
+Arquitetura e Modelo de Dados
+Contrato da API (OpenAPI)
+Decisões arquiteturais (ADR)
+Manual do Usuário e Notas de Versão
 
 Projeto acadêmico em desenvolvimento, disciplina de Gerência de Configuração.
