@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
-| Versão | 0.2.0 |
-| Status | Finalizado |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -24,6 +24,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.2.0 | 14-11-2026 | Renata Martins da Silva | Atualização conforme o sistema implementado (versão 0.1.0 do produto): fluxos, mensagens e códigos de erro reais; reativação de usuários, alunos e exercícios; encerramento de ficha; novas regras RN08 a RN12; painel inicial por perfil; filtros e comportamentos das telas; rastreabilidade com GYM-TST-005 e seção 8 (notas de implementação)
 Atualização de versão do documento.
 | — |
+| 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado.
 ---
 
 ## 1. Introdução
