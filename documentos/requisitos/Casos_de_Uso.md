@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
-| Versão | 1.0.0 |
-| Status | Aprovado |
+| Versão | 1.1.0 |
+| Status | Em revisão |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -24,7 +24,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.2.0 | 14-11-2026 | Renata Martins da Silva | Atualização conforme o sistema implementado (versão 0.1.0 do produto): fluxos, mensagens e códigos de erro reais; reativação de usuários, alunos e exercícios; encerramento de ficha; novas regras RN08 a RN12; painel inicial por perfil; filtros e comportamentos das telas; rastreabilidade com GYM-TST-005 e seção 8 (notas de implementação)
 Atualização de versão do documento.
 | — |
-| 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado.
+| 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado. | — |
+| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0: UC07 passa a citar as regras RN13 e RN14 do ERS v1.1.0 (execuções em andamento e registro de item inativado); seção 8 atualizada. A v1.1.0 aguarda revisão no PR | #27 |
 ---
 
 ## 1. Introdução
@@ -341,7 +342,7 @@ flowchart LR
 | --- | --- |
 | Ator | Aluno |
 | Requisitos | RF05 |
-| Regras de negócio | RN02, RN07 |
+| Regras de negócio | RN02, RN07, RN10, RN11, RN13, RN14 |
 | Tela | TL08 (Registro de execução) |
 | Endpoints | `POST /execucoes`, `POST /execucoes/{id}/exercicios`, `PATCH /execucoes/{id}/finalizar` |
 | Pré-condição | Aluno autenticado (UC01) com ficha ativa atribuída (UC05) |
@@ -360,7 +361,8 @@ flowchart LR
 
 - **FA1 — Corrigir registro:** antes de finalizar, o aluno altera a repetição ou a carga de um exercício já registrado.
 - **FA2 — Finalizar parcialmente:** o aluno finaliza sem ter registrado todos os exercícios; o sistema grava apenas os informados.
-- **FA3 — Retomar treino em andamento:** ao abrir a ficha que já tem execução em andamento, a interface a retoma, exibindo os exercícios já registrados e o botão "Continuar treino" no painel.
+- **FA3 — Retomar treino em andamento:** ao abrir a ficha que já tem execução em andamento, a interface a retoma, exibindo os exercícios já registrados e o botão "Continuar treino" no painel (RN13).
+- **FA4 — Item inativado durante o treino:** se o instrutor remover um exercício da ficha depois do início da execução, a API ainda aceita o registro desse exercício na execução em andamento, e o registro é preservado no histórico (RN14).
 
 
 **Fluxos de exceção**
@@ -439,9 +441,10 @@ Comportamentos do sistema implementado que o leitor dos fluxos acima deve conhec
 
 - **Exclusões são sempre lógicas:** não há exclusão física de usuários, alunos, exercícios, fichas ou execuções; "Inativar" mantém o histórico.
 - **Instrutor da ficha:** é sempre o usuário que a criou, mesmo quando é o administrador; qualquer instrutor ou administrador pode editar qualquer ficha.
-- **Execuções simultâneas:** a API não impede iniciar uma nova execução da mesma ficha enquanto outra está em andamento; a interface retoma a execução aberta (UC07, FA3).
-- **Vigência da ficha:** é verificada ao iniciar a execução; uma execução já iniciada pode continuar a ser registrada e finalizada mesmo que a ficha seja encerrada depois.
-- **Evolução na interface:** o gráfico exibe a carga; as repetições de cada ponto são entregues pela API, mas ainda não aparecem na tela.
+- **Execuções simultâneas:** a API não impede iniciar uma nova execução da mesma ficha enquanto outra está em andamento; a interface retoma a execução aberta (UC07, FA3). Comportamento registrado como a regra RN13 no ERS v1.1.0.
+- **Vigência da ficha:** é verificada ao iniciar a execução, conforme a RN10; uma execução já iniciada pode continuar a ser registrada e finalizada mesmo que a ficha seja encerrada depois.
+- **Item inativado durante o treino:** o registro de um item inativado depois do início da execução é aceito (UC07, FA4). Comportamento registrado como a regra RN14 no ERS v1.1.0.
+- **Evolução na interface:** o gráfico exibe a evolução de carga exigida pelo RF05; as repetições de cada ponto são entregues pela API como informação adicional e não aparecem na tela.
 - **Telas e menu por perfil:** ver a seção 4.4 do ERS.
 
   
