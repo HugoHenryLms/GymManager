@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-TST-001 |
 | Caminho | `documentos/testes/Plano_de_Testes.md` |
-| Versão | 0.1.0 |
+| Versão | 0.2.0 |
 | Status | Em elaboração |
 | Baseline prevista | BL-IMPL-S2 (Design/Implementação) |
 | Responsável | QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa) |
@@ -23,6 +23,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- | --- | --- | --- |
 | 0.0.0 | 11-11-2026 | QA/Testes | Arquivo criado vazio (placeholder) | — |
 | 0.1.0 | 16-11-2026 | Renata Martins da Silva | Primeira versão do plano. Formaliza a estratégia já aplicada nos testes automatizados iniciais (PR #17) e define o escopo, os níveis, os critérios de aceite e a cobertura planejada até a baseline BL-IMPL-S2 | #18 |
+| 0.2.0 | 17-11-2026 | Renata Martins da Silva | Alinhamento com o comportamento do sistema 0.1.0, antes da implementação dos novos testes: (1) nova seção 3.2.1 com os códigos HTTP retornados pela API; (2) resultados esperados da meta da seção 4.3 corrigidos (usuário inativo → `403`; duplicidade, autoinativação do administrador e ficha para aluno inativo → `409`); (3) escopo ampliado para RN01 a RN14, com RN09, RN12, RN13 e RN14 na meta da seção 4.3. Asserção de `test_login_senha_incorreta` restrita a `401` | #33 |
 
 > **Observação de configuração:** este plano foi formalizado depois dos primeiros testes automatizados, incorporados à `main` pelo PR #17. O desvio está registrado aqui para fins de rastreabilidade. A partir desta versão, o plano é atualizado **antes** da implementação de novos testes.
 
@@ -39,7 +40,7 @@ Este documento define a estratégia, o escopo, os recursos, os critérios de ace
 **Dentro do escopo:**
 
 - API REST do backend (Flask): as 23 operações especificadas no ERS (seção 4.5) e no contrato OpenAPI (GYM-ARQ-003).
-- Regras de negócio RN01 a RN12.
+- Regras de negócio RN01 a RN14 (RN13 e RN14 incluídas no ERS v1.1.0).
 - Autenticação, sessão e controle de acesso por perfil (RF02, RNF01, RNF02, RNF13).
 - Integração com o banco MySQL e as migrações (GYM-DB-001).
 - Interface web (GYM-SRC-006), por meio dos casos de teste manuais CT01 a CT12.
@@ -117,6 +118,24 @@ Usam o cliente de testes do Flask (`app.test_client()`) contra o MySQL do CI, j�
 1. **Caminho de sucesso** (ex.: cadastrar e consultar).
 2. **Erro de validação** (ex.: campo obrigatório ausente, retorno `400`).
 3. **Controle de acesso**: sem token (`401`) e com perfil não autorizado (`403`).
+4. **Conflito com regra de negócio**, quando o módulo tiver (ex.: duplicidade ou estado que impede a operação, retorno `409`).
+
+#### 3.2.1 Códigos de resposta esperados
+
+Os resultados esperados dos testes seguem os códigos que a API realmente retorna (módulos do backend, sistema 0.1.0):
+
+| Código | Quando a API retorna | Exemplos |
+| --- | --- | --- |
+| `200` | Consulta, edição, inativação ou correção bem-sucedida | `PUT /alunos/{id}`; `DELETE /exercicios/{id}` (apenas inativa, RN04); novo registro do mesmo exercício na execução (RN11) |
+| `201` | Recurso criado | `POST /usuarios`, `/alunos`, `/exercicios`, `/fichas`, `/execucoes`; primeiro registro de um exercício na execução |
+| `204` | Logout | `POST /auth/logout` |
+| `400` | Dado inválido ou ausente | Campo obrigatório vazio; senha fraca; perfil inválido; ficha sem exercício (RN06); exercício inativo na ficha; exercício que não pertence à ficha da execução; período com data final anterior à inicial |
+| `401` | Não autenticado | Sem token; token inválido, expirado ou encerrado por logout ou inativação (RNF13); **e-mail ou senha incorretos** no login |
+| `403` | Autenticado, mas sem permissão | Perfil não autorizado (RN01, RN03); acesso a ficha, execução ou histórico de outro aluno (RN02, RN07); **login de usuário inativo** (RN05) |
+| `404` | Recurso inexistente | `GET /alunos/{id}` com ID que não existe |
+| `409` | Conflito com regra de negócio | E-mail ou nome de exercício duplicado; administrador inativando a si mesmo ou alterando o próprio perfil (RN08); ficha para aluno inativo (RN05); troca de aluno em ficha com execuções e reativação de ficha de aluno inativo (RN09); execução em ficha não vigente (RN10); registro ou nova finalização em execução já finalizada (RN11) |
+
+Os testes devem verificar **um único código** por cenário (ex.: `assert resposta.status_code == 401`), e não uma faixa de códigos.
 
 **Regras para os dados de teste:**
 
@@ -165,18 +184,18 @@ Coleção Postman executada pelo Newman no ambiente Docker completo, passando pe
 | --- | --- | --- | --- | --- |
 | `unitarios/test_configuracao.py` | Unitário | `test_criacao_aplicacao_flask` | Aplicação criada com `SECRET_KEY` | — |
 | `integracao/test_autenticacao.py` | Integração | `test_login_admin_sucesso` | Login válido retorna token e perfil `ADMIN` (RF02) | CT01 |
-| `integracao/test_autenticacao.py` | Integração | `test_login_senha_incorreta` | Senha incorreta retorna `400` ou `401` (RF02) | CT02 |
+| `integracao/test_autenticacao.py` | Integração | `test_login_senha_incorreta` | Senha incorreta retorna `400` ou `401` (RF02). Ajuste previsto: aceitar somente `401` (seção 3.2.1) | CT02 |
 
 ### 4.3 Meta mínima por módulo até a BL-IMPL-S2
 
 | Módulo | Testes de integração mínimos | Regras cobertas |
 | --- | --- | --- |
-| Autenticação | Login válido ✅; senha incorreta ✅; usuário inativo não autentica; logout invalida o token; rota protegida sem token → `401` | RF02, RN05, RNF02, RNF13 |
-| Usuários | Admin cadastra instrutor; e-mail duplicado rejeitado; instrutor tenta cadastrar usuário → `403`; admin não inativa a própria conta | RF06, RN03, RN08 |
-| Alunos | Cadastrar, consultar e editar aluno; campo obrigatório ausente → `400`; aluno inativado não recebe ficha | RF01, RN05 |
-| Exercícios | Cadastrar exercício; nome duplicado rejeitado; aluno tenta cadastrar → `403`; exercício usado em ficha é apenas inativado | RF03, RN04 |
-| Fichas | Criar ficha com exercício para um aluno; ficha sem exercício → `400`; aluno tenta criar ficha → `403`; aluno vê só as próprias fichas | RF04, RN01, RN02, RN06 |
-| Execuções | Aluno inicia, registra e finaliza execução; execução finalizada não aceita registro; ficha não vigente rejeitada; aluno consulta histórico de outro → `403` | RF05, RN02, RN07, RN10, RN11 |
+| Autenticação | Login válido → `200` ✅; senha incorreta → `401` ✅ (ajustar a asserção); login sem e-mail ou senha → `400`; usuário inativo → `403`; rota protegida sem token ou com token inválido → `401`; logout → `204` e o mesmo token passa a retornar `401`; usuário inativado perde a sessão → `401` | RF02, RN05, RNF02, RNF13 |
+| Usuários | Admin cadastra instrutor → `201`; e-mail duplicado → `409`; senha fraca ou perfil inválido → `400`; instrutor tenta cadastrar usuário → `403`; admin inativa a própria conta ou altera o próprio perfil → `409` | RF06, RN03, RN08 |
+| Alunos | Cadastrar → `201`, consultar e editar → `200`; campo obrigatório ausente → `400`; aluno tenta listar alunos → `403`; ID inexistente → `404`; aluno inativado não autentica (`403`) e volta a autenticar após reativação | RF01, RN05 |
+| Exercícios | Cadastrar → `201`; nome duplicado → `409`; aluno tenta cadastrar → `403`; `DELETE` de exercício usado em ficha → `200` com `ativo=false`, mantendo o item na ficha; exercício inativo em nova ficha → `400` | RF03, RN04 |
+| Fichas | Criar ficha com exercício para um aluno → `201`; ficha sem exercício → `400`; aluno tenta criar ficha → `403`; ficha para aluno inativo → `409`; aluno vê só as próprias fichas e recebe `403` na ficha de outro; trocar o aluno de ficha com execuções → `409`; reativar ficha de aluno inativo → `409`; exercício removido da ficha fica inativo no item, preservando as execuções | RF04, RN01, RN02, RN05, RN06, RN09, RN12 |
+| Execuções | Aluno inicia → `201`, registra → `201` e finaliza → `200`; novo registro do mesmo exercício corrige o anterior → `200`; registro ou nova finalização em execução finalizada → `409`; ficha não vigente → `409`; ficha de outro aluno → `403`; aluno consulta histórico de outro → `403`; duas execuções abertas na mesma ficha são aceitas → `201` (RN13); registro de item inativado após o início da execução é aceito → `201` e aparece no histórico (RN14) | RF05, RN02, RN07, RN10, RN11, RN13, RN14 |
 
 O objetivo é que **todo requisito funcional tenha pelo menos um teste automatizado**, e que os casos de segurança CT11 (privacidade) e CT12 (permissões) estejam automatizados.
 
