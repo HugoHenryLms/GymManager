@@ -8,7 +8,7 @@ assignees: ''
 
 <!--
 Template de Change Request — GymManager
-IC: GYM-CFG-004 · Versão 0.1.0 · Responsável: Gerente de Projeto/Configuração (Hugo Henry Lemos Carvalho)
+IC: GYM-CFG-004 · Versão 1.0.0 · Status: Aprovado (revisão do QA pelo WhatsApp em 17/11/2026; registro na issue #29) · Responsável: Gerente de Projeto/Configuração (Hugo Henry Lemos Carvalho)
 Campos conforme o Modelo de CRF (documentos/gerencia/Modelo_CRF.md, GYM-GER-005).
 
 Quando usar: mudança em IC sob baseline, mudança que atravessa vários ICs ou mudança de requisito após a BL-REQ-S1 (PGC, seção 6.3).
