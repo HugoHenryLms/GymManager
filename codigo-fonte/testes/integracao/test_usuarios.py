@@ -1,6 +1,6 @@
 """Testes de integração de usuários e instrutores — RF06, RN03, RN08.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT03, CT04 e CT12.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT08, CT09, CT27 e CT28.
 """
 
 import pytest
@@ -14,7 +14,7 @@ def _novo(perfil="INSTRUTOR", **campos):
     return corpo
 
 
-# TI-USU-01 — CT04: admin cadastra instrutor
+# TI-USU-01 — CT08: admin cadastra instrutor
 def test_admin_cadastra_instrutor(client, token_admin):
     corpo = _novo()
     resposta = client.post(f"{API}/usuarios", json=corpo, headers=auth(token_admin))
@@ -48,23 +48,23 @@ def test_dados_invalidos(client, token_admin, campos, campo):
     assert resposta.get_json()["campo"] == campo
 
 
-# TI-USU-04 — RN03: instrutor não cadastra usuários
+# TI-USU-04 — CT09 / CT27 / RN03: instrutor não cadastra usuários
 def test_instrutor_nao_cadastra_usuario(client, instrutor):
     resposta = client.post(f"{API}/usuarios", json=_novo(), headers=auth(instrutor["token"]))
     assert resposta.status_code == 403
 
 
-# TI-USU-05 — RN03: aluno não lista usuários
+# TI-USU-05 — CT27 / RN03: aluno não lista usuários
 def test_aluno_nao_lista_usuarios(client, aluno):
     assert client.get(f"{API}/usuarios", headers=auth(aluno["token"])).status_code == 403
 
 
-# TI-USU-06 — RN08: admin não inativa a própria conta
+# TI-USU-06 — CT28 / RN08: admin não inativa a própria conta
 def test_admin_nao_inativa_a_si_mesmo(client, token_admin, id_admin):
     assert client.delete(f"{API}/usuarios/{id_admin}", headers=auth(token_admin)).status_code == 409
 
 
-# TI-USU-07 — RN08: admin não altera o próprio perfil
+# TI-USU-07 — CT28 / RN08: admin não altera o próprio perfil
 def test_admin_nao_altera_o_proprio_perfil(client, token_admin, id_admin):
     resposta = client.put(f"{API}/usuarios/{id_admin}", json={"perfil": "INSTRUTOR"}, headers=auth(token_admin))
     assert resposta.status_code == 409
