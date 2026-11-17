@@ -4,7 +4,7 @@ Sistema web de gerenciamento de treinos de academia: cadastro de alunos e exerc�
 
 Projeto Integrador da disciplina **Gerência de Configuração** (6º período), CENTRO UNIVERSITÁRIO FAMETRO. Professor: Paulo Rodrigo Barbosa Alves.
 
-> **Status:** versão do sistema 0.1.0. Backend, banco de dados, interface web e ambiente Docker implementados; testes automatizados em andamento (testes iniciais de autenticação e configuração no CI desde o PR #17). A release v1.0.0 está prevista para a baseline BL-REL-S3.
+> **Status:** versão do sistema 0.1.0. Backend, banco de dados, interface web e ambiente Docker implementados; testes automatizados implementados (136 testes pytest e coleção Postman/Newman com 17 requisições, executados no CI a cada PR desde o PR #37); execução manual dos casos de teste pela interface pendente. A release v1.0.0 está prevista para a baseline BL-REL-S3.
 
 
 ## Sobre o projeto
@@ -17,16 +17,16 @@ Escopo da versão 1.0.0:
 
 Implementado na versão 0.1.0:
 
-Autenticação por e-mail e senha, com sessão por token (validade de 8 horas) e perfis de acesso: administrador, instrutor e aluno
-Gestão de usuários instrutores (administrador) e de alunos
-Catálogo de exercícios
-Fichas de treino (exercício, séries, repetições, carga e descanso), com uma ficha vigente por aluno
-Registro e histórico de execução de treinos, com acompanhamento da evolução de carga
-Exclusão lógica (inativação) com possibilidade de reativação
-API REST (/api/v1) documentada com OpenAPI
-Interface web
+- Autenticação por e-mail e senha, com sessão por token (validade de 8 horas) e perfis de acesso: administrador, instrutor e aluno
+- Gestão de usuários instrutores (administrador) e de alunos
+- Catálogo de exercícios
+- Fichas de treino (exercício, séries, repetições, carga e descanso), com período de vigência
+- Registro e histórico de execução de treinos, com acompanhamento da evolução de carga
+- Exclusão lógica (inativação) com possibilidade de reativação
+- API REST (/api/v1) documentada com OpenAPI
+- Interface web
 
-Previsto para a versão 1.0.0: testes automatizados (pytest e Postman/Newman) e manual do usuário completo.
+Previsto para a versão 1.0.0: execução manual dos casos de teste CT01 a CT30 pela interface (incluindo navegadores e celular) e emissão das baselines BL-IMPL-S2 e BL-REL-S3.
 
 Fora do escopo: aplicativo móvel nativo, pagamentos e mensalidades, integração com catracas ou wearables.
 

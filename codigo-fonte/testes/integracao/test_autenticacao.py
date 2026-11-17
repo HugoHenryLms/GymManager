@@ -1,6 +1,6 @@
 """Testes de integração da autenticação — RF02, RN05, RNF02, RNF13.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT01, CT02 e CT12.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT01, CT02, CT03 e CT30.
 """
 
 from conftest import API, auth
@@ -45,7 +45,7 @@ def test_login_sem_senha(client, admin_credenciais):
     assert resposta.status_code == 400
 
 
-# TI-AUTH-04 — RN05: usuário inativo não autentica
+# TI-AUTH-04 — CT03 / RN05: usuário inativo não autentica
 def test_login_usuario_inativo(client, login, token_admin, criar_instrutor):
     instrutor = criar_instrutor()
     client.delete(f"{API}/usuarios/{instrutor['usuario']['id']}", headers=auth(token_admin))
@@ -66,7 +66,7 @@ def test_rota_protegida_com_token_invalido(client):
     assert client.get(f"{API}/fichas", headers=auth("token-inventado")).status_code == 401
 
 
-# TI-AUTH-07 — RNF13: logout encerra a sessão
+# TI-AUTH-07 — CT30 / RNF13: logout encerra a sessão
 def test_logout_invalida_o_token(client, token_de, admin_credenciais):
     token = token_de(*admin_credenciais)
     assert client.get(f"{API}/fichas", headers=auth(token)).status_code == 200

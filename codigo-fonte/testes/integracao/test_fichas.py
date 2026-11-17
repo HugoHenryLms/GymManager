@@ -1,6 +1,6 @@
 """Testes de integração das fichas de treino — RF04, RN01, RN02, RN05, RN06, RN09, RN12.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT07, CT08 e CT11.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT13 a CT16, CT18 e CT29.
 """
 
 from conftest import API, auth, unico
@@ -10,7 +10,7 @@ def _itens(*exercicios):
     return [{"exercicio_id": e["id"], "series": 3, "repeticoes": 12, "carga_kg": 20, "descanso_s": 60} for e in exercicios]
 
 
-# TI-FIC-01 — CT07: criar ficha com exercícios para um aluno
+# TI-FIC-01 — CT13: criar ficha com exercícios para um aluno
 def test_criar_ficha(client, instrutor, aluno, criar_exercicio):
     corpo = {
         "nome": unico("Treino A"),
@@ -28,7 +28,7 @@ def test_criar_ficha(client, instrutor, aluno, criar_exercicio):
     assert [item["ordem"] for item in ficha["exercicios"]] == [1, 2]
 
 
-# TI-FIC-02 — RN06: ficha sem exercício
+# TI-FIC-02 — CT14 / RN06: ficha sem exercício (e CT29: séries inválidas)
 def test_ficha_sem_exercicio(client, instrutor, aluno):
     corpo = {"nome": unico("Ficha"), "aluno_id": aluno["usuario"]["id"], "data_inicio": "2026-01-01", "exercicios": []}
     resposta = client.post(f"{API}/fichas", json=corpo, headers=auth(instrutor["token"]))
@@ -87,7 +87,7 @@ def test_ficha_para_aluno_inativo(client, instrutor, criar_aluno, criar_exercici
     assert resposta.get_json()["campo"] == "aluno_id"
 
 
-# TI-FIC-05 — CT11 / RN02: aluno não vê a ficha de outro aluno
+# TI-FIC-05 — CT16 / RN02: aluno não vê a ficha de outro aluno
 def test_aluno_nao_consulta_ficha_de_outro(client, criar_aluno, criar_ficha):
     dono, outro = criar_aluno(), criar_aluno()
     ficha = criar_ficha(dono["usuario"]["id"])
@@ -96,7 +96,7 @@ def test_aluno_nao_consulta_ficha_de_outro(client, criar_aluno, criar_ficha):
     assert client.get(f"{API}/fichas/{ficha['id']}", headers=auth(outro["token"])).status_code == 403
 
 
-# TI-FIC-06 — CT08 / RN02: aluno lista só as próprias fichas
+# TI-FIC-06 — CT15 / RN02: aluno lista só as próprias fichas
 def test_aluno_lista_somente_as_proprias_fichas(client, criar_aluno, criar_ficha):
     dono, outro = criar_aluno(), criar_aluno()
     propria = criar_ficha(dono["usuario"]["id"])
@@ -108,7 +108,7 @@ def test_aluno_lista_somente_as_proprias_fichas(client, criar_aluno, criar_ficha
     assert all(f["aluno"]["id"] == dono["usuario"]["id"] for f in fichas)
 
 
-# TI-FIC-07 — RN09: ficha com execuções não muda de aluno
+# TI-FIC-07 — CT18 / RN09: ficha com execuções não muda de aluno
 def test_ficha_com_execucao_nao_muda_de_aluno(client, instrutor, criar_aluno, criar_ficha):
     dono, outro = criar_aluno(), criar_aluno()
     ficha = criar_ficha(dono["usuario"]["id"])

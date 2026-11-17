@@ -1,6 +1,6 @@
 """Testes de integração de alunos — RF01, RN05.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Caso de teste CT05.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT04 a CT07.
 """
 
 from conftest import API, SENHA_PADRAO, auth, unico
@@ -12,7 +12,7 @@ def _novo(**campos):
     return corpo
 
 
-# TI-ALU-01 — CT05: cadastrar, consultar e editar
+# TI-ALU-01 — CT04 / CT06: cadastrar, consultar e editar
 def test_cadastrar_consultar_e_editar_aluno(client, instrutor):
     cabecalho = auth(instrutor["token"])
     corpo = _novo(telefone="92999990000", data_nascimento="2000-05-10")
@@ -33,7 +33,7 @@ def test_cadastrar_consultar_e_editar_aluno(client, instrutor):
     assert editado.get_json()["nome"] == "Aluno Editado"
 
 
-# TI-ALU-02 — campo obrigatório ausente
+# TI-ALU-02 — CT05: campo obrigatório ausente
 def test_cadastro_sem_nome(client, instrutor):
     resposta = client.post(f"{API}/alunos", json=_novo(nome=""), headers=auth(instrutor["token"]))
 
@@ -69,7 +69,7 @@ def test_sem_token_nao_lista_alunos(client):
     assert client.get(f"{API}/alunos").status_code == 401
 
 
-# TI-ALU-05 — RN05: inativar e reativar
+# TI-ALU-05 — CT07 / RN05: inativar e reativar
 def test_inativar_e_reativar_aluno(client, instrutor, criar_aluno, login):
     cabecalho = auth(instrutor["token"])
     novo = criar_aluno()

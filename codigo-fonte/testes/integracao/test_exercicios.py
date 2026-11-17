@@ -1,12 +1,12 @@
 """Testes de integração do catálogo de exercícios — RF03, RN04.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Caso de teste CT06.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT10 a CT12.
 """
 
 from conftest import API, auth, unico
 
 
-# TI-EXE-01 — CT06: cadastrar exercício
+# TI-EXE-01 — CT10: cadastrar exercício
 def test_instrutor_cadastra_exercicio(client, instrutor):
     corpo = {"nome": unico("Supino"), "grupo_muscular": "Peito", "descricao": "Barra reta"}
     resposta = client.post(f"{API}/exercicios", json=corpo, headers=auth(instrutor["token"]))
@@ -23,7 +23,7 @@ def test_exercicio_sem_nome(client, instrutor):
     assert resposta.status_code == 400
 
 
-# TI-EXE-02 — nome duplicado (sem diferenciar maiúsculas)
+# TI-EXE-02 — CT11: nome duplicado (sem diferenciar maiúsculas)
 def test_nome_duplicado(client, instrutor, criar_exercicio):
     existente = criar_exercicio()
     resposta = client.post(
@@ -49,7 +49,7 @@ def test_aluno_lista_exercicios(client, aluno, criar_exercicio):
     assert [e["id"] for e in resposta.get_json()] == [criado["id"]]
 
 
-# TI-EXE-05 — RN04: exercício usado em ficha é apenas inativado
+# TI-EXE-05 — CT12 / RN04: exercício usado em ficha é apenas inativado
 def test_excluir_exercicio_usado_em_ficha_apenas_inativa(client, instrutor, aluno, criar_ficha):
     ficha = criar_ficha(aluno["usuario"]["id"], qtd_exercicios=1)
     id_exercicio = ficha["exercicios"][0]["exercicio"]["id"]
