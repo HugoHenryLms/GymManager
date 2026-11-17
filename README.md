@@ -4,7 +4,7 @@ Sistema web de gerenciamento de treinos de academia: cadastro de alunos e exerc�
 
 Projeto Integrador da disciplina **Gerência de Configuração** (6º período), CENTRO UNIVERSITÁRIO FAMETRO. Professor: Paulo Rodrigo Barbosa Alves.
 
-> **Status:** versão do sistema 0.1.0. Backend, banco de dados, interface web e ambiente Docker implementados; testes automatizados ainda pendentes. A release v1.0.0 está prevista para a baseline BL-REL-S3.
+> **Status:** versão do sistema 0.1.0. Backend, banco de dados, interface web e ambiente Docker implementados; testes automatizados em andamento (testes iniciais de autenticação e configuração no CI desde o PR #17). A release v1.0.0 está prevista para a baseline BL-REL-S3.
 
 
 ## Sobre o projeto
@@ -102,14 +102,14 @@ GymManager/
 
 ## Gerência de configuração
 
-- **Itens de Configuração (ICs):** todo artefato relevante tem ID no padrão `GYM-REQ-001(nome, tipo, caminho, versão, responsável, baseline, status e dependências` e está catalogado em [`documento/gerencia/Planilha_Controle_de_ICs.xlxs`](documento/gerencia/Planilha_Controle_de_ICs.xlxs).
+- **Itens de Configuração (ICs):** todo artefato relevante tem ID no padrão `GYM-<TIPO>-<NNN>` (ex.: `GYM-REQ-001`), com nome, tipo, caminho, versão, responsável, baseline, status e dependências, e está catalogado em [`documentos/gerencia/Planilha_Controle_de_ICs.xlsx`](documentos/gerencia/Planilha_Controle_de_ICs.xlsx).
 
 - **Controle de mudanças:** alterações em itens sob baseline exigem uma Change Request (issue com o formulário CRF), avaliada pelo Comitê de Controle de Mudanças (CCB). Todo commit deve estar vinculado a uma issue ou CR.
   
--**Baselines:** BL-PLAN, BL-REQ-S1, BL-IMPL-S2 e BL-REL-S3 (release v1.0.0), um IC sob baseline só muda mediante Change Request aprovada
+- **Baselines:** BL-PLAN, BL-REQ-S1, BL-IMPL-S2 e BL-REL-S3 (release v1.0.0), um IC sob baseline só muda mediante Change Request aprovada
 
--**Commits:** padrão Conventional Commits (feat:, fix:, docs:, test:, chore:), CONTRIBUTING.md
-Branches: <tipo>/<id-do-ic>-<descricao-curta> (ex.: feat/gym-src-004-fichas-de-treino), integrados à main por Pull Request. A lista dos branches utilizados está no Plano de Gerência de Configuração, seção 4.2.
+- **Commits:** padrão Conventional Commits (feat:, fix:, docs:, test:, chore:), conforme o [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Branches:** <tipo>/<id-do-ic>-<descricao-curta> (ex.: feat/gym-src-004-fichas-de-treino), integrados à main por Pull Request. A lista dos branches utilizados está no Plano de Gerência de Configuração, seção 4.2.
 
 ## Equipe
 
@@ -122,15 +122,17 @@ Branches: <tipo>/<id-do-ic>-<descricao-curta> (ex.: feat/gym-src-004-fichas-de-t
 | QA/Testes | Iago Medice Ferreira Da Silva, Tiago Costa Dos Santos, Ruan Victor Assunção Costa |
 
 ## Documentação
-Plano de Projeto
-Plano de Gerência de Configuração
-Inventário de ICs
-Documento de Requisitos (ERS)
-Casos de Uso
-Matriz de Rastreabilidade (RTM)
-Arquitetura e Modelo de Dados
-Contrato da API (OpenAPI)
-Decisões arquiteturais (ADR)
-Manual do Usuário e Notas de Versão
+
+- [Plano de Projeto](documentos/gerencia/Plano_de_Projeto.md)
+- [Plano de Gerência de Configuração](documentos/gerencia/Plano_de_Gerencia_de_Configuracao.md)
+- [Inventário de ICs (Planilha de Controle)](documentos/gerencia/Planilha_Controle_de_ICs.xlsx)
+- [Documento de Requisitos (ERS)](documentos/requisitos/ERS.md)
+- [Casos de Uso](documentos/requisitos/Casos_de_Uso.md)
+- [Matriz de Rastreabilidade (RTM)](documentos/requisitos/RTM.xlsx)
+- [Arquitetura](documentos/arquitetura/Arquitetura.md) e [Modelo de Dados](documentos/arquitetura/Modelo_de_Dados.md)
+- [Contrato da API (OpenAPI)](documentos/arquitetura/openapi.yaml)
+- [Decisões arquiteturais (ADR)](documentos/arquitetura/adr/ADR-001-stack.md)
+- [Plano de Testes](documentos/testes/Plano_de_Testes.md) e [Casos de Teste](documentos/testes/Casos_de_Teste.md)
+- [Manual do Usuário](documentos/usuario/Manual_do_Usuario.md) e [Notas de Versão](documentos/usuario/Notas_de_Versao.md)
 
 Projeto acadêmico em desenvolvimento, disciplina de Gerência de Configuração.
