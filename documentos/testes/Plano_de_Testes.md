@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-TST-001 |
 | Caminho | `documentos/testes/Plano_de_Testes.md` |
-| Versão | 0.2.0 |
+| Versão | 0.3.0 |
 | Status | Em revisão |
 | Baseline prevista | BL-IMPL-S2 (Design/Implementação) |
 | Responsável | QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa) |
@@ -24,6 +24,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.0.0 | 11-11-2026 | QA/Testes | Arquivo criado vazio (placeholder) | — |
 | 0.1.0 | 16-11-2026 | Renata Martins da Silva | Primeira versão do plano. Formaliza a estratégia já aplicada nos testes automatizados iniciais (PR #17) e define o escopo, os níveis, os critérios de aceite e a cobertura planejada até a baseline BL-IMPL-S2 | #18 |
 | 0.2.0 | 17-11-2026 | Renata Martins da Silva | Alinhamento com o comportamento do sistema 0.1.0, antes da implementação dos novos testes: (1) nova seção 3.2.1 com os códigos HTTP retornados pela API; (2) resultados esperados da meta da seção 4.3 corrigidos (usuário inativo → `403`; duplicidade, autoinativação do administrador e ficha para aluno inativo → `409`); (3) escopo ampliado para RN01 a RN14, com RN09, RN12, RN13 e RN14 na meta da seção 4.3. Asserção de `test_login_senha_incorreta` restrita a `401` | #33 |
+| 0.3.0 | 17-11-2026 | Renata Martins da Silva | Registro dos testes automatizados entregues no PR #37: (1) seção 4.1 com a numeração atual dos casos de teste (CT01 a CT30) e a situação real de cada nível; (2) seção 4.2 reescrita com os 136 testes pytest e as 17 requisições da coleção Newman; (3) meta da seção 4.3 marcada como atingida; (4) referências a "CT01 a CT12" atualizadas para CT01 a CT30 nas seções 1.2, 6.2, 8 e 10 (Pendência 26 da Planilha de ICs); (5) seção 5 com o modo de executar a coleção Newman localmente | #39 |
 
 > **Observação de configuração:** este plano foi formalizado depois dos primeiros testes automatizados, incorporados à `main` pelo PR #17. O desvio está registrado aqui para fins de rastreabilidade. A partir desta versão, o plano é atualizado **antes** da implementação de novos testes.
 
@@ -43,7 +44,7 @@ Este documento define a estratégia, o escopo, os recursos, os critérios de ace
 - Regras de negócio RN01 a RN14 (RN13 e RN14 incluídas no ERS v1.1.0).
 - Autenticação, sessão e controle de acesso por perfil (RF02, RNF01, RNF02, RNF13).
 - Integração com o banco MySQL e as migrações (GYM-DB-001).
-- Interface web (GYM-SRC-006), por meio dos casos de teste manuais CT01 a CT12.
+- Interface web (GYM-SRC-006), por meio dos casos de teste manuais CT01 a CT30.
 - Ambiente completo em Docker (teste de fumaça do CI).
 
 **Fora do escopo nesta versão:**
@@ -168,36 +169,55 @@ Coleção Postman executada pelo Newman no ambiente Docker completo, passando pe
 
 ### 4.1 Requisitos funcionais × níveis × casos de teste
 
+Numeração dos casos de teste conforme os Casos de Teste (GYM-TST-005) v0.3.0. Os IDs `TI-…` e `TU-…` são os comentários que identificam cada teste nos arquivos pytest (seção 4.2).
+
 | Requisito | Caso de uso | Caso(s) de teste manual | Integração (pytest) | API (Newman) |
 | --- | --- | --- | --- | --- |
-| RF01 — Alunos | UC03 | CT05 | Planejado | Planejado |
-| RF02 — Autenticação e perfis | UC01 | CT01, CT02, CT12 | **Parcial** (login válido e senha incorreta) | Planejado |
-| RF03 — Exercícios | UC04 | CT06 | Planejado | Planejado |
-| RF04 — Fichas de treino | UC05, UC06 | CT07, CT08, CT11 | Planejado | Planejado |
-| RF05 — Execuções e histórico | UC07, UC08 | CT09, CT10, CT11 | Planejado | Planejado |
-| RF06 — Usuários e instrutores | UC02 | CT03, CT04 | Planejado | Planejado |
-| RF07 — Interface por perfil | UC01 a UC08 | CT01 a CT12 | — | — |
+| RF01 — Alunos | UC03 | CT04 a CT07 | **Implementado** (TI-ALU-01 a 06) | **Implementado** (requisição 04) |
+| RF02 — Autenticação e perfis | UC01 | CT01, CT02, CT03, CT27, CT30 | **Implementado** (TI-AUTH-01 a 08) | **Implementado** (requisições 01, 03, 07, 15 a 17) |
+| RF03 — Exercícios | UC04 | CT10 a CT12 | **Implementado** (TI-EXE-01 a 06) | **Implementado** (requisição 05) |
+| RF04 — Fichas de treino | UC05, UC06 | CT13 a CT18, CT29 | **Implementado** (TI-FIC-01 a 10) | **Implementado** (requisições 06, 08 e 09) |
+| RF05 — Execuções e histórico | UC07, UC08 | CT19 a CT26 | **Implementado** (TI-EXC-01 a 14) | **Implementado** (requisições 10 a 14) |
+| RF06 — Usuários e instrutores | UC02 | CT08, CT09, CT27, CT28 | **Implementado** (TI-USU-01 a 08) | **Implementado** (requisição 02) |
+| RF07 — Interface por perfil | UC01 a UC08 | CT01 a CT30 (pela interface) | — (fora do escopo, seção 1.2) | — |
 
-### 4.2 Testes automatizados existentes (versão 0.1.0 do sistema)
+### 4.2 Testes automatizados existentes (sistema 0.1.0)
 
-| Arquivo | Nível | Teste | Verifica | CT |
-| --- | --- | --- | --- | --- |
-| `unitarios/test_configuracao.py` | Unitário | `test_criacao_aplicacao_flask` | Aplicação criada com `SECRET_KEY` | — |
-| `integracao/test_autenticacao.py` | Integração | `test_login_admin_sucesso` | Login válido retorna token e perfil `ADMIN` (RF02) | CT01 |
-| `integracao/test_autenticacao.py` | Integração | `test_login_senha_incorreta` | Senha incorreta retorna `400` ou `401` (RF02). Ajuste previsto: aceitar somente `401` (seção 3.2.1) | CT02 |
+Situação em 17-11-2026, após o PR #37. O resultado de cada execução fica no Relatório de Testes (GYM-TST-007).
+
+**Testes pytest — 136 testes** (69 de integração e 67 unitários; a contagem inclui os casos de `@pytest.mark.parametrize`):
+
+| Arquivo | Nível | IDs | Testes | Verifica | Requisitos | CT |
+| --- | --- | --- | ---: | --- | --- | --- |
+| `integracao/test_autenticacao.py` | Integração | TI-AUTH-01 a 08 | 10 | Login válido, senha incorreta (`401`), e-mail inexistente com a mesma mensagem, campos obrigatórios, usuário inativo (`403`), sem token e token inválido (`401`), logout e inativação encerram a sessão | RF02, RN05, RNF02, RNF13 | CT01, CT02, CT03, CT30 |
+| `integracao/test_usuarios.py` | Integração | TI-USU-01 a 08 | 11 | Cadastro de instrutor, e-mail duplicado (`409`), senha fraca, perfil e nome inválidos (`400`), permissões de instrutor e aluno (`403`), autoproteção do administrador (`409`), edição, inativação e reativação, ID inexistente (`404`) | RF06, RN03, RN08 | CT08, CT09, CT27, CT28 |
+| `integracao/test_alunos.py` | Integração | TI-ALU-01 a 06 | 9 | Cadastrar, consultar e editar; campo ausente e e-mail duplicado; busca por nome e e-mail; aluno e visitante sem acesso; inativação e reativação; ID inexistente e ID de instrutor (`404`) | RF01, RN05 | CT04 a CT07 |
+| `integracao/test_exercicios.py` | Integração | TI-EXE-01 a 06 | 8 | Cadastro, nome obrigatório, nome duplicado, aluno não cadastra, todos consultam o catálogo, `DELETE` apenas inativa e mantém o item na ficha, exercício inativo fora de ficha nova, reativação | RF03, RN04 | CT10 a CT12 |
+| `integracao/test_fichas.py` | Integração | TI-FIC-01 a 10 | 12 | Criação, ficha sem exercício e séries inválidas (`400`), período inválido, aluno não cria, aluno inativo (`409`), privacidade da ficha e da listagem, troca de aluno com e sem execuções, reativação com aluno inativo, exercício removido fica inativo no item | RF04, RN01, RN02, RN05, RN06, RN09, RN12 | CT13 a CT16, CT18, CT29 |
+| `integracao/test_execucoes.py` | Integração | TI-EXC-01 a 14 | 19 | Fluxo iniciar → registrar → finalizar, correção do registro, execução finalizada, ficha encerrada ou vencida, ficha e execução de outro aluno, item de outra ficha, valores inválidos, instrutor não inicia, RN13 (duas execuções abertas), RN14 (item inativado após o início), histórico, evolução de carga e filtros | RF05, RN02, RN07, RN10 a RN14 | CT16, CT19 a CT26 |
+| `unitarios/test_validacao.py` | Unitário | TU-01 a 08 | 54 | Senha, e-mail, nome, perfil, séries e repetições, carga, descanso, datas e período, com valores válidos e inválidos | ERS 4.3 | — |
+| `unitarios/test_seguranca.py` | Unitário | TU-09 e 10 | 5 | Hash scrypt com sal, senha errada rejeitada, token guardado como SHA-256 | RNF01, RNF13 | — |
+| `unitarios/test_migracoes.py` | Unitário | TU-11 | 7 | Ordem das migrações, nome fora do padrão, pasta inexistente, checksum estável (inclusive com fim de linha do Windows) e separação das instruções SQL | RNF11 | — |
+| `unitarios/test_configuracao.py` | Unitário | — | 1 | Aplicação criada com `SECRET_KEY` | RNF03 | — |
+
+As fixtures comuns ficam em `codigo-fonte/testes/conftest.py`, conforme a seção 3.2.
+
+**Coleção Newman (`postman/GymManager.postman_collection.json`) — 17 requisições e 41 verificações.** Segue o fluxo da seção 3.3: login do administrador → cadastro de instrutor → login do instrutor → cadastro de aluno e de exercício → criação de ficha → login do aluno → consulta da ficha → aluno tenta criar ficha (`403`) → início, registro e finalização da execução → registro em execução finalizada (`409`) → histórico → rota sem token (`401`) → logout → token encerrado (`401`). Toda requisição verifica o tempo de resposta < 2000 ms (RNF04).
 
 ### 4.3 Meta mínima por módulo até a BL-IMPL-S2
 
 | Módulo | Testes de integração mínimos | Regras cobertas |
 | --- | --- | --- |
-| Autenticação | Login válido → `200` ✅; senha incorreta → `401` ✅ (ajustar a asserção); login sem e-mail ou senha → `400`; usuário inativo → `403`; rota protegida sem token ou com token inválido → `401`; logout → `204` e o mesmo token passa a retornar `401`; usuário inativado perde a sessão → `401` | RF02, RN05, RNF02, RNF13 |
+| Autenticação | Login válido → `200` ✅; senha incorreta → `401` ✅; login sem e-mail ou senha → `400`; usuário inativo → `403`; rota protegida sem token ou com token inválido → `401`; logout → `204` e o mesmo token passa a retornar `401`; usuário inativado perde a sessão → `401` | RF02, RN05, RNF02, RNF13 |
 | Usuários | Admin cadastra instrutor → `201`; e-mail duplicado → `409`; senha fraca ou perfil inválido → `400`; instrutor tenta cadastrar usuário → `403`; admin inativa a própria conta ou altera o próprio perfil → `409` | RF06, RN03, RN08 |
 | Alunos | Cadastrar → `201`, consultar e editar → `200`; campo obrigatório ausente → `400`; aluno tenta listar alunos → `403`; ID inexistente → `404`; aluno inativado não autentica (`403`) e volta a autenticar após reativação | RF01, RN05 |
 | Exercícios | Cadastrar → `201`; nome duplicado → `409`; aluno tenta cadastrar → `403`; `DELETE` de exercício usado em ficha → `200` com `ativo=false`, mantendo o item na ficha; exercício inativo em nova ficha → `400` | RF03, RN04 |
 | Fichas | Criar ficha com exercício para um aluno → `201`; ficha sem exercício → `400`; aluno tenta criar ficha → `403`; ficha para aluno inativo → `409`; aluno vê só as próprias fichas e recebe `403` na ficha de outro; trocar o aluno de ficha com execuções → `409`; reativar ficha de aluno inativo → `409`; exercício removido da ficha fica inativo no item, preservando as execuções | RF04, RN01, RN02, RN05, RN06, RN09, RN12 |
 | Execuções | Aluno inicia → `201`, registra → `201` e finaliza → `200`; novo registro do mesmo exercício corrige o anterior → `200`; registro ou nova finalização em execução finalizada → `409`; ficha não vigente → `409`; ficha de outro aluno → `403`; aluno consulta histórico de outro → `403`; duas execuções abertas na mesma ficha são aceitas → `201` (RN13); registro de item inativado após o início da execução é aceito → `201` e aparece no histórico (RN14) | RF05, RN02, RN07, RN10, RN11, RN13, RN14 |
 
-O objetivo é que **todo requisito funcional tenha pelo menos um teste automatizado**, e que os casos de segurança CT11 (privacidade) e CT12 (permissões) estejam automatizados.
+O objetivo é que **todo requisito funcional tenha pelo menos um teste automatizado**, e que os casos de segurança CT16 (privacidade) e CT27 (permissões) estejam automatizados.
+
+**Situação em 17-11-2026: meta atingida.** Todos os cenários da tabela acima estão implementados nos arquivos da seção 4.2 (PR #37). RF01 a RF06 têm testes de integração e de API; CT16 está automatizado em TI-FIC-05, TI-EXC-05 e TI-EXC-13; CT27, em TI-USU-04 e TI-USU-05. Falta a execução manual dos casos pela interface (critério de saída da seção 6.2).
 
 ---
 
@@ -216,6 +236,17 @@ pip install -r codigo-fonte/backend/requirements-dev.txt
 PYTHONPATH=codigo-fonte/backend python -m pytest codigo-fonte/testes -v
 ```
 
+Os testes pytest precisam das mesmas variáveis do CI (`DATABASE_URL` ou `MYSQL_*`, `SECRET_KEY`, `ADMIN_EMAIL` e `ADMIN_SENHA`).
+
+Para executar a coleção Newman com o ambiente Docker no ar (`docker compose up`):
+
+```bash
+npx --yes newman@6.2.3 run codigo-fonte/testes/postman/GymManager.postman_collection.json \
+  --env-var "baseUrl=http://localhost:8080/api/v1" \
+  --env-var "adminEmail=<e-mail do administrador>" \
+  --env-var "adminSenha=<senha do administrador>"
+```
+
 ---
 
 ## 6. Critérios
@@ -230,7 +261,7 @@ PYTHONPATH=codigo-fonte/backend python -m pytest codigo-fonte/testes -v
 
 - CI verde na `main`, com os testes pytest e Newman **executados** (sem o aviso de "nenhum teste encontrado").
 - Todo requisito funcional (RF01 a RF06) com pelo menos um teste automatizado de integração ou de API.
-- CT01 a CT12 executados manualmente, com resultado registrado no Relatório de Testes.
+- CT01 a CT30 executados manualmente, com resultado registrado no Relatório de Testes.
 - Nenhum defeito de gravidade **Crítica** ou **Alta** em aberto no Registro de Defeitos.
 - RTM atualizada com a situação de verificação de cada requisito.
 - Revisão técnica do QA registrada para os ICs de teste.
@@ -260,7 +291,7 @@ PYTHONPATH=codigo-fonte/backend python -m pytest codigo-fonte/testes -v
 | GYM-TST-002 | Testes unitários | A cada PR que altere o backend |
 | GYM-TST-003 | Testes de integração | A cada PR que altere o backend |
 | GYM-TST-004 | Coleção Postman | A cada mudança na API |
-| GYM-TST-005 | Casos de Teste (CT01 a CT12) | Quando um requisito ou caso de uso mudar |
+| GYM-TST-005 | Casos de Teste (CT01 a CT30) | Quando um requisito ou caso de uso mudar |
 | GYM-TST-006 | Registro de Defeitos | A cada defeito encontrado ou corrigido |
 | GYM-TST-007 | Relatório de Testes | Ao fim de cada ciclo e antes de cada baseline |
 
@@ -281,14 +312,14 @@ PYTHONPATH=codigo-fonte/backend python -m pytest codigo-fonte/testes -v
 
 As entregas seguem o ritmo semanal da equipe (quartas-feiras), na ordem abaixo:
 
-| Ordem | Atividade | IC(s) | Marco |
-| --- | --- | --- | --- |
-| 1 | Plano de Testes (esta versão) e atualização de Casos de Teste e Relatório | TST-001, 005, 007 | — |
-| 2 | Testes de integração dos módulos de usuários, alunos e exercícios | TST-003 | — |
-| 3 | Testes de integração de fichas e execuções (inclui CT11 e CT12) e testes unitários de validação | TST-002, 003 | — |
-| 4 | Coleção Postman com fluxo completo e asserção de tempo (RNF04) | TST-004 | — |
-| 5 | Execução manual de CT01 a CT12, Relatório de Testes e revisão técnica | TST-005, 006, 007 | BL-IMPL-S2 |
-| 6 | Regressão completa e testes de navegadores e dispositivos (RNF05, RNF06) | Todos | BL-REL-S3 (`v1.0.0`) |
+| Ordem | Atividade | IC(s) | Marco | Situação |
+| --- | --- | --- | --- | --- |
+| 1 | Plano de Testes e atualização de Casos de Teste e Relatório | TST-001, 005, 007 | — | Concluída (v0.2.0 e v0.3.0 deste plano) |
+| 2 | Testes de integração dos módulos de usuários, alunos e exercícios | TST-003 | — | Concluída (PR #37) |
+| 3 | Testes de integração de fichas e execuções (inclui CT16 e CT27) e testes unitários de validação | TST-002, 003 | — | Concluída (PR #37) |
+| 4 | Coleção Postman com fluxo completo e asserção de tempo (RNF04) | TST-004 | — | Concluída (PR #37) |
+| 5 | Execução manual de CT01 a CT30, Relatório de Testes e revisão técnica | TST-005, 006, 007 | BL-IMPL-S2 | Pendente |
+| 6 | Regressão completa e testes de navegadores e dispositivos (RNF05, RNF06) | Todos | BL-REL-S3 (`v1.0.0`) | Pendente |
 
 ---
 
@@ -299,7 +330,7 @@ As entregas seguem o ritmo semanal da equipe (quartas-feiras), na ordem abaixo:
 | Divergências entre o sistema 0.1.0 e o ERS (ver Pendências da Planilha de ICs, item 20) | Testes podem falhar por requisito desatualizado, e não por defeito | O CCB decide, para cada divergência, entre corrigir o código ou ajustar o ERS por CR, antes de escrever o teste correspondente |
 | Banco compartilhado entre os testes no CI | Testes dependentes entre si ou falhas intermitentes | Dados únicos por teste e fixtures centralizadas (seção 3.2) |
 | Equipe de QA com pouca experiência em pytest e Postman | Atraso na cobertura | Começar pelos módulos mais simples; usar os testes existentes como modelo |
-| Plano formalizado após os primeiros testes | Testes iniciais sem critério documentado | Registrado no histórico; testes existentes revisados frente a este plano (seção 4.2) |
+| Plano formalizado após os primeiros testes | Testes iniciais sem critério documentado | Registrado no histórico; testes iniciais revisados frente a este plano e ampliados no PR #37 (seção 4.2) |
 
 ---
 
