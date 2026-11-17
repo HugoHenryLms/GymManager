@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
 | Versão | 1.1.1 |
-| Status | Em revisão |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -26,7 +26,7 @@ Atualização de versão do documento.
 | — |
 | 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado. | — |
 | 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0: UC07 passa a citar as regras RN13 e RN14 do ERS v1.1.0 (execuções em andamento e registro de item inativado); seção 8 atualizada. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
-| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): correspondência entre casos de uso e casos de teste atualizada para a numeração CT01 a CT30 dos Casos de Teste (GYM-TST-005) v0.3.0 | CR-001 (#41) |
+| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): correspondência entre casos de uso e casos de teste atualizada para a numeração CT01 a CT30 dos Casos de Teste (GYM-TST-005) v0.3.0. Verificada pelo QA (Iago Medice Ferreira da Silva) no PR #43 e aprovada pelo CCB (Hugo, Renata e João) em 17/11/2026; BL-REQ-S1 reemitida (revisão 2, tag `BL-REQ-S1-r2`) | CR-001 (#41) / PR #43 |
 ---
 
 ## 1. Introdução

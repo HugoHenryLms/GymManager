@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-TST-007 |
 | Caminho | `documentos/testes/Relatorio_de_Testes.md` |
-| Versão | 0.3.0 |
+| Versão | 0.3.1 |
 | Status | Em elaboração |
 | Baseline prevista | BL-REL-S3 (Product/Release) |
 | Responsável | QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa) |
@@ -23,6 +23,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.1.0 | 11-11-2026 | QA/Testes | Versão inicial (modelo, sem execuções) | — |
 | 0.2.0 | 16-11-2026 | Renata Martins da Silva | Total corrigido de 10 para 12 casos, conforme GYM-TST-005 (Pendência 15 da Planilha de ICs); registro do ciclo 1 (testes automatizados do PR #17 no CI); cobertura por requisito; lista de funcionalidades alinhada aos casos CT01 a CT12 | #18 |
 | 0.3.0 | 17-11-2026 | Renata Martins da Silva | Registro do ciclo 2 (136 testes pytest e coleção Newman entregues no PR #37); resumo e cobertura atualizados para os casos CT01 a CT30 de GYM-TST-005 v0.3.0 (Pendência 26 da Planilha de ICs); cobertura dos casos de teste pelos testes automatizados | #39 |
+| 0.3.1 | 17-11-2026 | Renata Martins da Silva | Resultado oficial do CI registrado no ciclo 2 (PR #40, commit `c08e8c4`, jobs Backend e Docker aprovados); RNF04 confirmado no CI (Pendência 29 da Planilha de ICs) | CR-001 (#41) |
 
 ---
 
@@ -63,7 +64,7 @@ Os casos manuais ainda não foram executados neste ciclo.
 | Versão do sistema | 0.1.0 |
 | Origem | PR #37 (testes de integração dos seis módulos, testes unitários, `conftest.py` e coleção Postman) |
 | Ambiente oficial | CI no GitHub Actions (GYM-CI-001): Ubuntu, Python 3.12, MySQL 8.4; Newman 6.2.3 no ambiente Docker, pelo proxy do frontend |
-| Resultado do CI | **A confirmar**: abrir a aba *Actions* do PR #37, conferir os jobs *Backend — build, migrações e pytest* e *Docker — ambiente completo, fumaça e Newman* e registrar aqui o resultado, a data e o commit |
+| Resultado do CI | **Aprovado.** CI do PR #40 (commit `c08e8c4`, 17-11-2026), que executou o mesmo conjunto de testes do PR #37 sobre a `main` atualizada: jobs *Backend — build, migrações e pytest* e *Docker — ambiente completo, fumaça e Newman* concluídos com sucesso. |
 | Execução de verificação | 17-11-2026, ambiente local montado como o CI (MySQL 8.0, banco migrado duas vezes e administrador criado por `flask criar-admin`; Newman 6.2.3 direto na API): pytest executado duas vezes seguidas sem limpar o banco, com o mesmo resultado |
 
 ### 3.1 Testes pytest (GYM-TST-002 e GYM-TST-003)
@@ -82,7 +83,7 @@ Os casos manuais ainda não foram executados neste ciclo.
 | `unitarios/test_configuracao.py` | Unitário | 1 | 1 | 0 |
 | **Total** | | **136** | **136** | **0** |
 
-Resultado da execução de verificação: `136 passed`.
+Resultado da execução de verificação: `136 passed`. No CI do PR #40, o job *Backend* foi aprovado (todos os testes passaram).
 
 ### 3.2 Coleção Newman (GYM-TST-004)
 
@@ -93,7 +94,7 @@ Resultado da execução de verificação: `136 passed`.
 | Tempo de resposta (RNF04: < 2000 ms) | Atendido em todas as requisições; média de 37 a 42 ms e máximo de 180 ms nas duas execuções de verificação |
 | Repetição | Duas execuções seguidas no mesmo banco, sem falhas (dados únicos por execução) |
 
-O tempo medido na execução de verificação foi direto na API. No CI, a coleção passa pelo proxy do frontend; o resultado oficial do RNF04 é o do CI.
+O tempo medido na execução de verificação foi direto na API. No CI, a coleção passa pelo proxy do frontend: o job *Docker* do PR #40 foi aprovado, ou seja, todas as asserções de tempo < 2000 ms passaram também no CI (RNF04 confirmado).
 
 ### 3.3 Casos de teste manuais (GYM-TST-005)
 
@@ -135,7 +136,7 @@ Todos os casos têm cobertura automatizada no nível da API (seção 5), mas **t
 | RF07 — Interface por perfil | CT01 a CT30 | Não (fora do escopo dos testes automatizados) | Não |
 | RNF01 — Hash de senha | — | **Sim** (TU-09) | — |
 | RNF02 — Rotas protegidas | — | **Sim** (TI-AUTH-05, TI-ALU-04; Newman 15) | — |
-| RNF04 — Tempo de resposta | — | **Sim**, na verificação local (Newman, todas as requisições); confirmar no CI | — |
+| RNF04 — Tempo de resposta | — | **Sim** (Newman, todas as requisições; CI do PR #40) | — |
 | RNF08 — Testes no CI | — | **Sim** (pytest e Newman executados a cada PR) | — |
 | RNF11 — Migrações com checksum | — | **Sim** (TU-11; migrações aplicadas duas vezes no CI) | — |
 | RNF13 — Sessão por token | — | **Sim** (TU-10, TI-AUTH-06 a 08; Newman 16 e 17) | — |
@@ -188,4 +189,4 @@ Nenhum defeito foi encontrado nos ciclos 1 e 2. Ver o Registro de Defeitos (GYM-
 
 ## 8. Conclusão
 
-O ciclo 2 atinge a meta de testes automatizados do Plano de Testes (seção 4.3): RF01 a RF06 têm testes de integração e de API, e os casos de segurança CT16 e CT27 estão automatizados. Para a baseline BL-IMPL-S2 ainda faltam, conforme os critérios de saída do Plano de Testes (seção 6.2): confirmar o CI verde do PR #37 na `main`, executar manualmente os casos CT01 a CT30, atualizar a situação de verificação na RTM (por CR, pois a RTM está na BL-REQ-S1) e registrar a revisão técnica do QA.
+O ciclo 2 atinge a meta de testes automatizados do Plano de Testes (seção 4.3): RF01 a RF06 têm testes de integração e de API, e os casos de segurança CT16 e CT27 estão automatizados. O CI verde foi confirmado no PR #40, e a situação de verificação foi atualizada na RTM v1.1.1 pela CR-001. Para a baseline BL-IMPL-S2 ainda faltam, conforme os critérios de saída do Plano de Testes (seção 6.2): executar manualmente os casos CT01 a CT30 e registrar a revisão técnica do QA dos ICs de teste.

@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
 | Versão | 1.1.1 |
-| Status | Em revisão |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
@@ -26,7 +26,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.2.0 | 14-11-2026| Renata Martins da Silva| Atualização conforme o sistema implementado (versão 0.1.0 do produto): requisitos refinados (RF01, RF03 a RF06), novas regras de negócio RN08 a RN12 e requisitos RNF13 e RNF14, regras e mensagens de validação completas, telas e rotas reais, contrato da API detalhado, modelo conceitual com a entidade SESSAO e nova seção 7 (situação de atendimento dos requisitos)  e atualização da versão do documento| — |
 | 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado. | — |
 | 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0 (Pendências 20 e 23 da Planilha de ICs): novas regras RN13 e RN14, que registram o comportamento do sistema 0.1.0 em execuções; retirada da ressalva do RF05 (o gráfico de evolução de carga atende ao requisito); situação de RNF04, RNF08 e RNF12 atualizada após os PRs #17 e #19; seção 5 atualizada; lista de verificação da BL-REQ-S1 com a revisão do QA e a aprovação do CCB registradas. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
-| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): seção 5 com a numeração atual dos casos de teste (CT01 a CT30) e os testes automatizados do PR #37; vínculo do RNF04 com GYM-TST-004 (coleção Newman), separado de RNF05 e RNF06; seção 7 com a situação de RNF04, RNF08 e RNF12 após os testes do PR #37 | CR-001 (#41) |
+| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): seção 5 com a numeração atual dos casos de teste (CT01 a CT30) e os testes automatizados do PR #37; vínculo do RNF04 com GYM-TST-004 (coleção Newman), separado de RNF05 e RNF06; seção 7 com a situação de RNF04 (confirmada no CI do PR #40), RNF08 e RNF12 após os testes do PR #37. Verificada pelo QA (Iago Medice Ferreira da Silva) no PR #43 e aprovada pelo CCB (Hugo, Renata e João) em 17/11/2026; BL-REQ-S1 reemitida (revisão 2, tag `BL-REQ-S1-r2`) | CR-001 (#41) / PR #43 |
 ---
 
 ## 1. Introdução
@@ -369,12 +369,12 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 
 | # | Verificação | Resultado |
 | --- | --- | --- |
-| 1 | ID, caminho, versão e responsável do ERS coincidem com a planilha de ICs | ☑ Conferido em 17/11/2026 (Planilha de ICs v1.6.0) |
-| 2 | Todos os RF e RNF possuem IC de projeto, código e teste na RTM | ☑ RTM v1.1.0: 21 de 21 requisitos com cobertura completa (aba Resumo) |
+| 1 | ID, caminho, versão e responsável do ERS coincidem com a planilha de ICs | ☑ Conferido em 17/11/2026 (Planilha de ICs v1.6.0). Revisão 2: v1.1.1 conferida em 17/11/2026 (Planilha de ICs v1.12.0) |
+| 2 | Todos os RF e RNF possuem IC de projeto, código e teste na RTM | ☑ RTM v1.1.0: 21 de 21 requisitos com cobertura completa (aba Resumo). Revisão 2: RTM v1.1.1, 21 de 21 |
 | 3 | Casos de Uso e protótipos coerentes com os requisitos | ☑ Casos de Uso v1.1.0 revisados pelo QA; os protótipos (GYM-REQ-004) são apenas inspiração, fora do escopo (Pendência 22) |
 | 4 | Tecnologias coerentes com o Plano de Projeto e o ADR da stack | ☑ Verificado na revisão do QA (reunião de 16/11/2026) |
-| 5 | Revisão técnica do QA/Testes registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: Iago Medice Ferreira da Silva, 17/11/2026 (PR #28) |
-| 6 | Aprovação do CCB registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: João Vitor Simonetti, 17/11/2026 (PR #28) |
+| 5 | Revisão técnica do QA/Testes registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: Iago Medice Ferreira da Silva, 17/11/2026 (PR #28). v1.1.1 (CR-001): Iago Medice Ferreira da Silva, 17/11/2026 (PR #43) |
+| 6 | Aprovação do CCB registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: João Vitor Simonetti, 17/11/2026 (PR #28). v1.1.1: CR-001 aprovada pelo CCB (Hugo, Renata e João) em 17/11/2026 (issue #41) |
 
 ## 7. Situação de atendimento dos requisitos (sistema versão 0.1.0)
 | ID | Situação | Evidência no repositório / observação |
@@ -389,7 +389,7 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | RNF01 | Atendido | Hash scrypt com sal (`auth/seguranca.py`) |
 | RNF02 | Atendido | Todas as rotas usam `@autenticado` ou `@exige_perfil`, exceto `POST /auth/login` |
 | RNF03 | Atendido | `config.py` sem valores padrão para segredos; `.env.example`; `.gitignore` exclui `.env` |
-| RNF04 | Atendido, com ressalva | Asserção de tempo < 2000 ms em todas as 17 requisições da coleção Newman (GYM-TST-004, PR #37); na verificação de 17/11/2026, média de 37 a 42 ms e máximo de 180 ms. Ressalva: registrar o resultado oficial do CI no Relatório de Testes (GYM-TST-007) |
+| RNF04 | Atendido | Asserção de tempo < 2000 ms em todas as 17 requisições da coleção Newman (GYM-TST-004, PR #37), aprovada no CI do PR #40 (commit `c08e8c4`); na verificação local de 17/11/2026, média de 37 a 42 ms e máximo de 180 ms (Relatório de Testes, GYM-TST-007 v0.3.1) |
 | RNF05 | Atendido, com ressalva | CSS com adaptações para 1100 px e 760 px e menu recolhível; falta validação em dispositivos reais |
 | RNF06 | Não verificado | Sem teste em múltiplos navegadores |
 | RNF07 | Parcial | Código organizado em módulos por domínio; o uso de Conventional Commits e do vínculo commit–issue não pôde ser verificado, pois o pacote analisado não inclui o histórico do Git |
