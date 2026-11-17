@@ -1,11 +1,28 @@
 # Casos de Teste — GymManager
 
-**Projeto:** GymManager  
-**Documento:** GYM-TST-005  
-**Versão:** 1.1.0  
-**Base de referência:** ERS v1.1.0  
-**Responsável:** Equipe de QA/Testes  
-**Status geral:** Preparado para execução
+**Sistema web de gerenciamento de treinos de academia**
+Disciplina: Gerência de Configuração (6º período) · CENTRO UNIVERSITÁRIO FAMETRO
+Professor: Paulo Rodrigo Barbosa Alves
+
+| Campo | Valor |
+| --- | --- |
+| ID do IC | GYM-TST-005 |
+| Caminho | `documentos/testes/Casos_de_Teste.md` |
+| Versão | 0.3.0 |
+| Status | Em elaboração |
+| Baseline prevista | BL-IMPL-S2 (Design/Implementação) |
+| Responsável | QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa) |
+| Dependências | GYM-TST-001 (Plano de Testes), GYM-REQ-001 (ERS v1.1.0) |
+| ICs relacionados | GYM-TST-006 (Registro de Defeitos), GYM-TST-007 (Relatório de Testes), GYM-REQ-003 (RTM) |
+| Situação da execução | Casos preparados, aguardando execução |
+
+## Histórico de revisões
+
+| Versão | Data | Autor | Descrição | CR/Issue |
+| --- | --- | --- | --- | --- |
+| 0.1.0 | 16-11-2026 | QA/Testes | Casos CT01 a CT12 | — |
+| 0.2.0 | 16-11-2026 | QA/Testes | Indicação do requisito verificado em cada caso (Pendência 19 da Planilha de ICs) | #18 |
+| 0.3.0 | 17-11-2026 | Renata Martins da Silva | Casos ampliados para CT01 a CT30 com base no ERS v1.1.0 (inclui RN13 e RN14); cabeçalho e histórico no padrão dos demais ICs; versão alinhada à Planilha de ICs (o arquivo informava 1.1.0 sem aprovação registrada) | #35 |
 
 ## 1. Objetivo
 

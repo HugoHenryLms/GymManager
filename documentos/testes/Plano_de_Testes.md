@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-TST-001 |
 | Caminho | `documentos/testes/Plano_de_Testes.md` |
 | Versão | 0.2.0 |
-| Status | Em elaboração |
+| Status | Em revisão |
 | Baseline prevista | BL-IMPL-S2 (Design/Implementação) |
 | Responsável | QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos, Ruan Victor Assunção Costa) |
 | Elaboração desta versão | Renata Martins da Silva (Analista de Requisitos) |
