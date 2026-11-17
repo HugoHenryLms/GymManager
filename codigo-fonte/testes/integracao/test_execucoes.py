@@ -1,6 +1,6 @@
 """Testes de integração de execuções e histórico — RF05, RN02, RN07, RN10, RN11, RN12, RN13, RN14.
 
-IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT09, CT10 e CT11.
+IC: GYM-TST-003 · Plano de Testes (GYM-TST-001), seção 4.3 · Casos de teste CT16 e CT19 a CT26.
 """
 
 from datetime import date, timedelta
@@ -31,7 +31,7 @@ def _finalizar(client, token, execucao_id):
     return client.patch(f"{API}/execucoes/{execucao_id}/finalizar", headers=auth(token))
 
 
-# TI-EXC-01 — CT09: iniciar, registrar e finalizar
+# TI-EXC-01 — CT19 / CT21 / CT23: iniciar, registrar e finalizar
 def test_fluxo_completo_de_execucao(client, aluno, ficha_do_aluno):
     token = aluno["token"]
     iniciada = _iniciar(client, token, ficha_do_aluno["id"])
@@ -49,7 +49,7 @@ def test_fluxo_completo_de_execucao(client, aluno, ficha_do_aluno):
     assert len(dados["registros"]) == 2
 
 
-# TI-EXC-02 — RN11: registrar de novo corrige o anterior
+# TI-EXC-02 — CT22 / RN11: registrar de novo corrige o anterior
 def test_registrar_de_novo_corrige(client, aluno, ficha_do_aluno):
     token = aluno["token"]
     execucao = _iniciar(client, token, ficha_do_aluno["id"]).get_json()
@@ -84,7 +84,7 @@ def test_finalizar_duas_vezes(client, aluno, ficha_do_aluno):
     assert _finalizar(client, token, execucao["id"]).status_code == 409
 
 
-# TI-EXC-05 — CT11 / RN07: não inicia execução em ficha de outro aluno
+# TI-EXC-05 — CT16 / RN07: não inicia execução em ficha de outro aluno
 def test_iniciar_em_ficha_de_outro_aluno(client, criar_aluno, ficha_do_aluno):
     outro = criar_aluno()
     assert _iniciar(client, outro["token"], ficha_do_aluno["id"]).status_code == 403
@@ -98,7 +98,7 @@ def test_registrar_em_execucao_de_outro_aluno(client, aluno, criar_aluno, ficha_
     assert resposta.status_code == 403
 
 
-# TI-EXC-06 — RN10: só inicia em ficha vigente
+# TI-EXC-06 — CT20 / RN10: só inicia em ficha vigente
 def test_iniciar_em_ficha_encerrada(client, instrutor, aluno, ficha_do_aluno):
     client.put(f"{API}/fichas/{ficha_do_aluno['id']}", json={"ativa": False}, headers=auth(instrutor["token"]))
 
@@ -146,7 +146,7 @@ def test_instrutor_nao_inicia_execucao(client, instrutor, ficha_do_aluno):
     assert _iniciar(client, instrutor["token"], ficha_do_aluno["id"]).status_code == 403
 
 
-# TI-EXC-10 — RN13: a mesma ficha aceita mais de uma execução em andamento
+# TI-EXC-10 — CT25 / RN13: a mesma ficha aceita mais de uma execução em andamento
 def test_duas_execucoes_abertas_na_mesma_ficha(client, aluno, ficha_do_aluno):
     primeira = _iniciar(client, aluno["token"], ficha_do_aluno["id"])
     segunda = _iniciar(client, aluno["token"], ficha_do_aluno["id"])
@@ -156,7 +156,7 @@ def test_duas_execucoes_abertas_na_mesma_ficha(client, aluno, ficha_do_aluno):
     assert primeira.get_json()["id"] != segunda.get_json()["id"]
 
 
-# TI-EXC-11 — RN14 (e RN12): registro de item inativado depois do início é aceito e preservado
+# TI-EXC-11 — CT26 / RN14 (e RN12): registro de item inativado depois do início é aceito e preservado
 def test_registro_de_item_inativado_apos_o_inicio(client, instrutor, aluno, ficha_do_aluno):
     mantido, removido = ficha_do_aluno["exercicios"]
     execucao = _iniciar(client, aluno["token"], ficha_do_aluno["id"]).get_json()
@@ -175,7 +175,7 @@ def test_registro_de_item_inativado_apos_o_inicio(client, instrutor, aluno, fich
     assert removido["id"] in [r["ficha_exercicio_id"] for r in registros]
 
 
-# TI-EXC-12 — CT10: aluno consulta o próprio histórico e a evolução de carga
+# TI-EXC-12 — CT24: aluno consulta o próprio histórico e a evolução de carga
 def test_historico_com_evolucao_de_carga(client, aluno, ficha_do_aluno):
     token = aluno["token"]
     item = ficha_do_aluno["exercicios"][0]
@@ -198,7 +198,7 @@ def test_instrutor_consulta_historico_do_aluno(client, instrutor, aluno):
     assert resposta.status_code == 200
 
 
-# TI-EXC-13 — CT11 / RN02: aluno não vê o histórico de outro
+# TI-EXC-13 — CT16 / RN02: aluno não vê o histórico de outro
 def test_aluno_nao_consulta_historico_de_outro(client, aluno, criar_aluno):
     outro = criar_aluno()
     resposta = client.get(f"{API}/alunos/{outro['usuario']['id']}/historico", headers=auth(aluno["token"]))
