@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
-| Versão | 1.1.0 |
-| Status | Aprovado |
+| Versão | 1.1.1 |
+| Status | Em revisão |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
@@ -26,6 +26,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.2.0 | 14-11-2026| Renata Martins da Silva| Atualização conforme o sistema implementado (versão 0.1.0 do produto): requisitos refinados (RF01, RF03 a RF06), novas regras de negócio RN08 a RN12 e requisitos RNF13 e RNF14, regras e mensagens de validação completas, telas e rotas reais, contrato da API detalhado, modelo conceitual com a entidade SESSAO e nova seção 7 (situação de atendimento dos requisitos)  e atualização da versão do documento| — |
 | 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado. | — |
 | 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0 (Pendências 20 e 23 da Planilha de ICs): novas regras RN13 e RN14, que registram o comportamento do sistema 0.1.0 em execuções; retirada da ressalva do RF05 (o gráfico de evolução de carga atende ao requisito); situação de RNF04, RNF08 e RNF12 atualizada após os PRs #17 e #19; seção 5 atualizada; lista de verificação da BL-REQ-S1 com a revisão do QA e a aprovação do CCB registradas. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
+| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): seção 5 com a numeração atual dos casos de teste (CT01 a CT30) e os testes automatizados do PR #37; vínculo do RNF04 com GYM-TST-004 (coleção Newman), separado de RNF05 e RNF06; seção 7 com a situação de RNF04, RNF08 e RNF12 após os testes do PR #37 | CR-001 (#41) |
 ---
 
 ## 1. Introdução
@@ -327,7 +328,7 @@ Formato de erro: {"erro": "<mensagem>", "campo": "<campo>"}; o campo campo só a
 
 ## 5. Rastreabilidade 
 
-Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa, com a situação de implementação e de verificação, é mantida em documentos/requisitos/RTM.xlsx (GYM-REQ-003). Os testes funcionais manuais (GYM-TST-005, casos CT01 a CT12) cobrem os requisitos funcionais; os primeiros testes automatizados (GYM-TST-002 e GYM-TST-003) foram entregues no PR #17 e cobrem parte do RF02; os demais testes automatizados e a coleção Postman (GYM-TST-004) seguem a meta do Plano de Testes (GYM-TST-001, seção 4.3).
+Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa, com a situação de implementação e de verificação, é mantida em documentos/requisitos/RTM.xlsx (GYM-REQ-003). Os testes funcionais manuais (GYM-TST-005, casos CT01 a CT30) cobrem os requisitos funcionais pela interface. Os testes automatizados entregues no PR #37 (GYM-TST-002 e GYM-TST-003, 136 testes pytest; GYM-TST-004, coleção Newman com 17 requisições) cobrem RF01 a RF06 e as regras RN01 a RN14, conforme a meta do Plano de Testes (GYM-TST-001, seção 4.3). O resultado de cada ciclo está no Relatório de Testes (GYM-TST-007).
 
 | Requisito | Casos de uso | Telas | IC de projeto | IC de código | IC de teste |
 | --------- | ------------ | ----- | ------------- | ----------- | ----------- |
@@ -343,7 +344,8 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | ----------------------- | ------------- | --------------------------- | ------------ |
 | RNF01, RNF02 | GYM-ARQ-001 | GYM-SRC-001 | GYM-TST-002, GYM-TST-003, GYM-TST-005 |
 | RNF03 | GYM-GER-003 | GYM-CFG-001, GYM-CFG-002 | GYM-CI-001 |
-| RNF04, RNF05, RNF06 | GYM-ARQ-001 | GYM-SRC-006 | GYM-TST-001 |
+| RNF04 | GYM-ARQ-001 | GYM-SRC-006 | GYM-TST-001, GYM-TST-004 |
+| RNF05, RNF06 | GYM-ARQ-001 | GYM-SRC-006 | GYM-TST-001 |
 | RNF07 | GYM-GER-003, GYM-GER-004 | GYM-CFG-001 | GYM-CI-001 |
 | RNF08 | GYM-TST-001 | GYM-CI-001 | GYM-TST-002, GYM-TST-003, GYM-TST-004 |
 | RNF09 | GYM-ARQ-003 | GYM-SRC-001 a GYM-SRC-005 | GYM-TST-004, GYM-CI-001 |
@@ -387,15 +389,15 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | RNF01 | Atendido | Hash scrypt com sal (`auth/seguranca.py`) |
 | RNF02 | Atendido | Todas as rotas usam `@autenticado` ou `@exige_perfil`, exceto `POST /auth/login` |
 | RNF03 | Atendido | `config.py` sem valores padrão para segredos; `.env.example`; `.gitignore` exclui `.env` |
-| RNF04 | Não verificado | Verificação definida no Plano de Testes (GYM-TST-001, seção 3.4): asserção de tempo de resposta na coleção Newman, ainda não entregue |
+| RNF04 | Atendido, com ressalva | Asserção de tempo < 2000 ms em todas as 17 requisições da coleção Newman (GYM-TST-004, PR #37); na verificação de 17/11/2026, média de 37 a 42 ms e máximo de 180 ms. Ressalva: registrar o resultado oficial do CI no Relatório de Testes (GYM-TST-007) |
 | RNF05 | Atendido, com ressalva | CSS com adaptações para 1100 px e 760 px e menu recolhível; falta validação em dispositivos reais |
 | RNF06 | Não verificado | Sem teste em múltiplos navegadores |
 | RNF07 | Parcial | Código organizado em módulos por domínio; o uso de Conventional Commits e do vínculo commit–issue não pôde ser verificado, pois o pacote analisado não inclui o histórico do Git |
-| RNF08 | Parcial | 3 testes pytest (unitário e de integração) entregues no PR #17 e executados pelo CI a cada PR; coleção Postman/Newman ainda não entregue |
+| RNF08 | Atendido | 136 testes pytest (67 unitários e 69 de integração) e coleção Newman (17 requisições) entregues no PR #37 e executados pelo CI a cada PR |
 | RNF09 | Atendido | `openapi.yaml` com as mesmas 23 operações do ERS (4.5); validado no CI |
 | RNF10 | Atendido | `docker-compose.yml`, Dockerfiles do backend e do frontend e `.env.example`; o CI sobe o ambiente completo |
 | RNF11 | Atendido | Migração `V001__cria_tabelas.sql`; executor com checksum (`migracoes.py`, `flask migrar`); o CI aplica as migrações duas vezes |
-| RNF12 | Parcial | RTM atualizada na versão 1.1.0; a cobertura de teste só será completa quando os testes de GYM-TST-002 a 004 cobrirem todos os requisitos |
+| RNF12 | Atendido | RTM v1.1.1: todos os requisitos com IC de projeto, código e teste, e os testes de GYM-TST-002 a 004 entregues (PR #37); a situação de verificação de cada requisito está na coluna O da RTM |
 | RNF13 | Atendido | `auth/seguranca.py`, tabela `sessao`; `SESSAO_HORAS` em `.env.example` |
 | RNF14 | Atendido | `frontend/nginx.conf` (CSP e demais cabeçalhos); função `esc()` em `ui.js`; `MAX_CONTENT_LENGTH` em `config.py` |
 | RN01 a RN14 | Atendidas | Aplicadas no backend (módulos `fichas`, `execucoes`, `usuarios`, `exercicios`, `auth`). RN13 e RN14 registram o comportamento atual das execuções, por decisão de 17/11/2026 (ver abaixo) |

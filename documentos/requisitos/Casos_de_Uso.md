@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
-| Versão | 1.1.0 |
-| Status | Aprovado |
+| Versão | 1.1.1 |
+| Status | Em revisão |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -26,6 +26,7 @@ Atualização de versão do documento.
 | — |
 | 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado. | — |
 | 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0: UC07 passa a citar as regras RN13 e RN14 do ERS v1.1.0 (execuções em andamento e registro de item inativado); seção 8 atualizada. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
+| 1.1.1 | 17-11-2026 | Renata Martins da Silva | CR-001 (correção, sem mudança de requisito): correspondência entre casos de uso e casos de teste atualizada para a numeração CT01 a CT30 dos Casos de Teste (GYM-TST-005) v0.3.0 | CR-001 (#41) |
 ---
 
 ## 1. Introdução
@@ -421,7 +422,7 @@ flowchart LR
 | UC07 | RF05 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001 a GYM-TST-004 | TL08 |
 | UC08 | RF05 | GYM-SRC-005, GYM-SRC-006 | GYM-TST-001 a GYM-TST-004 | TL09 |
 
-Correspondência com os casos de teste funcionais (GYM-TST-005): CT01 e CT02 → UC01; CT03 e CT04 → UC02; CT05 → UC03; CT06 → UC04; CT07 → UC05; CT08 → UC06; CT09 → UC07; CT10 → UC08; CT11 → UC06, UC07 e UC08 (RN02); CT12 → UC01 a UC08 (RNF02).
+Correspondência com os casos de teste funcionais (GYM-TST-005 v0.3.0): CT01, CT02, CT03 e CT30 → UC01; CT08, CT09 e CT28 → UC02; CT04 a CT07 → UC03; CT10 a CT12 → UC04; CT13, CT14, CT17, CT18 e CT29 → UC05; CT15 → UC06; CT19 a CT23, CT25 e CT26 → UC07; CT24 → UC08; CT16 → UC06, UC07 e UC08 (RN02); CT27 → UC01 a UC08 (RNF02, RF07).
 
 A matriz completa, com todos os requisitos funcionais e não funcionais, está em `documentos/requisitos/RTM.xlsx` (GYM-REQ-003).
 
