@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-ARQ-004 |
 | Caminho | `documentos/arquitetura/adr/ADR-001-stack.md` |
-| Versão | 0.1.1 |
-| Status | Em elaboração |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-IMPL-S2 |
 | Responsável | João Vitor Simonetti (Dev Backend e Frontend) |
 | Apoio | DBA/DevOps |
@@ -22,6 +22,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial do ADR | — |
 | 0.1.1 | 10/11/2026 | João Vitor Simonetti | Ajusta versões fixadas (Flask 3.1.3, Gunicorn 27.0) ao requirements.txt | — |
+| 1.0.0 | 17/11/2026 | Renata Martins da Silva | Aprovado na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes: revisão técnica do QA/Testes (Iago, Tiago e Ruan) e aprovação do CCB. Conteúdo idêntico ao da v0.1.1; registro feito em 17/11/2026 | #27 |
 
 ---
 

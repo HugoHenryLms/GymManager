@@ -1,13 +1,15 @@
 # =============================================================================
 # GymManager — Contrato da API REST
 # IC: GYM-ARQ-003 · Caminho: documentos/arquitetura/openapi.yaml
-# Versão do IC: 0.1.0 · Status: Em elaboração · Baseline prevista: BL-IMPL-S2
+# Versão do IC: 1.0.0 · Status: Aprovado · Baseline prevista: BL-IMPL-S2
 # Responsável: João Vitor Simonetti (Dev Backend e Frontend)
 # Apoio: Analista de Requisitos · Dependências: GYM-REQ-001 (ERS 4.5), GYM-REQ-002
 #
 # Histórico de revisões
 # | Versão | Data       | Autor                | Descrição                    | CR/Issue |
 # | 0.1.0  | 10/11/2026 | João Vitor Simonetti | Versão inicial do contrato   | —        |
+# | 1.0.0  | 17/11/2026 | Renata Martins da Silva | Aprovado na reunião de 16/11/2026 (QA e CCB); conteúdo idêntico ao da v0.1.0; registro em 17/11/2026 | #27 |
+# Obs.: info.version abaixo é a versão da API (produto 0.1.0), não a versão deste IC.
 # =============================================================================
 openapi: 3.0.3
 info:

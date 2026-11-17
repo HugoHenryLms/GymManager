@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
-| Versão | 1.0.0 |
-| Status | Aprovado|
+| Versão | 1.1.0 |
+| Status | Em revisão |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
@@ -24,7 +24,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.1.1 | 09-11-2026 | Renata Martins da Silva| Atualização de versão do documento | — |
 | 0.1.2 | 10-11-2026| Renata Martins da Silva| Atualização de versão do documento e correção de dados. | — |
 | 0.2.0 | 14-11-2026| Renata Martins da Silva| Atualização conforme o sistema implementado (versão 0.1.0 do produto): requisitos refinados (RF01, RF03 a RF06), novas regras de negócio RN08 a RN12 e requisitos RNF13 e RNF14, regras e mensagens de validação completas, telas e rotas reais, contrato da API detalhado, modelo conceitual com a entidade SESSAO e nova seção 7 (situação de atendimento dos requisitos)  e atualização da versão do documento| — |
-| 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado.
+| 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado. | — |
+| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0 (Pendências 20 e 23 da Planilha de ICs): novas regras RN13 e RN14, que registram o comportamento do sistema 0.1.0 em execuções; retirada da ressalva do RF05 (o gráfico de evolução de carga atende ao requisito); situação de RNF04, RNF08 e RNF12 atualizada após os PRs #17 e #19; seção 5 atualizada; lista de verificação da BL-REQ-S1 com a revisão do QA e a aprovação do CCB registradas. A v1.1.0 aguarda revisão no PR | #27 |
 ---
 
 ## 1. Introdução
@@ -203,6 +204,8 @@ Conforme a seção 4 do Plano de Projeto e o ADR da stack (GYM-ARQ-004).
 | RN10 | Uma execução só pode ser iniciada em ficha vigente: ativa e com data de fim vazia ou não anterior à data atual. | RF05 |
 | RN11 | Em uma execução, cada exercício da ficha tem um único registro: registrar de novo corrige o anterior. Execução finalizada não aceita novos registros.	| RF05 |
 | RN12 | O exercício removido de uma ficha é apenas inativado no item da ficha, preservando as execuções que o referenciam. | RF04,  RF05 |
+| RN13 | Uma ficha pode ter mais de uma execução em andamento; a interface retoma a execução aberta em vez de iniciar outra. | RF05 |
+| RN14 | Em uma execução já iniciada, o registro de um exercício é aceito mesmo que o item tenha sido inativado na ficha depois do início; o histórico preserva o registro. | RF04, RF05 |
 ---
 
 ## 4. Modelagem
@@ -324,7 +327,7 @@ Formato de erro: {"erro": "<mensagem>", "campo": "<campo>"}; o campo campo só a
 
 ## 5. Rastreabilidade 
 
-Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa, com a situação de implementação e de verificação, é mantida em documentos/requisitos/RTM.xlsx (GYM-REQ-003). Os testes funcionais manuais (GYM-TST-005, casos CT01 a CT12) cobrem os requisitos funcionais; os testes automatizados (GYM-TST-002 a 004) ainda não foram entregues
+Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC de teste, conforme exigido. A matriz completa, com a situação de implementação e de verificação, é mantida em documentos/requisitos/RTM.xlsx (GYM-REQ-003). Os testes funcionais manuais (GYM-TST-005, casos CT01 a CT12) cobrem os requisitos funcionais; os primeiros testes automatizados (GYM-TST-002 e GYM-TST-003) foram entregues no PR #17 e cobrem parte do RF02; os demais testes automatizados e a coleção Postman (GYM-TST-004) seguem a meta do Plano de Testes (GYM-TST-001, seção 4.3).
 
 | Requisito | Casos de uso | Telas | IC de projeto | IC de código | IC de teste |
 | --------- | ------------ | ----- | ------------- | ----------- | ----------- |
@@ -368,8 +371,8 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | 2 | Todos os RF e RNF possuem IC de projeto, código e teste na RTM | ☐ |
 | 3 | Casos de Uso e protótipos coerentes com os requisitos | ☐ |
 | 4 | Tecnologias coerentes com o Plano de Projeto e o ADR da stack | ☐ |
-| 5 | Revisão técnica do QA/Testes registrada | ☐ |
-| 6 | Aprovação do CCB registrada | ☐ |
+| 5 | Revisão técnica do QA/Testes registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: pendente (revisão no PR) |
+| 6 | Aprovação do CCB registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: pendente (confirmação no PR) |
 
 ## 7. Situação de atendimento dos requisitos (sistema versão 0.1.0)
 | ID | Situação | Evidência no repositório / observação |
@@ -378,21 +381,23 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 | RF02 | Atendido | `backend/gymmanager/auth/`; tela TL01 |
 | RF03 | Atendido | `backend/gymmanager/exercicios/rotas.py`; tela TL05 |
 | RF04 | Atendido | `backend/gymmanager/fichas/rotas.py`; telas TL06 e TL07 |
-| RF05 | Atendido, com ressalva | `backend/gymmanager/execucoes/rotas.py`; telas TL08 e TL09. A API devolve a evolução de carga e de repetições, mas o gráfico da interface mostra apenas a carga |
+| RF05 | Atendido | `backend/gymmanager/execucoes/rotas.py`; telas TL08 e TL09. O gráfico exibe a evolução de carga exigida pelo RF05; a API também devolve as repetições de cada ponto, como informação adicional |
 | RF06 | Atendido | `backend/gymmanager/usuarios/`; tela TL03 |
 | RF07 | Atendido | `frontend/` (menu e rotas por perfil, painel por perfil, mensagens de erro e sucesso) |
 | RNF01 | Atendido | Hash scrypt com sal (`auth/seguranca.py`) |
 | RNF02 | Atendido | Todas as rotas usam `@autenticado` ou `@exige_perfil`, exceto `POST /auth/login` |
 | RNF03 | Atendido | `config.py` sem valores padrão para segredos; `.env.example`; `.gitignore` exclui `.env` |
-| RNF04 | Não verificado | Não há medição de tempo de resposta (a definir no Plano de Testes) |
+| RNF04 | Não verificado | Verificação definida no Plano de Testes (GYM-TST-001, seção 3.4): asserção de tempo de resposta na coleção Newman, ainda não entregue |
 | RNF05 | Atendido, com ressalva | CSS com adaptações para 1100 px e 760 px e menu recolhível; falta validação em dispositivos reais |
 | RNF06 | Não verificado | Sem teste em múltiplos navegadores |
 | RNF07 | Parcial | Código organizado em módulos por domínio; o uso de Conventional Commits e do vínculo commit–issue não pôde ser verificado, pois o pacote analisado não inclui o histórico do Git |
-| RNF08 | **Pendente** | `codigo-fonte/testes/` contém apenas `.gitkeep`; o CI executa o pytest e o Newman, mas apenas emite aviso quando não encontra testes |
+| RNF08 | Parcial | 3 testes pytest (unitário e de integração) entregues no PR #17 e executados pelo CI a cada PR; coleção Postman/Newman ainda não entregue |
 | RNF09 | Atendido | `openapi.yaml` com as mesmas 23 operações do ERS (4.5); validado no CI |
 | RNF10 | Atendido | `docker-compose.yml`, Dockerfiles do backend e do frontend e `.env.example`; o CI sobe o ambiente completo |
 | RNF11 | Atendido | Migração `V001__cria_tabelas.sql`; executor com checksum (`migracoes.py`, `flask migrar`); o CI aplica as migrações duas vezes |
-| RNF12 | Parcial | RTM atualizada na versão 0.2.0; a cobertura de teste só será completa quando GYM-TST-002 a 004 forem entregues |
+| RNF12 | Parcial | RTM atualizada na versão 1.1.0; a cobertura de teste só será completa quando os testes de GYM-TST-002 a 004 cobrirem todos os requisitos |
 | RNF13 | Atendido | `auth/seguranca.py`, tabela `sessao`; `SESSAO_HORAS` em `.env.example` |
 | RNF14 | Atendido | `frontend/nginx.conf` (CSP e demais cabeçalhos); função `esc()` em `ui.js`; `MAX_CONTENT_LENGTH` em `config.py` |
-| RN01 a RN12 | Atendidas | Aplicadas no backend (módulos `fichas`, `execucoes`, `usuarios`, `exercicios`, `auth`) |
+| RN01 a RN14 | Atendidas | Aplicadas no backend (módulos `fichas`, `execucoes`, `usuarios`, `exercicios`, `auth`). RN13 e RN14 registram o comportamento atual das execuções, por decisão de 17/11/2026 (ver abaixo) |
+
+**Comportamentos registrados como regra (v1.1.0):** na análise da Pendência 20 da Planilha de ICs, a verificação da vigência apenas ao iniciar a execução foi considerada conforme à RN10, e o gráfico de carga, conforme ao RF05. Os dois comportamentos que o ERS não definia (várias execuções em andamento na mesma ficha e registro de item inativado depois do início) passaram a ser as regras RN13 e RN14, mantendo o sistema como está. A decisão foi tomada pela Analista de Requisitos e pelo Gerente de Projeto/Configuração em 17/11/2026 e é submetida à confirmação do CCB na revisão do Pull Request desta versão (issue #27).
