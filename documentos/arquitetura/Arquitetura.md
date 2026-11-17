@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-ARQ-001 |
 | Caminho | `documentos/arquitetura/Arquitetura.md` |
-| Versão | 0.1.1 |
-| Status | Em elaboração |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-IMPL-S2 |
 | Responsável | João Vitor Simonetti (Dev Backend e Frontend) |
 | Apoio | DBA/DevOps |
@@ -22,6 +22,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial do documento | — |
 | 0.1.1 | 10/11/2026 | João Vitor Simonetti | Porta padrão do MySQL no host passa a 3316 (evita conflito com MySQL local em 3306/3307) | — |
+| 1.0.0 | 17/11/2026 | Renata Martins da Silva | Aprovado na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes: revisão técnica do QA/Testes (Iago, Tiago e Ruan) e aprovação do CCB. Conteúdo idêntico ao da v0.1.1; registro feito em 17/11/2026 | #27 |
 
 ---
 
