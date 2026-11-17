@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-GER-005 |
 | Caminho | `documentos/gerencia/Modelo_CRF.md` |
-| Versão | 0.1.0 |
-| Status | Em elaboração |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 | Apoio | QA/Testes |
@@ -21,6 +21,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 16-11-2026 | Hugo Henry Lemos Carvalho | Versão inicial do modelo de CRF, conforme as seções 6.1 a 6.5 do PGC | #23 |
+| 1.0.0 | 17-11-2026 | Renata Martins da Silva | Aprovado na revisão técnica do QA/Testes, pelo WhatsApp, em 17/11/2026, como parte da preparação da baseline BL-REQ-S1; conteúdo idêntico ao da v0.1.0; registro na issue #29 | #29 |
 
 ---
 
