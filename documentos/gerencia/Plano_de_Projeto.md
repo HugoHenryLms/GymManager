@@ -7,8 +7,8 @@
 | --- | --- |
 | ID do IC | GYM-GER-001 |
 | Caminho | `documentos/gerencia/Plano_de_Projeto.md` |
-| Versão | 1.0.0 |
-| Status | Aprovado |
+| Versão | 1.3.0 |
+| Status | Em revisão |
 | Baseline prevista | BL-PLAN |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
 
@@ -29,7 +29,8 @@
 | 0.1.0 | — | Hugo Henry Lemos Carvalho | Versão inicial | — |
 | 0.2.0 | — | Hugo Henry Lemos Carvalho | Atualização da 1ª entrega: inclusão do ERS (GYM-REQ-001) como IC sob controle de versão | — |
 | 0.9.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
-| 1.0.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização versão do documento.
+| 1.0.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização versão do documento. | — |
+| 1.3.0 | 17/11/2026 | Hugo Henry Lemos Carvalho | Situação do projeto atualizada para 17/11/2026; inclusão de `CONTRIBUTING.md`, `change-request.md`, `Modelo_CRF.md` e `Status_Accounting.xlsx` na estrutura do repositório (seção 8.2); correção do caminho do Status Accounting (seção 10). Versão e status alinhados à Planilha de ICs (GYM-GER-002), que já registrava a v1.2.0; o documento volta a "Em revisão" até a emissão da baseline BL-PLAN | #23 |
 
 ## 2. Visão geral e objetivos
 
@@ -106,19 +107,21 @@ Academias costumam controlar fichas de treino em papel ou planilhas soltas, o qu
 
 As entregas são semanais, sempre às **quartas-feiras**, acompanhando o conteúdo das aulas. As datas após a Entrega 1 devem ser ajustadas ao calendário da disciplina.
 
-**Situação em 14/11/2026:** o sistema (versão 0.1.0) está implementado — backend, banco de dados, interface web, CI e Docker. Pendentes: testes automatizados, Plano de Testes, `CONTRIBUTING.md`, modelo de CRF, template de issue, status accounting, revisão técnica e criação de alguamas baselines.
+**Situação em 17/11/2026:** o sistema (versão 0.1.0) está implementado — backend, banco de dados, interface web, CI e Docker. Entregues desde 14/11/2026: primeiros testes automatizados (PR #17), Plano de Testes v0.1.0 e atualização dos Casos de Teste e do Relatório de Testes (PR #19), `CONTRIBUTING.md`, modelo de CRF, template de issue de CR e Status Accounting (issue #23). Pendentes: completar os testes automatizados e a coleção Postman, revisão técnica do QA e emissão das baselines (BL-PLAN, BL-REQ-S1, BL-IMPL-S2 e BL-REL-S3).
 
 ## 8. Gerência de configuração
 
 ### 8.1 Identificação
 
-Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `documentos/gerencia/Planilha_Controle_de_ICs.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4). A estrutura abaixo é a do repositório atual; os arquivos `CONTRIBUTING.md`, `change-request.md`, `Modelo_CRF.md` e `Status_Accounting.xlsx` são ICs previstos ainda não criados.
+Todo artefato relevante é um Item de Configuração, com ID no padrão `GYM-<TIPO>-<NNN>` (ex.: GYM-REQ-001), catalogado na planilha `documentos/gerencia/Planilha_Controle_de_ICs.xlsx` com nome, tipo, caminho, versão, responsável, baseline, status e dependências (Aulas 3 e 4). A estrutura abaixo é a do repositório atual; os arquivos `CONTRIBUTING.md` (GYM-GER-004), `change-request.md` (GYM-CFG-004), `Modelo_CRF.md` (GYM-GER-005) e `Status_Accounting.xlsx` (GYM-GER-006) foram criados em 17/11/2026 (issue #23).
 
 ### 8.2 Estrutura do repositório
 
 ```
 GymManager/
 ├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   └── change-request.md
 │   └── workflows/
 │       └── ci.yml
 ├── banco-de-dados/
@@ -148,9 +151,11 @@ GymManager/
 │   │   ├── Modelo_de_Dados.md
 │   │   └── openapi.yaml
 │   ├── gerencia/
+│   │   ├── Modelo_CRF.md
 │   │   ├── Planilha_Controle_de_ICs.xlsx
 │   │   ├── Plano_de_Gerencia_de_Configuracao.md
-│   │   └── Plano_de_Projeto.md
+│   │   ├── Plano_de_Projeto.md
+│   │   └── Status_Accounting.xlsx
 │   ├── requisitos/
 │   │   ├── Casos_de_Uso.md
 │   │   ├── ERS.md
@@ -167,6 +172,7 @@ GymManager/
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore
+├── CONTRIBUTING.md
 ├── docker-compose.yml
 ├── LICENSE
 └── README.md
@@ -199,7 +205,7 @@ IC sob baseline só muda mediante Change Request aprovada.
 
 ## 10. Auditoria e relato de status
 
-- **Status accounting:** registro da situação de ICs e baselines atualizado a cada entrega (`documentos/gerencia /Status_Accounting.xlxs`).
+- **Status accounting:** registro da situação de ICs e baselines atualizado a cada entrega (`documentos/gerencia/Status_Accounting.xlsx`).
 - **Revisão técnica formal:** realizada pelo QA/Testes sobre cada IC antes de entrar em baseline.
 - **Auditoria de configuração:** verifica se a modificação realizada é a solicitada, se a revisão ocorreu, se o processo foi seguido e se os dados de rastreabilidade (data, autor, nº da CR) constam registrados.
 
