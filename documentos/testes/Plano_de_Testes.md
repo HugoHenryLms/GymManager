@@ -22,7 +22,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.0.0 | 11-11-2026 | QA/Testes | Arquivo criado vazio (placeholder) | — |
-| 0.1.0 | 16-11-2026 | Renata Martins da Silva | Primeira versão do plano. Formaliza a estratégia já aplicada nos testes automatizados iniciais (PR #17) e define o escopo, os níveis, os critérios de aceite e a cobertura planejada até a baseline BL-IMPL-S2 | — |
+| 0.1.0 | 16-11-2026 | Renata Martins da Silva | Primeira versão do plano. Formaliza a estratégia já aplicada nos testes automatizados iniciais (PR #17) e define o escopo, os níveis, os critérios de aceite e a cobertura planejada até a baseline BL-IMPL-S2 | #18 |
 
 > **Observação de configuração:** este plano foi formalizado depois dos primeiros testes automatizados, incorporados à `main` pelo PR #17. O desvio está registrado aqui para fins de rastreabilidade. A partir desta versão, o plano é atualizado **antes** da implementação de novos testes.
 
