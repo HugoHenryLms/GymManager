@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-REQ-002 |
 | Caminho | `documentos/requisitos/Casos_de_Uso.md` |
 | Versão | 1.1.0 |
-| Status | Em revisão |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | João Vitor Simonetti (Dev Backend e Frontend) |
@@ -25,7 +25,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 Atualização de versão do documento.
 | — |
 | 1.0.0 | 14-11-2026 | Renata Martins da Silva | Atualização da versão e status do documento, aprovado e revisado. | — |
-| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0: UC07 passa a citar as regras RN13 e RN14 do ERS v1.1.0 (execuções em andamento e registro de item inativado); seção 8 atualizada. A v1.1.0 aguarda revisão no PR | #27 |
+| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0: UC07 passa a citar as regras RN13 e RN14 do ERS v1.1.0 (execuções em andamento e registro de item inativado); seção 8 atualizada. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
 ---
 
 ## 1. Introdução

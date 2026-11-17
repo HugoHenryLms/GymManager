@@ -9,7 +9,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | ID do IC | GYM-REQ-001 |
 | Caminho | `documentos/requisitos/ERS.md` |
 | Versão | 1.1.0 |
-| Status | Em revisão |
+| Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 (Funcional) |
 | Responsável | Renata Martins da Silva (Analista de Requisitos) |
 | Apoio | Todos |
@@ -25,7 +25,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.1.2 | 10-11-2026| Renata Martins da Silva| Atualização de versão do documento e correção de dados. | — |
 | 0.2.0 | 14-11-2026| Renata Martins da Silva| Atualização conforme o sistema implementado (versão 0.1.0 do produto): requisitos refinados (RF01, RF03 a RF06), novas regras de negócio RN08 a RN12 e requisitos RNF13 e RNF14, regras e mensagens de validação completas, telas e rotas reais, contrato da API detalhado, modelo conceitual com a entidade SESSAO e nova seção 7 (situação de atendimento dos requisitos)  e atualização da versão do documento| — |
 | 1.0.0 | 14-11-2026| Renata Martins da Silva| Atualização da versão do documento, revisado e aprovado. | — |
-| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0 (Pendências 20 e 23 da Planilha de ICs): novas regras RN13 e RN14, que registram o comportamento do sistema 0.1.0 em execuções; retirada da ressalva do RF05 (o gráfico de evolução de carga atende ao requisito); situação de RNF04, RNF08 e RNF12 atualizada após os PRs #17 e #19; seção 5 atualizada; lista de verificação da BL-REQ-S1 com a revisão do QA e a aprovação do CCB registradas. A v1.1.0 aguarda revisão no PR | #27 |
+| 1.1.0 | 17-11-2026 | Renata Martins da Silva | A v1.0.0 foi revisada pelo QA/Testes (Iago Medice Ferreira da Silva, Tiago Costa dos Santos e Ruan Victor Assunção Costa) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a aprovação foi registrada no GitHub em 17/11/2026 (issue #27). A data de 14-11-2026 da linha 1.0.0 corresponde à preparação da versão, não à aprovação. Alterações da v1.1.0 (Pendências 20 e 23 da Planilha de ICs): novas regras RN13 e RN14, que registram o comportamento do sistema 0.1.0 em execuções; retirada da ressalva do RF05 (o gráfico de evolução de carga atende ao requisito); situação de RNF04, RNF08 e RNF12 atualizada após os PRs #17 e #19; seção 5 atualizada; lista de verificação da BL-REQ-S1 com a revisão do QA e a aprovação do CCB registradas. A v1.1.0 aguarda revisão no PR. Aprovação da v1.1.0: revisão técnica do QA por Iago Medice Ferreira da Silva e confirmação do CCB por João Vitor Simonetti, pelo WhatsApp, em 17/11/2026; registro no PR #28. Status alterado para Aprovado em 17/11/2026 (issue #29). | #27, #29 |
 ---
 
 ## 1. Introdução
@@ -367,12 +367,12 @@ Cada requisito está vinculado a um IC de projeto, a um IC de código e a um IC 
 
 | # | Verificação | Resultado |
 | --- | --- | --- |
-| 1 | ID, caminho, versão e responsável do ERS coincidem com a planilha de ICs | ☐ |
-| 2 | Todos os RF e RNF possuem IC de projeto, código e teste na RTM | ☐ |
-| 3 | Casos de Uso e protótipos coerentes com os requisitos | ☐ |
-| 4 | Tecnologias coerentes com o Plano de Projeto e o ADR da stack | ☐ |
-| 5 | Revisão técnica do QA/Testes registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: pendente (revisão no PR) |
-| 6 | Aprovação do CCB registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: pendente (confirmação no PR) |
+| 1 | ID, caminho, versão e responsável do ERS coincidem com a planilha de ICs | ☑ Conferido em 17/11/2026 (Planilha de ICs v1.6.0) |
+| 2 | Todos os RF e RNF possuem IC de projeto, código e teste na RTM | ☑ RTM v1.1.0: 21 de 21 requisitos com cobertura completa (aba Resumo) |
+| 3 | Casos de Uso e protótipos coerentes com os requisitos | ☑ Casos de Uso v1.1.0 revisados pelo QA; os protótipos (GYM-REQ-004) são apenas inspiração, fora do escopo (Pendência 22) |
+| 4 | Tecnologias coerentes com o Plano de Projeto e o ADR da stack | ☑ Verificado na revisão do QA (reunião de 16/11/2026) |
+| 5 | Revisão técnica do QA/Testes registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: Iago Medice Ferreira da Silva, 17/11/2026 (PR #28) |
+| 6 | Aprovação do CCB registrada | ☑ v1.0.0: reunião de 16/11/2026 (issue #27). v1.1.0: João Vitor Simonetti, 17/11/2026 (PR #28) |
 
 ## 7. Situação de atendimento dos requisitos (sistema versão 0.1.0)
 | ID | Situação | Evidência no repositório / observação |
