@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-DOC-002 |
 | Caminho | `documentos/usuario/Manual_do_Usuario.md` |
-| Versão | 0.1.0 |
-| Status | Em elaboração |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-REL-S3 |
 | Responsável | João Vitor Simonetti (Dev Backend e Frontend) |
 | Apoio | Gerente de Projeto/Configuração |
@@ -20,6 +20,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial, cobrindo os três perfis | — |
+| 1.0.0 | 17/11/2026 | Renata Martins da Silva | Aprovado na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes: revisão técnica do QA/Testes (Iago, Tiago e Ruan) e aprovação do CCB. Conteúdo idêntico ao da v0.1.0; registro feito em 17/11/2026 | #27 |
 
 ---
 
