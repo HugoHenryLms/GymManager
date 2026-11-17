@@ -8,7 +8,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-GER-003 |
 | Caminho | `documentos/gerencia/Plano_de_Gerencia_de_Configuracao.md` |
-| Versão | 1.0.0 |
+| Versão | 1.0.1 |
 | Status | Aprovado |
 | Baseline prevista | BL-REQ-S1 |
 | Responsável | Hugo Henry Lemos Carvalho (Gerente de Projeto/Configuração) |
@@ -22,7 +22,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | 0.1.0 | 09/11/2026 | Hugo Henry Lemos Carvalho | Versão inicial do plano | — |
 | 0.1.1 | 09/11/2026 | Hugo Henry Lemos Carvalho | — |
 | 0.9.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Atualização conforme o sistema 0.1.0: estrutura do repositório, atividades e ICs, escopo, tecnologias, status, branches utilizados e histórico de revisões | — |
-| 1.0.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Revisado e Aprovado.|
+| 1.0.0 | 14/11/2026 | Hugo Henry Lemos Carvalho | Revisado e Aprovado. | — |
+| 1.0.1 | 17/11/2026 | Renata Martins da Silva | Correção do histórico, sem mudança de conteúdo: a v1.0.0 foi revisada pelo QA/Testes (Iago, Tiago e Ruan) e aprovada pelo CCB na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes; a data de 14/11/2026 da linha anterior corresponde à preparação da versão. Registro feito em 17/11/2026 | #27 |
 ---
 
 ## 1. Introdução
