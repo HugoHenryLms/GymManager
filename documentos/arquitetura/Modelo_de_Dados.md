@@ -8,8 +8,8 @@ Professor: Paulo Rodrigo Barbosa Alves
 | --- | --- |
 | ID do IC | GYM-ARQ-002 |
 | Caminho | `documentos/arquitetura/Modelo_de_Dados.md` |
-| Versão | 0.1.0 |
-| Status | Em elaboração |
+| Versão | 1.0.0 |
+| Status | Aprovado |
 | Baseline prevista | BL-IMPL-S2 |
 | Responsável | João Vitor Simonetti (DBA/DevOps) |
 | Apoio | Dev Backend e Frontend |
@@ -21,6 +21,7 @@ Professor: Paulo Rodrigo Barbosa Alves
 | Versão | Data | Autor | Descrição | CR/Issue |
 | --- | --- | --- | --- | --- |
 | 0.1.0 | 10/11/2026 | João Vitor Simonetti | Versão inicial: modelo físico, dicionário de dados e migração V001 | — |
+| 1.0.0 | 17/11/2026 | Renata Martins da Silva | Aprovado na reunião da equipe de 16/11/2026, pela manhã, com todos os integrantes presentes: revisão técnica do QA/Testes (Iago, Tiago e Ruan) e aprovação do CCB. Conteúdo idêntico ao da v0.1.0; registro feito em 17/11/2026 | #27 |
 
 ---
 
